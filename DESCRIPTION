@@ -1,12 +1,19 @@
 Package: NatPop2021
-Title: What the Package Does (One Line, Title Case)
+Title: Analyze Fecundity, Egg-to-adult Viability And Oviposition Preference Data
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    c(person(given = "Nicolas",
+           family = "RODE",
            role = c("aut", "cre"),
-           email = "first.last@example.com")
-Description: What the package does (one paragraph).
+           email = "nicolas.rode@inrae.fr",
+           comment = c(ORCID = "0000-0002-1121-4202")),
+      person(given = "Laure",
+           family = "OLAZCUAGA",
+           role = c("aut"),
+           email = "olaz.laure@gmail.com",
+           comment = c(ORCID = "0000-0001-9100-1305")))
+Description: This research compendium describes how to analyze fecundity, egg-to-adult viability and oviposition preference data
+    from an experiment conducted in D. suzukii in 2019.
 License: MIT + file LICENSE
 ByteCompile: true
 Encoding: UTF-8
