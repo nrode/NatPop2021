@@ -13,4 +13,4 @@ usethis::edit_file("DESCRIPTION")
 usethis::use_git(message = ":bulb: Update documentation")
 
 ## Create a R directory and a file for functions
-usethis::use_r("loadfitnessdata")
+usethis::use_r("simulmodel")
