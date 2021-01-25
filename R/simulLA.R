@@ -11,6 +11,6 @@
 
 simulateLA <- function(SA)
 {
-  bip <- c()
+  bip <- c()  #test
   return(bip)
 }
