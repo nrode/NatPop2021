@@ -18,6 +18,7 @@ dir.create("reports")
 
 ## Update DESCRIPTION file
 usethis::use_package("here")
+usethis::use_package("lme4")
 
 ## Create a R directory and a file for functions
 usethis::use_r("simulmodel")
