@@ -31,7 +31,7 @@ devtools::load_all()
 # sdpophab <- 1
 # sdpophab_ng <- 1
 # sigma <- 0.5
-nb_simul <- 1000
+nb_simul <- 2000
 
 #Perform siluations
 sim <- sapply(1:nb_simul, simul_fitnessdata_normal, rho=-0.1, rho_ng=-0.1, sigma = 0.5, nrep=10)
@@ -84,19 +84,19 @@ data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)),
                  prop_val_sign_aov = tapply(sim_select_genetic$IndicGen_aov, 
                                         sim_select_genetic$SA_Gen, mean))
 
-
+colors <- c("LMER" = "#DCA237", "Anova" = "#459B76")
 
 #Plot
 plot_genetic<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_genet)) + 
-   geom_point(aes(y=prop_val_sign), color="#DCA237", size = 3) + 
-   geom_line(aes(y=prop_val_sign), color="#DCA237", size = 1, linetype = "dashed") + 
-   geom_point(aes(y=prop_val_sign_aov), color="#459B76", size = 3) + 
-   geom_line(aes(y=prop_val_sign_aov), color="#459B76", size = 1) + 
+   geom_point(aes(y=prop_val_sign, color="LMER"), size = 3) + 
+   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1) + 
+   geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 3) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1) + 
    ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
    xlab("Intensity of genetic local adaptation (SA)")  +
    theme_LO_sober  + 
-   labs(color = "Models") +
-   scale_color_manual(values = c("LMER" = "#DCA237", "Anova" = "#459B76"))
+   labs(color = "Methods") +
+   scale_color_manual(values = colors)
 plot_genetic
 
 
@@ -135,18 +135,18 @@ data_prop <- data.frame(val_SA_nongenet = sort(unique(sim_select_nongenetic$SA_N
                                         sim_select_nongenetic$SA_NonGen, mean))
 
 
-
+colors<-c("LMER" = "#DCA237", "Anova" = "#459B76")
 #Plot
 plot_nongenetic<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongenet)) + 
-   geom_point(aes(y=prop_val_sign), color="#DCA237", size = 3) + 
-   geom_line(aes(y=prop_val_sign), color="#DCA237", size = 1, linetype = "dashed") + 
-   geom_point(aes(y=prop_val_sign_aov), color="#459B76", size = 3) + 
-   geom_line(aes(y=prop_val_sign_aov), color="#459B76", size = 1) + 
+   geom_point(aes(y=prop_val_sign, color="LMER"), size = 3) + 
+   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1) + 
+   geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 3) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1) + 
    ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
    xlab("Intensity of non-genetic local adaptation (SA)")  +
    theme_LO_sober + 
-   labs(color = "Models") +
-   scale_color_manual(values = c("LMER" = "#DCA237", "Anova" = "#459B76"))
+   labs(color = "Methods") +
+   scale_color_manual(values = colors)
 plot_nongenetic
 
 
