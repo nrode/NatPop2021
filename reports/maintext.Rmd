@@ -21,3 +21,267 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 devtools::load_all()
 ```
 
+
+
+# DATA 
+## PREFERENCE
+```{r }
+
+data_PREF<-read.table(file = "/Users/laure/Documents/RESEARCH/z_PhD/POPNAT/DATA_COMPLET/Clean/DATACOMPLET_PREF_POPNAT2018.csv",sep=";",header=T)
+
+str(data_PREF)
+
+#Variables
+data_PREF$Pop_code<-as.factor(data_PREF$Pop_code)
+data_PREF$Pop_name<-as.factor(data_PREF$Pop_name)
+data_PREF$Population<-as.factor(data_PREF$Population)
+data_PREF$Original_environment<-as.factor(data_PREF$Original_environment)
+data_PREF$Experiment<-as.factor(data_PREF$Experiment)
+data_PREF$Generation<-as.factor(data_PREF$Generation)
+data_PREF$Test_environment<-as.factor(data_PREF$Test_environment)
+data_PREF$Box<-as.factor(data_PREF$Box)
+data_PREF$Row<-as.factor(data_PREF$Row)
+data_PREF$Column<-as.factor(data_PREF$Column)
+data_PREF$Nb_eggs<-as.numeric(as.character(data_PREF$Nb_eggs))
+data_PREF$obs<-as.factor(1:nrow(data_PREF))
+#Variable d'adaptation locale SA:
+data_PREF$SA<-as.factor(ifelse (as.character(data_PREF$Original_environment)==as.character(data_PREF$Test_environment),1,0))
+#Somme d'oeufs pondus dans chaque boite
+sumboite<-aggregate(data_PREF$Nb_eggs, by=list(Box=data_PREF$Box), FUN=sum)
+data_PREF<-merge(data_PREF,sumboite,by="Box")
+#Proportion par fruit per boite 
+data_PREF$prop_per_boite<-data_PREF$Nb_eggs/data_PREF$x
+
+#indicatrice G0 G2
+data_PREF$IndicG0<-as.numeric(ifelse (as.character(data_PREF$Generation)=="G0",1,0))
+data_PREF$IndicG2<-as.numeric(ifelse (as.character(data_PREF$Generation)=="G2",1,0))
+
+
+data_PREF$SAIndicG0<-as.numeric(ifelse (as.character(data_PREF$Generation)=="G0"&
+                                        (as.character(data_PREF$SA)=="1"),1,0))
+
+
+data_PREF$pop_gen <- as.factor(paste(data_PREF$Population, data_PREF$Generation, sep="_"))
+data_PREF$test_envt_gen <- as.factor(paste(data_PREF$Test_environment, data_PREF$Generation, sep="_"))
+
+
+#Visualisation
+head(data_PREF)
+tail(data_PREF)
+
+
+
+```
+
+
+
+## PERFORMANCE
+```{r }
+
+data_PERF<-read.table(file="/Users/laure/Documents/RESEARCH/z_PhD/POPNAT/DATA_COMPLET/Clean/DATACOMPLET_PERF_POPNAT2018.csv",sep=";",header=T)
+
+str(data_PERF)
+
+#Ajout variables
+data_PERF$Pop_code<-as.factor(data_PERF$Pop_code)
+data_PERF$Pop_name<-as.factor(data_PERF$Pop_name)
+data_PERF$Population<-as.factor(data_PERF$Population)
+data_PERF$Original_environment<-as.factor(data_PERF$Original_environment)
+data_PERF$Experiment<-as.factor(data_PERF$Experiment)
+data_PERF$Generation<-as.factor(data_PERF$Generation)
+data_PERF$Test_environment<-as.factor(data_PERF$Test_environment)
+data_PERF$Rate <- data_PERF$Nb_adults/data_PERF$Nb_eggs
+data_PERF$obs<-as.factor(1:nrow(data_PERF))
+data_PERF$SA<-as.factor(ifelse (as.character(data_PERF$Original_environment)==as.character(data_PERF$Test_environment),1,0))
+data_PERF$Lambda<-data_PERF$Nb_adults/20
+data_PERF$IndicG0<-as.numeric(ifelse (as.character(data_PERF$Generation)=="G0",1,0))
+data_PERF$IndicG2<-as.numeric(ifelse (as.character(data_PERF$Generation)=="G2",1,0))
+
+data_PERF$SAIndicG0<-as.numeric(ifelse (as.character(data_PERF$Generation)=="G0"&
+                                        (as.character(data_PERF$SA)=="1"),1,0))
+
+
+data_PERF$pop_gen <- as.factor(paste(data_PERF$Population, data_PERF$Generation, sep="_"))
+data_PERF$test_envt_gen <- as.factor(paste(data_PERF$Test_environment, data_PERF$Generation, sep="_"))
+
+
+#Visualisation
+head(data_PERF)
+tail(data_PERF)
+
+
+
+
+str(data_PERF)
+length(data_PERF$Rate[data_PERF$Generation=="G0"])
+length(data_PERF$Rate[data_PERF$Generation=="G2"])
+
+#Emergence rate
+#Enlever les emergence rate faux
+data_PERF_rate<-data_PERF
+data_PERF_rate<-data_PERF_rate[data_PERF_rate$Nb_adults<=data_PERF_rate$Nb_eggs,]
+data_PERF_rate<-data_PERF_rate[data_PERF_rate$Nb_eggs!=0,]
+data_PERF_rate<-data_PERF_rate[!is.na(data_PERF_rate$Rate),]
+dim(data_PERF_rate)
+
+dim(data_PERF)
+
+length(data_PERF_rate$Rate[data_PERF_rate$Generation=="G0"])
+length(data_PERF_rate$Rate[data_PERF_rate$Generation=="G2"])
+
+```
+
+
+
+## Subset
+```{r }
+#PERF
+  #Uniquement G0 et G2
+data_PERF_G0G2<-data_PERF[data_PERF$Generation=="G0"|
+                          data_PERF$Generation=="G2",]
+  
+  #Uniquement traitement Fraise cerise blackberry raisin 
+data_PERF_G0G2<-data_PERF_G0G2[data_PERF_G0G2$Test_environment!="GF",]
+#data_PERF_G0G2<-data_PERF_G0G2[data_PERF_G0G2$Test_environment!="Grape",]
+
+  #Uniquement pop fruit
+data_PERF_G0G2<-data_PERF_G0G2[data_PERF_G0G2$Population!="WT3",]
+
+
+
+
+
+
+#PERF_rate
+  #Uniquement G0 et G2
+data_PERF_G0G2rate<-data_PERF_rate[data_PERF_rate$Generation=="G0"|
+                          data_PERF_rate$Generation=="G2",]
+  
+  #Uniquement traitement Fraise cerise blackberry raisin 
+data_PERF_G0G2rate<-data_PERF_G0G2rate[data_PERF_G0G2rate$Test_environment!="GF",]
+#data_PERF_G0G2rate<-data_PERF_G0G2rate[data_PERF_G0G2rate$Test_environment!="Grape",]
+
+  #Uniquement pop fruit
+data_PERF_G0G2rate<-data_PERF_G0G2rate[data_PERF_G0G2rate$Population!="WT3",]
+
+
+
+
+
+#PREFRENCE
+ #Uniquement G0 et G2
+data_PREF_G0G2<-data_PREF[data_PREF$Generation=="G0"|
+                          data_PREF$Generation=="G2",]
+
+  #Uniquement pop fruit
+data_PREF_G0G2<-data_PREF_G0G2[data_PREF_G0G2$Population!="WT3",]
+
+
+data_PREF_G0G2<-droplevels(data_PREF_G0G2)
+data_PERF_G0G2rate<-droplevels(data_PERF_G0G2rate)
+data_PERF_G0G2<-droplevels(data_PERF_G0G2)
+#
+
+
+# data_PREF_G0G2<-data_PREF_G0G2[data_PREF_G0G2$Test_environment=="Strawberry"|
+#                                  data_PREF_G0G2$Test_environment=="Cherry"|
+#                                  data_PREF_G0G2$Test_environment=="Blackberry",]
+dim(data_PREF_G0G2)
+```
+
+
+
+
+# Emergence rate
+## TEMP pour Nico
+```{r }
+
+#######################################################
+  ## Analysis of genetic effects lmer ###
+  #######################################################
+  ## Model to get the df of the interaction
+  m_perGen <- lm(asin(sqrt(Rate))~pop_gen+test_envt_gen+
+                    Original_environment:Test_environment:IndicG0+
+                   Original_environment:Test_environment:IndicG2+
+                   SA:IndicG0+
+                   SA, data=data_PERF_G0G2)
+  anova(m_perGen)
+  
+  m00 <- lme4::lmer(asin(sqrt(Rate))~pop_gen+test_envt_gen+SA+
+                (1|Original_environment:Test_environment), data=data_PERF_G0G2)
+
+  summary(m00)
+
+  data.frame(VarCorr(m00))
+  indic <- grep("SA",names(fixef(m00)))
+
+  Fratio_Gen = as.numeric(fixef(m00)[indic[1]]^2/vcov(m00)[indic[1],indic[1]])
+  (pvalue_Gen = 1 - pf(Fratio_Gen, 1, anova(m_perGen)[5, 1])) 
+  
+  #######################################################
+  ## Analysis of genetic and non-genetic effects lmer ###
+  #######################################################
+  ## Model to get the df of the interaction
+  m_perGen <- lm(asin(sqrt(Rate))~pop_gen+test_envt_gen+
+                   Original_environment:Test_environment:IndicG0+
+                   Original_environment:Test_environment+
+                   SA:IndicG0+
+                   SA,
+                 data=data_PERF_G0G2)
+  anova(m_perGen)
+  
+  m0 <- lmer(asin(sqrt(Rate))~pop_gen+test_envt_gen+SA+SAIndicG0+
+               (1|Original_environment:Test_environment)+
+             (0+dummy(Generation, "G0")|Original_environment:Test_environment),
+             data=data_PERF_G0G2)
+  summary(m0)
+
+  data.frame(VarCorr(m0))
+  indic <- grep("SA",names(fixef(m0)))
+
+  (Fratio_Gen = as.numeric(fixef(m0)[indic[1]]^2/vcov(m0)[indic[1],indic[1]]))
+  (pvalue_Gen = 1 - pf(Fratio_Gen, 1, anova(m_perGen)[4, 1])) 
+  
+  (Fratio_NonGen = as.numeric(fixef(m0)[indic[2]]^2/vcov(m0)[indic[2],indic[2]]))
+  (pvalue_NonGen = 1 - pf(Fratio_NonGen, 1, anova(m_perGen)[6, 1])) 
+  
+
+  
+  
+  #######################################################
+  ## Analysis of genetic effects lm   ###
+  #######################################################
+  m1 <- aov(asin(sqrt(Rate))~pop_gen+test_envt_gen+SA+Original_environment:Test_environment,
+            contrasts=list(Pop="contr.sum", Hab="contr.sum"), data=data_PERF_G0G2)
+  model.matrix(m1)
+  anova(m1)
+  ## F test for SA
+  (Fratio = (anova(m1)[3,2]/anova(m1)[4,2])/(1/anova(m1)[4,1]))
+  (pvalue = 1 - pf(Fratio, 1, anova(m1)[4,1])) #the correct test (see equation D7 in Appendix D of the paper)
+
+  #######################################################
+  ## Analysis of genetic and non-genetic effects lm   ###
+  #######################################################
+  data_PERF_G0G2$pop_hab_G0 <- as.factor(
+    ifelse(data_PERF_G0G2$Generation=="G0", paste(data_PERF_G0G2$Population,
+                                                  data_PERF_G0G2$Test_environment, sep="_"), 0))
+  
+    
+  m2 <- aov(asin(sqrt(Rate))~pop_gen+test_envt_gen+SA:IndicG0+SA+
+              Original_environment:Test_environment+Original_environment:Test_environment:IndicG0,
+            data=data_PERF_G0G2)
+  model.matrix(m2)
+  summary(m2)
+
+  anova(m2)
+  ## F test for SA
+  (Fratio_Gen_aov = (anova(m2)[3,2]/anova(m2)[5,2])/(1/anova(m2)[5,1]))
+  (pvalue_Gen_aov = 1 - pf(Fratio_Gen_aov, 1, anova(m2)[5,1])) #the correct test (see equation D7 in Appendix D of the paper)
+
+  ## F test for SA
+  (Fratio_NonGen_aov = (anova(m2)[4,2]/anova(m2)[6,2])/(1/anova(m2)[6,1]))
+  (pvalue_NonGen_aov = 1 - pf(Fratio_NonGen_aov, 1, anova(m2)[6,1])) #the correct test (see equation D7 in Appendix D of the paper)
+ 
+
+```
+

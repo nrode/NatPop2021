@@ -19,10 +19,20 @@ dir.create("reports")
 ## Update DESCRIPTION file
 usethis::use_package("here")
 usethis::use_package("lme4")
+usethis::use_package("MASS")
+usethis::use_package("reshape")
+usethis::use_package("ggplot2")
+usethis::use_package("cowplot")
+
+
 
 ## Create a R directory and a file for functions
 usethis::use_r("simulmodel")
-
+usethis::use_r("simul_fitnessdata_normal")
+usethis::use_r("add_indic_sign")
+usethis::use_r("add_sim_number_SA")
+usethis::use_r("select_sample_simul")
+usethis::use_r("theme_LO_sober")
 
 
 ## Update NAMESPACE file
@@ -30,3 +40,4 @@ devtools::document()
 
 ## Load all required packages
 devtools::load_all()
+

@@ -24,4 +24,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
     here,
-    lme4
+    lme4,
+    ggplot2,
+    cowplot

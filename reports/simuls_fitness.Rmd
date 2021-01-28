@@ -1,0 +1,242 @@
+---
+title: "Simulations fitness data"
+author: "Laure Olazcuaga, Nicolas Rode"
+date: "`r format(Sys.Date(), '%d-%B-%Y')`"
+output: 
+  html_document:
+    theme: "journal"
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include =FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+devtools::load_all()
+```
+
+# Simulation: Normal
+```{r } 
+
+# Power Analyses
+# seed <- 1
+# npop <- nhab <- 3
+# nrep <- 2
+# sdpophab <- 1
+# sdpophab_ng <- 1
+# sigma <- 0.5
+nb_simul <- 1000
+
+#Perform siluations
+sim <- sapply(1:nb_simul, simul_fitnessdata_normal, rho=-0.1, rho_ng=-0.1, sigma = 0.5, nrep=10)
+sim <- as.data.frame(t(sim))
+
+#Add indic SA
+sim <- add_indic_sign(sim)
+
+#Add number of simul for each SA value to keep only 100 simuls per SA value
+sim <- add_sim_number_SA(sim)
+
+
+## Local adaptation (genetic)
+tapply(sim$IndicGen[sim$index_SA_Gen<101], sim$SA_Gen[sim$index_SA_Gen<101], length)
+tapply(sim$IndicGen_aov[sim$index_SA_Gen<101], sim$SA_Gen[sim$index_SA_Gen<101], mean)
+
+## Local adaptation (non genetic)
+tapply(sim$IndicNonGen[sim$index_SA_NonGen<101], sim$SA_NonGen[sim$index_SA_NonGen<101], mean)
+tapply(sim$IndicNonGen_aov[sim$index_SA_NonGen<101], sim$SA_NonGen[sim$index_SA_NonGen<101], mean)
+
+tapply(sim$IndicGen, sim$SA_Gen, length)
+tapply(sim$IndicNonGen, sim$SA_NonGen, length)
+
+```
+
+
+
+## Plot
+### Plot genetic
+```{r } 
+
+#Number of simuls for each SA value
+tapply(sim$index_SA_Gen, sim$SA_Gen, length)
+
+#Save the same number of simuls for each SA value
+nb_per_SA=10
+sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
+                                          type_SA = "genetic",
+                                          nb_simul_per_SA = nb_per_SA, 
+                                          minimum_SA = "0")
+#To check 
+# dim(sim)
+# dim(sim_select_genetic)
+# tapply(sim_select_genetic$index_SA_Gen, sim_select_genetic$SA_Gen, length)
+
+#Compute proportion of significant simul for each SA values
+data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)), 
+                 prop_val_sign = tapply(sim_select_genetic$IndicGen, 
+                                        sim_select_genetic$SA_Gen, mean), 
+                 prop_val_sign_aov = tapply(sim_select_genetic$IndicGen_aov, 
+                                        sim_select_genetic$SA_Gen, mean))
+
+
+
+#Plot
+plot_genetic<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_genet)) + 
+   geom_point(aes(y=prop_val_sign), color="#DCA237", size = 3) + 
+   geom_line(aes(y=prop_val_sign), color="#DCA237", size = 1, linetype = "dashed") + 
+   geom_point(aes(y=prop_val_sign_aov), color="#459B76", size = 3) + 
+   geom_line(aes(y=prop_val_sign_aov), color="#459B76", size = 1) + 
+   ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
+   xlab("Intensity of genetic local adaptation (SA)")  +
+   theme_LO_sober  + 
+   labs(color = "Models") +
+   scale_color_manual(values = c("LMER" = "#DCA237", "Anova" = "#459B76"))
+plot_genetic
+
+
+#Save plot
+name_plot<-paste0("Simul_powertest_genetic_",
+      nb_simul,"nbsimul_",nb_per_SA,
+      "nbsimulperSA.pdf")
+cowplot::save_plot(file =here::here("figures",name_plot ),
+                  plot_genetic, base_height = 10/cm(1), base_width = 14/cm(1), dpi = 1200)
+
+```
+
+### Plot non-genetic
+```{r } 
+
+#Number of simuls for each SA non genetic value
+tapply(sim$index_SA_NonGen, sim$SA_NonGen, length)
+
+#Save the same number of simuls for each SA value
+nb_per_SA 
+sim_select_nongenetic <- select_sample_simul(dataset_sim = sim, 
+                                          type_SA = "non-genetic",
+                                          nb_simul_per_SA = nb_per_SA, 
+                                          minimum_SA = "0")
+#To check 
+# dim(sim)
+# dim(sim_select_nongenetic)
+# tapply(sim_select_nongenetic$index_SA_Gen, sim_select_nongenetic$SA_Gen, length)
+# tapply(sim_select_nongenetic$index_SA_NonGen, sim_select_nongenetic$SA_NonGen, length)
+
+#Compute proportion of significant simul for each SA values
+data_prop <- data.frame(val_SA_nongenet = sort(unique(sim_select_nongenetic$SA_NonGen)), 
+                 prop_val_sign = tapply(sim_select_nongenetic$IndicNonGen, 
+                                        sim_select_nongenetic$SA_NonGen, mean), 
+                 prop_val_sign_aov = tapply(sim_select_nongenetic$IndicNonGen_aov, 
+                                        sim_select_nongenetic$SA_NonGen, mean))
+
+
+
+#Plot
+plot_nongenetic<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongenet)) + 
+   geom_point(aes(y=prop_val_sign), color="#DCA237", size = 3) + 
+   geom_line(aes(y=prop_val_sign), color="#DCA237", size = 1, linetype = "dashed") + 
+   geom_point(aes(y=prop_val_sign_aov), color="#459B76", size = 3) + 
+   geom_line(aes(y=prop_val_sign_aov), color="#459B76", size = 1) + 
+   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
+   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   theme_LO_sober + 
+   labs(color = "Models") +
+   scale_color_manual(values = c("LMER" = "#DCA237", "Anova" = "#459B76"))
+plot_nongenetic
+
+
+#Save plot
+name_plot<-paste0("Simul_powertest_nongenetic_",
+      nb_simul,"nbsimul_",nb_per_SA,
+      "nbsimulperSA.pdf")
+cowplot::save_plot(file =here::here("figures",name_plot ),
+                  plot_nongenetic, base_height = 10/cm(1), base_width = 14/cm(1), dpi = 1200)
+
+```
+
+
+### Plot commun
+```{r } 
+
+power_plot<-cowplot::plot_grid(plot_nongenetic,plot_genetic,
+                          labels=c("A", "B"), 
+                          label_size = 15,
+                          ncol =1, nrow = 2,
+                     #    hjust = 0, vjust = 1,
+                          scale = c(1,  1))
+power_plot
+
+
+
+#Save plot
+name_plot<-paste0("Simul_powertest_",
+      nb_simul,"nbsimul_",nb_per_SA,
+      "nbsimulperSA.pdf")
+cowplot::save_plot(file =here::here("figures",name_plot ),
+                  power_plot, base_height = 20/cm(1), base_width = 14/cm(1), dpi = 1200)
+
+
+
+```
+
+
+
+
+## False positive rate Analyses
+### No genetic and no non genetic effects
+```{r } 
+sim <- sapply(1:5, simul_fitnessdata_normal, rho=0, rho_ng=0, sigma = 0.5, nrep=10)
+sim <- as.data.frame(t(sim))
+sim <- add_indic_sign(sim)
+  
+## Local adaptation (genetic)
+mean(sim$IndicGen)
+mean(sim$IndicGen_aov)
+
+## Local adaptation (non genetic)
+mean(sim$IndicNonGen)
+mean(sim$IndicNonGen_aov)
+
+
+```
+
+
+### Genetic effects and no non-genetic effects
+```{r } 
+
+sim <- sapply(1:500, simul_fitnessdata_normal, rho=-0.1, rho_ng=0, sigma = 0.5, nrep=10)
+sim <- as.data.frame(t(sim))
+sim <- add_indic_sign(sim)
+
+## Local adaptation (genetic)
+tapply(sim$IndicGen, sim$SA_Gen, mean)
+
+## Local adaptation (non genetic)
+mean(sim$IndicNonGen)
+
+
+```
+
+
+### Non genetic effects and no genetic effects
+```{r } 
+
+sim <- sapply(1:500, simul_fitnessdata_normal, rho=0, rho_ng=-0.1, sigma=0.5, nrep=10)
+sim <- as.data.frame(t(sim))
+sim <- add_indic_sign(sim)
+
+## Local adaptation (genetic)
+mean(sim$IndicGen)
+
+## Local adaptation (non genetic)
+tapply(sim$IndicNonGen, sim$SA_NonGen, mean)
+
+
+
+```
+
