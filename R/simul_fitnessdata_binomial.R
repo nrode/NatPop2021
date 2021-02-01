@@ -17,11 +17,11 @@
 #' @export 
 #'
 #' @examples
-#'simul_fitnessdata_poisson(seed = 1, npop = 3, nhab = 3, nrep = 5, sdpophab = 1, sdpophab_ng = 1, 
+#'simul_fitnessdata_binomial(seed = 1, npop = 3, nhab = 3, nrep = 5, sdpophab = 1, sdpophab_ng = 1, 
 #'sigma = 0.5, rho=-1/(nhab-1), rho_ng=-1/(nhab-1), sdpophab_ng = 1, sigma = 0.5, constant = 0)
 
 
-simul_fitnessdata_poisson <- function(seed = 1, npop = 3, nhab = 3, nrep = 5, sdpophab = 1, 
+simul_fitnessdata_binomial <- function(seed = 1, npop = 3, nhab = 3, nrep = 5, sdpophab = 1, 
                                       rho = -1/(nhab-1), rho_ng = -1/(nhab-1), sdpophab_ng = 1, 
                                       sigma = 0.5, constant = 0){
   
@@ -102,14 +102,16 @@ simul_fitnessdata_poisson <- function(seed = 1, npop = 3, nhab = 3, nrep = 5, sd
   
   # data$fitness <- data$GenEff + data$NonGenEff + rnorm(n=nrow(data), 0, sigma)
   # data$fitness <- rpois(n=nrow(data), lambda = exp(constant + data$GenEff + data$NonGenEff))
-  data$fitness <- rbinom(n=nrow(data), prob = logit(data$GenEff + data$NonGenEff))
+  data$fitness <- rbinom(n=nrow(data),
+                         size = 1, 
+                         prob = (1/(1+exp(-(data$GenEff + data$NonGenEff)))))
   #tapply(data$fitness, list(data$Pop, data$Hab, data$Gen), mean)
   
   ##################################################
   ## Estimate genetic and non-genetic SA ###
   ##################################################
   
-  m00 <- lm(log(fitness +1)~pop_gen+hab_gen+SA+SAIndicG0, data=data)
+  m00 <- lm(asin(sqrt(fitness))~pop_gen+hab_gen+SA+SAIndicG0, data=data)
   indic <- grep("SA",names(coef(m00)))
   
   SAcoef <- coef(m00)[indic]
@@ -119,9 +121,9 @@ simul_fitnessdata_poisson <- function(seed = 1, npop = 3, nhab = 3, nrep = 5, sd
   ## Analysis of genetic effects lmer ###
   #######################################################
   ## Model to get the df of the interaction
-  m_perGen <- lm(log(fitness +1)~pop_gen+hab_gen+Pop:Hab:IndicG0+Pop:Hab:IndicG2+SA:IndicG0+SA, data=data)
+  m_perGen <- lm(asin(sqrt(fitness))~pop_gen+hab_gen+Pop:Hab:IndicG0+Pop:Hab:IndicG2+SA:IndicG0+SA, data=data)
   
-  m00 <- lme4::lmer(log(fitness +1)~Pop+Hab+SA+(1|Pop:Hab), data=data)
+  m00 <- lme4::lmer(asin(sqrt(fitness))~Pop+Hab+SA+(1|Pop:Hab), data=data)
   
   
   indic <- grep("SA",names(lme4::fixef(m00)))
@@ -133,9 +135,9 @@ simul_fitnessdata_poisson <- function(seed = 1, npop = 3, nhab = 3, nrep = 5, sd
   ## Analysis of genetic and non-genetic effects lmer ###
   #######################################################
   ## Model to get the df of the interaction
-  m_perGen <- lm(log(fitness +1)~pop_gen+hab_gen+Pop:Hab:IndicG0+Pop:Hab+SA:IndicG0+SA, data=data)
+  m_perGen <- lm(asin(sqrt(fitness))~pop_gen+hab_gen+Pop:Hab:IndicG0+Pop:Hab+SA:IndicG0+SA, data=data)
   
-  m0 <- lme4::lmer(log(fitness +1)~pop_gen+hab_gen+SA+SAIndicG0+(1|Pop:Hab)+
+  m0 <- lme4::lmer(asin(sqrt(fitness))~pop_gen+hab_gen+SA+SAIndicG0+(1|Pop:Hab)+
                      (0+lme4::dummy(Gen, "G0")|Pop:Hab), data=data)
   
   indic <- grep("SA",names(lme4::fixef(m0)))
@@ -150,7 +152,7 @@ simul_fitnessdata_poisson <- function(seed = 1, npop = 3, nhab = 3, nrep = 5, sd
   ## Analysis of genetic effects lm   ###
   #######################################################
   
-  m1 <- aov(log(fitness +1)~pop_gen+hab_gen+SA+Pop:Hab, contrasts=list(Pop="contr.sum", Hab="contr.sum"), data=data)
+  m1 <- aov(asin(sqrt(fitness))~pop_gen+hab_gen+SA+Pop:Hab, contrasts=list(Pop="contr.sum", Hab="contr.sum"), data=data)
   
   ## F test for SA
   Fratio = (anova(m1)[3,2]/anova(m1)[4,2])/(1/anova(m1)[4,1])
@@ -160,7 +162,7 @@ simul_fitnessdata_poisson <- function(seed = 1, npop = 3, nhab = 3, nrep = 5, sd
   ## Analysis of genetic and non-genetic effects lm   ###
   #######################################################
   data$pop_hab_G0 <- as.factor(ifelse(data$Gen=="G0", paste(data$Pop, data$Hab, sep="_"), 0))
-  m2 <- aov(log(fitness +1)~pop_gen+hab_gen+SA:IndicG0+SA+Pop:Hab+Pop:Hab:IndicG0, data=data)
+  m2 <- aov(asin(sqrt(fitness))~pop_gen+hab_gen+SA:IndicG0+SA+Pop:Hab+Pop:Hab:IndicG0, data=data)
   
   ## F test for SA
   Fratio_Gen_aov = (anova(m2)[3,2]/anova(m2)[5,2])/(1/anova(m2)[5,1])
