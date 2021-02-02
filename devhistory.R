@@ -34,6 +34,7 @@ usethis::use_r("add_indic_sign")
 usethis::use_r("add_sim_number_SA")
 usethis::use_r("select_sample_simul")
 usethis::use_r("theme_LO_sober")
+usethis::use_r("save_allprop_figures")
 
 
 ## Update NAMESPACE file
