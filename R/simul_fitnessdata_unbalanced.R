@@ -28,8 +28,7 @@ simul_fitnessdata_unbalanced <- function(distrib = "normal", unbalanced_dataset 
   # Values of parameters
   nfruit <- nlevels(as.factor(unbalanced_dataset$Original_environment)) 
   nhab <- nlevels(as.factor(unbalanced_dataset$Test_environment))
-  ntrial <- mean(as.numeric(as.character(unbalanced_dataset$Nb_eggs)), na.rm = TRUE)
-
+  ntrial <- round(mean(as.numeric(as.character(unbalanced_dataset$Nb_eggs)), na.rm = TRUE), digits = 0)
   #Create empty dataset       
   data <- data.frame(Ind = as.factor(1:length(unbalanced_dataset$Test_environment)), 
              Hab = as.factor(unbalanced_dataset$Test_environment), 
