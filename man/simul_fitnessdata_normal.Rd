@@ -11,7 +11,7 @@ simul_fitnessdata_normal(
   nrep = 5,
   sdpophab = 1,
   rho = -1/(nhab - 1),
-  rho_ng = -1/(nhab - 1),
+  rho_ng = 0,
   sdpophab_ng = 1,
   sigma = 0.5
 )

@@ -13,8 +13,7 @@ simul_fitnessdata_poisson(
   rho = -1/(nhab - 1),
   rho_ng = -1/(nhab - 1),
   sdpophab_ng = 1,
-  sigma = 0.5,
-  constant = 0
+  sigma = 0.5
 )
 }
 \arguments{
@@ -35,8 +34,6 @@ simul_fitnessdata_poisson(
 \item{sdpophab_ng}{Standard error for the variance of the non-genetic interaction PopxHabitat}
 
 \item{sigma}{Residual variance across replicates}
-
-\item{constant}{Should we add a constant factor?}
 }
 \value{
 vector seed, SA_Gen_True, SA_NonGen_True, SAcoef, rho, rho_ng, Fratio_Gen,

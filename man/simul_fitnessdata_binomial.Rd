@@ -10,11 +10,11 @@ simul_fitnessdata_binomial(
   nhab = 3,
   nrep = 5,
   sdpophab = 1,
+  ntrial = 60,
   rho = -1/(nhab - 1),
   rho_ng = -1/(nhab - 1),
   sdpophab_ng = 1,
-  sigma = 0.5,
-  constant = 0
+  sigma = 0.5
 )
 }
 \arguments{
@@ -36,7 +36,7 @@ simul_fitnessdata_binomial(
 
 \item{sigma}{Residual variance across replicates}
 
-\item{constant}{Should we add a constant factor?}
+\item{trial_nb}{number of trial, corresponding to the number of eggs for emergence rate}
 }
 \value{
 vector seed, SA_Gen_True, SA_NonGen_True, SAcoef, rho, rho_ng, Fratio_Gen,
