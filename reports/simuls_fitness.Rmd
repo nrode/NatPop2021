@@ -21,6 +21,8 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 devtools::load_all()
 ```
 
+
+# BALANCED DESIGN
 # Normal distribution
 ## Simulation
 ```{r } 
@@ -67,7 +69,7 @@ tapply(sim$IndicNonGen, sim$SA_NonGen, length)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=45
+nb_per_SA=100
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -91,7 +93,7 @@ plot_genetic_normal<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_genet)) +
    geom_point(aes(y=prop_val_sign, color="LMER"), size = 4) + 
    geom_line(aes(y=prop_val_sign, color="LMER"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
-   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.5) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.75) + 
    ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
    xlab("Intensity of genetic local adaptation (SA)")  +
    ggtitle("Normal data") +
@@ -138,10 +140,10 @@ data_prop <- data.frame(val_SA_nongenet = sort(unique(sim_select_nongenetic$SA_N
 colors<-c("LMER" = "#DCA237", "Anova" = "#459B76")
 #Plot
 plot_nongenetic_normal<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongenet)) + 
-   geom_point(aes(y=prop_val_sign, color="LMER"), size = 3) + 
-   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1) + 
-   geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 3) + 
-   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1) + 
+   geom_point(aes(y=prop_val_sign, color="LMER"), size = 4) + 
+   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1.5) + 
+   geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.75) + 
    ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
    xlab("Intensity of non-genetic local adaptation (SA)")  +
    theme_LO_sober + 
@@ -187,9 +189,9 @@ name_plot<-paste0("Simul_powertest_normal_",
 
 
 
-## False positive rate Analyses
-### No genetic and no non genetic effects
+## False positive rate analyses
 ```{r } 
+### No genetic and no non genetic effects
 nb_simul = 1000
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", rho=0, rho_ng=0, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
@@ -207,11 +209,8 @@ mean(sim$IndicNonGen)
 mean(sim$IndicNonGen_aov)
 
 
-```
-
 
 ### Genetic effects and no non-genetic effects
-```{r } 
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", rho=-0.1, rho_ng=0,  
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
@@ -228,11 +227,8 @@ mean(sim$IndicNonGen)
 mean(sim$IndicNonGen_aov)
 
 
-```
-
 
 ### Non genetic effects and no genetic effects
-```{r } 
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", rho=0, rho_ng=-0.1,  
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
@@ -297,7 +293,7 @@ tapply(sim$IndicNonGen, sim$SA_NonGen, length)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=45
+nb_per_SA=100
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -321,7 +317,7 @@ plot_genetic_poisson<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_genet)) +
    geom_point(aes(y=prop_val_sign, color="LMER"), size = 4) + 
    geom_line(aes(y=prop_val_sign, color="LMER"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
-   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.5) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.75) + 
    ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
    xlab("Intensity of genetic local adaptation (SA)")  +
    ggtitle("Poisson data") +
@@ -368,10 +364,10 @@ data_prop <- data.frame(val_SA_nongenet = sort(unique(sim_select_nongenetic$SA_N
 colors<-c("LMER" = "#DCA237", "Anova" = "#459B76")
 #Plot
 plot_nongenetic_poisson<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongenet)) + 
-   geom_point(aes(y=prop_val_sign, color="LMER"), size = 3) + 
-   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1) + 
-   geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 3) + 
-   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1) + 
+   geom_point(aes(y=prop_val_sign, color="LMER"), size = 4) + 
+   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1.5) + 
+   geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.75) + 
    ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
    xlab("Intensity of non-genetic local adaptation (SA)")  +
    ggtitle("Poisson data") +
@@ -417,9 +413,9 @@ power_plot_poisson
 
 
 
-## False positive rate Analyses
-### No genetic and no non genetic effects
+## False positive rate analyses
 ```{r } 
+### No genetic and no non genetic effects
 nb_simul = 1000
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson", rho=0, rho_ng=0,  
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
@@ -437,11 +433,7 @@ mean(sim$IndicNonGen)
 mean(sim$IndicNonGen_aov)
 
 
-```
-
-
 ### Genetic effects and no non-genetic effects
-```{r } 
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson", rho=-0.1, rho_ng=0,  
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
@@ -458,11 +450,8 @@ mean(sim$IndicNonGen)
 mean(sim$IndicNonGen_aov)
 
 
-```
-
 
 ### Non genetic effects and no genetic effects
-```{r } 
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson", rho=0, rho_ng=-0.1, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
@@ -528,7 +517,7 @@ tapply(sim$IndicNonGen, sim$SA_NonGen, length)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=45
+nb_per_SA=100
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -552,7 +541,7 @@ plot_genetic_binomial<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_genet)) +
    geom_point(aes(y=prop_val_sign, color="LMER"), size = 4) + 
    geom_line(aes(y=prop_val_sign, color="LMER"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
-   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.5) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.75) + 
    ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
    xlab("Intensity of genetic local adaptation (SA)")  +
    ggtitle("Binomial data") +
@@ -602,7 +591,7 @@ plot_nongenetic_binomial<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongene
    geom_point(aes(y=prop_val_sign, color="LMER"), size = 4) + 
    geom_line(aes(y=prop_val_sign, color="LMER"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
-   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.5) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.75) + 
    ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
    xlab("Intensity of non-genetic local adaptation (SA)")  +
    ggtitle("Binomial data") +
@@ -646,7 +635,7 @@ power_plot_binomial
 
 ```
 
-# All plots
+## All plots
 ```{r } 
 power_plot_all<-cowplot::plot_grid(plot_nongenetic_normal,plot_nongenetic_poisson,plot_nongenetic_binomial,
                                    plot_genetic_normal, plot_genetic_poisson,plot_genetic_binomial,
@@ -669,9 +658,9 @@ cowplot::save_plot(file =here::here("figures",name_plot ),
 
 ```
 
-## False positive rate Analyses
-### No genetic and no non genetic effects
+## False positive rate analyses
 ```{r } 
+### No genetic and no non genetic effects
 nb_simul = 1000
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",  rho=0, rho_ng=0, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
@@ -688,11 +677,8 @@ mean(sim$IndicNonGen)
 mean(sim$IndicNonGen_aov)
 
 
-```
-
 
 ### Genetic effects and no non-genetic effects
-```{r } 
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",rho=-0.1, rho_ng=0,
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
@@ -708,11 +694,8 @@ mean(sim$IndicNonGen)
 mean(sim$IndicNonGen_aov)
 
 
-```
-
-
+### 
 ### Non genetic effects and no genetic effects
-```{r } 
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",rho=0, rho_ng=-0.1,
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
@@ -731,3 +714,23 @@ tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
 
 
 
+# UNBALANCED DESIGN
+```{r } 
+#unbalanced dataset
+data_PERF <- read.table(file="/Users/laure/Documents/RESEARCH/z_PhD/POPNAT/OLD/DATA_COMPLET/Clean/DATACOMPLET_PERF_POPNAT2018.csv",sep=";",header=T)
+data_PERF$Original_environment<-as.factor(data_PERF$Original_environment)
+data_PERF <- data_PERF[data_PERF$Original_environment!="WT3",]
+data_PERF <- data_PERF[data_PERF$Test_environment!="GF",]
+data_PERF <- data_PERF[data_PERF$Test_environment!="Grape",] #mvrnom doesn't work with unbalanced matrix
+data_PERF <- droplevels(data_PERF)
+
+
+#Simul data 
+nb_simul <- 10000
+sim <- sapply(distrib = "normal", data = data_PERF, seed = 1, sdpop = 0.5, 
+                              sdfruithab = 1, sdfruithab_ng = 1, 
+                              rho = -1/(nhab-1), rho_ng = 0, sigma = 0.5)
+sim <- as.data.frame(t(sim))
+sim <- add_indic_sign(sim)
+sim <- add_sim_number_SA(sim)
+```
