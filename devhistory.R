@@ -28,10 +28,8 @@ usethis::use_package("cowplot")
 
 ## Create a R directory and a file for functions
 usethis::use_r("simulmodel")
-usethis::use_r("simul_fitnessdata_normal")
-usethis::use_r("simul_fitnessdata_poisson")
-usethis::use_r("simul_fitnessdata_binomial")
-usethis::use_r("add_indic_sign")
+usethis::use_r("simul_fitnessdata")
+usethis::use_r("add_indic_sign") 
 usethis::use_r("add_sim_number_SA")
 usethis::use_r("select_sample_simul")
 usethis::use_r("theme_LO_sober")
