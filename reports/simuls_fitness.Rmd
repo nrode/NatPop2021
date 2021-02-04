@@ -209,7 +209,6 @@ mean(sim$IndicNonGen)
 mean(sim$IndicNonGen_aov)
 
 
-
 ### Genetic effects and no non-genetic effects
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", rho=-0.1, rho_ng=0,  
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
@@ -219,13 +218,18 @@ sim <- as.data.frame(t(sim))
 sim <- add_indic_sign(sim)
 
 ## Local adaptation (genetic)
-tapply(sim$IndicGen, sim$SA_Gen, mean)
+tapply(sim$IndicGen, sim$SA_Gen, length)
 tapply(sim$IndicGen_aov, sim$SA_Gen, mean)
 
 ## Local adaptation (non genetic)
 mean(sim$IndicNonGen)
 mean(sim$IndicNonGen_aov)
 
+tapply(sim$IndicNonGen, sim$SA_Gen, mean)
+tapply(sim$IndicNonGen_aov, sim$SA_Gen, mean)
+
+tapply(sim$IndicNonGen, sim$SA_NonGen, mean)
+tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
 
 
 ### Non genetic effects and no genetic effects
@@ -238,6 +242,12 @@ sim <- add_indic_sign(sim)
 ## Local adaptation (genetic)
 mean(sim$IndicGen)
 mean(sim$IndicGen_aov)
+
+tapply(sim$IndicGen, sim$SA_Gen, mean)
+tapply(sim$IndicGen_aov, sim$SA_Gen, mean)
+
+tapply(sim$IndicGen, sim$SA_NonGen, mean)
+tapply(sim$IndicGen_aov, sim$SA_NonGen, mean)
 
 ## Local adaptation (non genetic)
 tapply(sim$IndicNonGen, sim$SA_NonGen, mean)
@@ -715,7 +725,7 @@ tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
 
 
 # UNBALANCED DESIGN
-```{r } 
+```{r, eval= FALSE } 
 #unbalanced dataset
 data_PERF <- read.table(file="/Users/laure/Documents/RESEARCH/z_PhD/POPNAT/OLD/DATA_COMPLET/Clean/DATACOMPLET_PERF_POPNAT2018.csv",sep=";",header=T)
 data_PERF$Original_environment<-as.factor(data_PERF$Original_environment)
