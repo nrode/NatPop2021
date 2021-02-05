@@ -21,6 +21,12 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 devtools::load_all()
 ```
 
+# Colors plot
+```{r } 
+colors <- c("LMER" = "#DCA237", "Anova" = "#459B76")
+lines <- c("Balanced" = "solid", "Unbalanced" = "dotted")
+```
+
 
 # BALANCED DESIGN
 # Normal distribution
@@ -31,7 +37,8 @@ devtools::load_all()
 nb_simul <- 10000
 
 #Perform siluations
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", rho = -0.05, rho_ng = -0.05, 
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", 
+              rho = -0.05, rho_ng = -0.05, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
 sim <- as.data.frame(t(sim))
@@ -86,20 +93,22 @@ data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)),
                  prop_val_sign_aov = tapply(sim_select_genetic$IndicGen_aov, 
                                         sim_select_genetic$SA_Gen, mean))
 
-colors <- c("LMER" = "#DCA237", "Anova" = "#459B76")
+
 
 #Plot
 plot_genetic_normal<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_genet)) + 
    geom_point(aes(y=prop_val_sign, color="LMER"), size = 4) + 
-   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1.5) + 
+   geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Balanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
-   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.75) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Balanced"), size = 0.75) + 
    ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
    xlab("Intensity of genetic local adaptation (SA)")  +
    ggtitle("Normal data") +
    theme_LO_sober  + 
-   labs(color = "Methods") +
-   scale_color_manual(values = colors)
+   ggtitle("Normal data") +
+   labs(color = "Methods", linetype = "Design") +
+   scale_color_manual(values = colors) +
+   scale_linetype_manual(values = lines)
 plot_genetic_normal
 
 
@@ -141,15 +150,16 @@ colors<-c("LMER" = "#DCA237", "Anova" = "#459B76")
 #Plot
 plot_nongenetic_normal<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongenet)) + 
    geom_point(aes(y=prop_val_sign, color="LMER"), size = 4) + 
-   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1.5) + 
+   geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Balanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
-   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.75) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Balanced"), size = 0.75) + 
    ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
    xlab("Intensity of non-genetic local adaptation (SA)")  +
    theme_LO_sober + 
    ggtitle("Normal data") +
-   labs(color = "Methods") +
-   scale_color_manual(values = colors)
+   labs(color = "Methods", linetype = "Design") +
+   scale_color_manual(values = colors) +
+   scale_linetype_manual(values = lines)
 plot_nongenetic_normal
 
 
@@ -192,7 +202,7 @@ name_plot<-paste0("Simul_powertest_normal_",
 ## False positive rate analyses
 ```{r } 
 ### No genetic and no non genetic effects
-nb_simul = 1000
+nb_simul = 200
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", rho=0, rho_ng=0, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
@@ -310,20 +320,20 @@ data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)),
                  prop_val_sign_aov = tapply(sim_select_genetic$IndicGen_aov, 
                                         sim_select_genetic$SA_Gen, mean))
 
-colors <- c("LMER" = "#DCA237", "Anova" = "#459B76")
 
 #Plot
 plot_genetic_poisson<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_genet)) + 
    geom_point(aes(y=prop_val_sign, color="LMER"), size = 4) + 
-   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1.5) + 
+   geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Balanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
-   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.75) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Balanced"), size = 0.75) + 
    ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
    xlab("Intensity of genetic local adaptation (SA)")  +
    ggtitle("Poisson data") +
    theme_LO_sober  + 
-   labs(color = "Methods") +
-   scale_color_manual(values = colors)
+   labs(color = "Methods", linetype = "Design") +
+   scale_color_manual(values = colors) +
+   scale_linetype_manual(values = lines)
 plot_genetic_poisson
 
 
@@ -365,15 +375,16 @@ colors<-c("LMER" = "#DCA237", "Anova" = "#459B76")
 #Plot
 plot_nongenetic_poisson<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongenet)) + 
    geom_point(aes(y=prop_val_sign, color="LMER"), size = 4) + 
-   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1.5) + 
+   geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Balanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
-   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.75) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Balanced"), size = 0.75) + 
    ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
    xlab("Intensity of non-genetic local adaptation (SA)")  +
    ggtitle("Poisson data") +
-   theme_LO_sober + 
-   labs(color = "Methods") +
-   scale_color_manual(values = colors)
+   theme_LO_sober +
+   labs(color = "Methods", linetype = "Design") +
+   scale_color_manual(values = colors) +
+   scale_linetype_manual(values = lines)
 plot_nongenetic_poisson
 
 
@@ -416,7 +427,7 @@ power_plot_poisson
 ## False positive rate analyses
 ```{r } 
 ### No genetic and no non genetic effects
-nb_simul = 1000
+nb_simul = 200
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson", rho=0, rho_ng=0,  
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
@@ -475,10 +486,11 @@ tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
 ## Simulation
 ```{r } 
 
-nb_simul <- 1000
+nb_simul <- 10000
 
 #Perform siluations
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",  rho = -0.05, rho_ng = -0.05, 
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",  rho = -0.05, 
+              rho_ng = -0.05, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5, ntrial = 60)
 sim <- as.data.frame(t(sim))
@@ -534,20 +546,20 @@ data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)),
                  prop_val_sign_aov = tapply(sim_select_genetic$IndicGen_aov, 
                                         sim_select_genetic$SA_Gen, mean))
 
-colors <- c("LMER" = "#DCA237", "Anova" = "#459B76")
 
 #Plot
 plot_genetic_binomial<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_genet)) + 
    geom_point(aes(y=prop_val_sign, color="LMER"), size = 4) + 
-   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1.5) + 
+   geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Balanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
-   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.75) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Balanced"), size = 0.75) + 
    ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
    xlab("Intensity of genetic local adaptation (SA)")  +
    ggtitle("Binomial data") +
-   theme_LO_sober  + 
-   labs(color = "Methods") +
-   scale_color_manual(values = colors)
+   theme_LO_sober +
+   labs(color = "Methods", linetype = "Design") +
+   scale_color_manual(values = colors) +
+   scale_linetype_manual(values = lines)
 plot_genetic_binomial
 
 
@@ -589,15 +601,16 @@ colors<-c("LMER" = "#DCA237", "Anova" = "#459B76")
 #Plot
 plot_nongenetic_binomial<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongenet)) + 
    geom_point(aes(y=prop_val_sign, color="LMER"), size = 4) + 
-   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1.5) + 
+   geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Balanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
-   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 0.75) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Balanced"), size = 0.75) + 
    ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
    xlab("Intensity of non-genetic local adaptation (SA)")  +
    ggtitle("Binomial data") +
-   theme_LO_sober + 
-   labs(color = "Methods") +
-   scale_color_manual(values = colors)
+   theme_LO_sober +
+   labs(color = "Methods", linetype = "Design") +
+   scale_color_manual(values = colors) +
+   scale_linetype_manual(values = lines)
 plot_nongenetic_binomial
 
 
@@ -652,16 +665,16 @@ power_plot_all
 name_plot<-paste0("Simul_powertest_ALLDATA_",
       nb_simul,"nbsimul_",nb_per_SA,
       "nbsimulperSA.pdf")
-cowplot::save_plot(file =here::here("figures",name_plot ),
-                  power_plot_all, base_height = 20/cm(1), base_width = 42/cm(1), dpi = 1200)
-
+# cowplot::save_plot(file =here::here("figures",name_plot ),
+#                   power_plot_all, base_height = 20/cm(1), base_width = 42/cm(1), dpi = 1200)
+# 
 
 ```
 
 ## False positive rate analyses
 ```{r } 
 ### No genetic and no non genetic effects
-nb_simul = 1000
+nb_simul = 200
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",  rho=0, rho_ng=0, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
@@ -715,6 +728,7 @@ tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
 
 
 # UNBALANCED DESIGN
+#Dataset
 ```{r } 
 #unbalanced dataset
 data_PERF <- read.table(file="/Users/laure/Documents/RESEARCH/z_PhD/POPNAT/OLD/DATA_COMPLET/Clean/DATACOMPLET_PERF_POPNAT2018.csv",sep=";",header=T)
@@ -723,14 +737,501 @@ data_PERF <- data_PERF[data_PERF$Original_environment!="WT3",]
 data_PERF <- data_PERF[data_PERF$Test_environment!="GF",]
 data_PERF <- data_PERF[data_PERF$Test_environment!="Grape",] #mvrnom doesn't work with unbalanced matrix
 data_PERF <- droplevels(data_PERF)
+```
 
-
+# Normal distribution
+## Simulation
+```{r } 
 #Simul data 
 nb_simul <- 10000
-sim <- sapply(distrib = "normal", data = data_PERF, seed = 1, sdpop = 0.5, 
-                              sdfruithab = 1, sdfruithab_ng = 1, 
-                              rho = -1/(nhab-1), rho_ng = 0, sigma = 0.5)
+sim <- sapply(1:nb_simul, simul_fitnessdata_unbalanced, distrib = "normal", 
+              unbalanced_dataset = data_PERF, sdpop = 0.5, 
+              sdfruithab = 0.5, sdfruithab_ng = 0.5, rho = -0.05, rho_ng = -0.05, 
+              sigma = 0.5)
 sim <- as.data.frame(t(sim))
 sim <- add_indic_sign(sim)
 sim <- add_sim_number_SA(sim)
+```
+
+
+
+
+## Plot
+```{r } 
+####################################
+###### Plot genetic
+####################################
+#Number of simuls for each SA value
+tapply(sim$index_SA_Gen, sim$SA_Gen, length)
+
+#Save the same number of simuls for each SA value
+nb_per_SA=100
+sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
+                                          type_SA = "genetic",
+                                          nb_simul_per_SA = nb_per_SA, 
+                                          minimum_SA = "0")
+
+#Compute proportion of significant simul for each SA values
+data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)), 
+                 prop_val_sign = tapply(sim_select_genetic$IndicGen, 
+                                        sim_select_genetic$SA_Gen, mean), 
+                 prop_val_sign_aov = tapply(sim_select_genetic$IndicGen_aov, 
+                                        sim_select_genetic$SA_Gen, mean))
+
+
+#Plot
+plot_genetic_normal_unbalanced<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_genet)) + 
+   geom_point(aes(y=prop_val_sign, color="LMER"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1, linetype = "dotted") + 
+   geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1, linetype = "dotted") + 
+   ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
+   xlab("Intensity of genetic local adaptation (SA)")  +
+   ggtitle("Normal data (unbalanced experimental design)") +
+   theme_LO_sober +
+   labs(color = "Methods", linetype = "Design") +
+   scale_color_manual(values = colors) +
+   scale_linetype_manual(values = lines)
+plot_genetic_normal_unbalanced
+
+
+# Balanced + unbabacaled
+plot_genetic_normal_ALL <- plot_genetic_normal +
+   geom_point(data = data_prop, 
+              aes(y=prop_val_sign, x=val_SA_genet, color="LMER"), size = 2.5) + 
+   geom_line(data = data_prop, 
+             aes(y=prop_val_sign, x=val_SA_genet, 
+                 color="LMER", linetype = "Unbalanced"), size = 1) + 
+   geom_point(data = data_prop,
+              aes(y=prop_val_sign_aov, x=val_SA_genet, 
+                  color="Anova"), size = 2.5) + 
+   geom_line(data = data_prop, 
+             aes(y=prop_val_sign_aov, color="Anova", x=val_SA_genet, 
+                 linetype = "Unbalanced"), size = 1) +
+   labs(color = "Methods", linetype = "Design") +
+   scale_linetype_manual(values = lines)
+plot_genetic_normal_ALL
+
+
+################################# 
+### Plot non-genetic
+#################################
+#Number of simuls for each SA non genetic value
+tapply(sim$index_SA_NonGen, sim$SA_NonGen, length)
+
+#Save the same number of simuls for each SA value
+nb_per_SA 
+sim_select_nongenetic <- select_sample_simul(dataset_sim = sim, 
+                                          type_SA = "non-genetic",
+                                          nb_simul_per_SA = nb_per_SA, 
+                                          minimum_SA = "0")
+
+#Compute proportion of significant simul for each SA values
+data_prop <- data.frame(val_SA_nongenet = sort(unique(sim_select_nongenetic$SA_NonGen)), 
+                 prop_val_sign = tapply(sim_select_nongenetic$IndicNonGen, 
+                                        sim_select_nongenetic$SA_NonGen, mean), 
+                 prop_val_sign_aov = tapply(sim_select_nongenetic$IndicNonGen_aov, 
+                                        sim_select_nongenetic$SA_NonGen, mean))
+
+
+#Plot
+plot_nongenetic_normal_unbalanced<-ggplot2::ggplot(data = data_prop, 
+                                                   aes(x=val_SA_nongenet)) + 
+   geom_point(aes(y=prop_val_sign, color="LMER"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1, linetype = "dotted") + 
+   geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1, linetype = "dotted") + 
+   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
+   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   theme_LO_sober + 
+   ggtitle("Normal data (unbalanced experimental design)") +
+   labs(color = "Methods") +
+   scale_color_manual(values = colors)
+plot_nongenetic_normal_unbalanced
+
+
+
+
+plot_nongenetic_normal_ALL <- plot_genetic_normal +
+   geom_point(data = data_prop, 
+              aes(y=prop_val_sign, x=val_SA_nongenet, color="LMER"), size = 2.5) + 
+   geom_line(data = data_prop, 
+             aes(y=prop_val_sign, x=val_SA_nongenet, 
+                 color="LMER", linetype = "Unbalanced"), size = 1) + 
+   geom_point(data = data_prop,
+              aes(y=prop_val_sign_aov, x=val_SA_nongenet, 
+                  color="Anova"), size = 2.5) + 
+   geom_line(data = data_prop, 
+             aes(y=prop_val_sign_aov, color="Anova", x=val_SA_nongenet, 
+                 linetype = "Unbalanced"), size = 1) +
+   labs(color = "Methods", linetype = "Design") +
+   scale_linetype_manual(values = lines)
+plot_nongenetic_normal_ALL
+
+
+```
+
+
+
+
+# Poisson distribution
+## Simulation
+```{r } 
+#Simul data 
+#nb_simul <- 1000
+sim <- sapply(1:nb_simul, simul_fitnessdata_unbalanced, distrib = "poisson", 
+              unbalanced_dataset = data_PERF, sdpop = 0.5, 
+              sdfruithab = 1, sdfruithab_ng = 1, rho = -0.05, rho_ng = -0.05, sigma = 0.5)
+sim <- as.data.frame(t(sim))
+sim <- add_indic_sign(sim)
+sim <- add_sim_number_SA(sim)
+```
+
+
+
+
+## Plot
+```{r } 
+####################################
+###### Plot genetic
+####################################
+#Number of simuls for each SA value
+tapply(sim$index_SA_Gen, sim$SA_Gen, length)
+
+#Save the same number of simuls for each SA value
+nb_per_SA=100
+sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
+                                          type_SA = "genetic",
+                                          nb_simul_per_SA = nb_per_SA, 
+                                          minimum_SA = "0")
+
+#Compute proportion of significant simul for each SA values
+data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)), 
+                 prop_val_sign = tapply(sim_select_genetic$IndicGen, 
+                                        sim_select_genetic$SA_Gen, mean), 
+                 prop_val_sign_aov = tapply(sim_select_genetic$IndicGen_aov, 
+                                        sim_select_genetic$SA_Gen, mean))
+
+
+#Plot
+plot_genetic_poisson_unbalanced<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_genet)) + 
+   geom_point(aes(y=prop_val_sign, color="LMER"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1, linetype = "dotted") + 
+   geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1, linetype = "dotted") + 
+   ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
+   xlab("Intensity of genetic local adaptation (SA)")  +
+   ggtitle("Poisson data (unbalanced experimental design)") +
+   theme_LO_sober  + 
+   labs(color = "Methods") +
+   scale_color_manual(values = colors)
+plot_genetic_poisson_unbalanced
+
+
+
+
+plot_genetic_poisson_ALL <- plot_genetic_poisson +
+   geom_point(data = data_prop, 
+              aes(y=prop_val_sign, x=val_SA_genet, color="LMER"), size = 2.5) + 
+   geom_line(data = data_prop, 
+             aes(y=prop_val_sign, x=val_SA_genet, 
+                 color="LMER", linetype = "Unbalanced"), size = 1) + 
+   geom_point(data = data_prop,
+              aes(y=prop_val_sign_aov, x=val_SA_genet, 
+                  color="Anova"), size = 2.5) + 
+   geom_line(data = data_prop, 
+             aes(y=prop_val_sign_aov, color="Anova", x=val_SA_genet, 
+                 linetype = "Unbalanced"), size = 1) +
+   labs(color = "Methods", linetype = "Design") +
+   scale_linetype_manual(values = lines)
+plot_genetic_poisson_ALL
+
+
+################################# 
+### Plot non-genetic
+#################################
+#Number of simuls for each SA non genetic value
+tapply(sim$index_SA_NonGen, sim$SA_NonGen, length)
+
+#Save the same number of simuls for each SA value
+nb_per_SA 
+sim_select_nongenetic <- select_sample_simul(dataset_sim = sim, 
+                                          type_SA = "non-genetic",
+                                          nb_simul_per_SA = nb_per_SA, 
+                                          minimum_SA = "0")
+
+#Compute proportion of significant simul for each SA values
+data_prop <- data.frame(val_SA_nongenet = sort(unique(sim_select_nongenetic$SA_NonGen)), 
+                 prop_val_sign = tapply(sim_select_nongenetic$IndicNonGen, 
+                                        sim_select_nongenetic$SA_NonGen, mean), 
+                 prop_val_sign_aov = tapply(sim_select_nongenetic$IndicNonGen_aov, 
+                                        sim_select_nongenetic$SA_NonGen, mean))
+
+
+colors<-c("LMER" = "#DCA237", "Anova" = "#459B76")
+#Plot
+plot_nongenetic_poisson_unbalanced<-ggplot2::ggplot(data = data_prop, 
+                                                   aes(x=val_SA_nongenet)) + 
+   geom_point(aes(y=prop_val_sign, color="LMER"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1, linetype = "dotted") + 
+   geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1, linetype = "dotted") + 
+   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
+   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   theme_LO_sober + 
+   ggtitle("Poisson data (unbalanced experimental design)") +
+   labs(color = "Methods") +
+   scale_color_manual(values = colors)
+plot_nongenetic_poisson_unbalanced
+
+
+
+
+plot_nongenetic_poisson_ALL <- plot_nongenetic_poisson +
+   geom_point(data = data_prop, 
+              aes(y=prop_val_sign, x=val_SA_nongenet, color="LMER"), size = 2.5) + 
+   geom_line(data = data_prop, 
+             aes(y=prop_val_sign, x=val_SA_nongenet, 
+                 color="LMER", linetype = "Unbalanced"), size = 1) + 
+   geom_point(data = data_prop,
+              aes(y=prop_val_sign_aov, x=val_SA_nongenet, 
+                  color="Anova"), size = 2.5) + 
+   geom_line(data = data_prop, 
+             aes(y=prop_val_sign_aov, color="Anova", x=val_SA_nongenet, 
+                 linetype = "Unbalanced"), size = 1) +
+   labs(color = "Methods", linetype = "Design") +
+   scale_linetype_manual(values = lines)
+plot_nongenetic_poisson_ALL
+```
+
+
+
+
+
+
+# Binomial distribution
+## Simulation
+```{r } 
+#Simul data 
+#nb_simul <- 1000
+sim <- sapply(1:nb_simul, simul_fitnessdata_unbalanced, distrib = "binomial", 
+              unbalanced_dataset = data_PERF, sdpop = 0.5, 
+              sdfruithab = 0.5, sdfruithab_ng = 0.5, 
+              rho = -0.05, rho_ng = -0.05, sigma = 0.5)
+sim <- as.data.frame(t(sim))
+sim <- add_indic_sign(sim)
+sim <- add_sim_number_SA(sim)
+```
+
+
+
+
+## Plot
+```{r } 
+####################################
+###### Plot genetic
+####################################
+#Number of simuls for each SA value
+tapply(sim$index_SA_Gen, sim$SA_Gen, length)
+
+#Save the same number of simuls for each SA value
+nb_per_SA=100
+sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
+                                          type_SA = "genetic",
+                                          nb_simul_per_SA = nb_per_SA, 
+                                          minimum_SA = "0")
+
+#Compute proportion of significant simul for each SA values
+data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)), 
+                 prop_val_sign = tapply(sim_select_genetic$IndicGen, 
+                                        sim_select_genetic$SA_Gen, mean), 
+                 prop_val_sign_aov = tapply(sim_select_genetic$IndicGen_aov, 
+                                        sim_select_genetic$SA_Gen, mean))
+
+
+#Plot
+plot_genetic_Binomial_unbalanced<-ggplot2::ggplot(data = data_prop, 
+                                                  aes(x=val_SA_genet)) + 
+   geom_point(aes(y=prop_val_sign, color="LMER"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1, linetype = "dotted") + 
+   geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1, linetype = "dotted") + 
+   ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
+   xlab("Intensity of genetic local adaptation (SA)")  +
+   ggtitle("Binomial data (unbalanced experimental design)") +
+   theme_LO_sober  + 
+   labs(color = "Methods") +
+   scale_color_manual(values = colors) 
+plot_genetic_Binomial_unbalanced
+
+
+
+
+plot_genetic_binomial_ALL <- plot_genetic_binomial +
+   geom_point(data = data_prop, 
+              aes(y=prop_val_sign, x=val_SA_genet, color="LMER"), size = 2.5) + 
+   geom_line(data = data_prop, 
+             aes(y=prop_val_sign, x=val_SA_genet, 
+                 color="LMER", linetype = "Unbalanced"), size = 1) + 
+   geom_point(data = data_prop,
+              aes(y=prop_val_sign_aov, x=val_SA_genet, 
+                  color="Anova"), size = 2.5) + 
+   geom_line(data = data_prop, 
+             aes(y=prop_val_sign_aov, color="Anova", x=val_SA_genet, 
+                 linetype = "Unbalanced"), size = 1) +
+   labs(color = "Methods", linetype = "Design") +
+   scale_linetype_manual(values = lines)
+plot_genetic_binomial_ALL
+
+################################# 
+### Plot non-genetic
+#################################
+#Number of simuls for each SA non genetic value
+tapply(sim$index_SA_NonGen, sim$SA_NonGen, length)
+
+#Save the same number of simuls for each SA value
+nb_per_SA 
+sim_select_nongenetic <- select_sample_simul(dataset_sim = sim, 
+                                          type_SA = "non-genetic",
+                                          nb_simul_per_SA = nb_per_SA, 
+                                          minimum_SA = "0")
+
+#Compute proportion of significant simul for each SA values
+data_prop <- data.frame(val_SA_nongenet = sort(unique(sim_select_nongenetic$SA_NonGen)), 
+                 prop_val_sign = tapply(sim_select_nongenetic$IndicNonGen, 
+                                        sim_select_nongenetic$SA_NonGen, mean), 
+                 prop_val_sign_aov = tapply(sim_select_nongenetic$IndicNonGen_aov, 
+                                        sim_select_nongenetic$SA_NonGen, mean))
+
+
+colors<-c("LMER" = "#DCA237", "Anova" = "#459B76")
+#Plot
+plot_nongenetic_Binomial_unbalanced<-ggplot2::ggplot(data = data_prop, 
+                                                   aes(x=val_SA_nongenet)) + 
+   geom_point(aes(y=prop_val_sign, color="LMER"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign, color="LMER"), size = 1, linetype = "dotted") + 
+   geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
+   geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1, linetype = "dotted") + 
+   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
+   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   theme_LO_sober + 
+   ggtitle("Binomial data (unbalanced experimental design)") +
+   labs(color = "Methods") +
+   scale_color_manual(values = colors)
+plot_nongenetic_Binomial_unbalanced
+
+
+
+plot_nongenetic_binomial_ALL <- plot_nongenetic_binomial +
+   geom_point(data = data_prop, 
+              aes(y=prop_val_sign, x=val_SA_nongenet, color="LMER"), 
+              size = 2.5) + 
+   geom_line(data = data_prop, 
+             aes(y=prop_val_sign, x=val_SA_nongenet, 
+                 color="LMER", linetype = "Unbalanced"), size = 1) + 
+   geom_point(data = data_prop,
+              aes(y=prop_val_sign_aov, x=val_SA_nongenet, 
+                  color="Anova"), size = 2.5) + 
+   geom_line(data = data_prop, 
+             aes(y=prop_val_sign_aov, color="Anova", x=val_SA_nongenet, 
+                 linetype = "Unbalanced"), size = 1) +
+   labs(color = "Methods", linetype = "Design") +
+   scale_linetype_manual(values = lines)
+plot_nongenetic_binomial_ALL
+
+
+```
+
+
+
+# All plots unbalanced
+```{r } 
+power_plot_all_unbalanced<-cowplot::plot_grid(plot_nongenetic_normal_unbalanced,
+                                   plot_nongenetic_poisson_unbalanced,
+                                   plot_nongenetic_Binomial_unbalanced,
+                                   plot_genetic_normal_unbalanced,
+                                   plot_genetic_poisson_unbalanced,
+                                   plot_genetic_Binomial_unbalanced,
+                          #labels=c("A", "B"), 
+                          #label_size = 15,
+                          ncol =3, nrow = 2,
+                     #    hjust = 0, vjust = 1,
+                          scale = c(1,  1))
+power_plot_all_unbalanced
+
+
+
+#Save plot
+name_plot<-paste0("Simul_powertest_ALLDATA_UNBALANCED",
+      nb_simul,"nbsimul_",nb_per_SA,
+      "nbsimulperSA.pdf")
+# cowplot::save_plot(file =here::here("figures",name_plot ),
+#                   power_plot_all_unbalanced, base_height = 20/cm(1),
+#                   base_width = 42/cm(1), dpi = 1200)
+# 
+
+```
+
+
+
+
+
+
+# ALLPLOT
+```{r } 
+POWER_ALL<-cowplot::plot_grid(plot_nongenetic_normal,
+                                          plot_nongenetic_poisson,
+                                          plot_nongenetic_binomial,
+                                          plot_genetic_normal,
+                                   plot_genetic_poisson,
+                                   plot_genetic_binomial,
+                                   plot_nongenetic_normal_unbalanced,
+                                   plot_nongenetic_poisson_unbalanced,
+                                   plot_nongenetic_Binomial_unbalanced,
+                                   plot_genetic_normal_unbalanced,
+                                   plot_genetic_poisson_unbalanced,
+                                   plot_genetic_Binomial_unbalanced,
+                          #labels=c("A", "B"), 
+                          #label_size = 15,
+                          ncol =3, nrow = 4,
+                     #    hjust = 0, vjust = 1,
+                          scale = c(1,  1))
+POWER_ALL
+
+
+
+#Save plot
+# name_plot<-paste0("Simul_powertest_ALLDATA_BALANCED_and_UNBALANCED",
+#       nb_simul,"nbsimul_",nb_per_SA,
+#       "nbsimulperSA.pdf")
+# cowplot::save_plot(file =here::here("figures",name_plot ),
+#                   POWER_ALL, base_height = 40/cm(1), 
+#                   base_width = 42/cm(1), dpi = 1200)
+# 
+
+
+
+PLOT_ALL<-cowplot::plot_grid(plot_nongenetic_normal_ALL,
+                                   plot_nongenetic_poisson_ALL,
+                                   plot_nongenetic_binomial_ALL,
+                                   plot_genetic_normal_ALL,
+                                   plot_genetic_poisson_ALL,
+                                   plot_genetic_binomial_ALL,
+                          #labels=c("A", "B"), 
+                          #label_size = 15,
+                          ncol =3, nrow = 2,
+                     #    hjust = 0, vjust = 1,
+                          scale = c(1,  1))
+PLOT_ALL
+
+
+
+#Save plot
+name_plot<-paste0("Simul_powertest_",
+      nb_simul,"nbsimul_",nb_per_SA,
+      "nbsimulperSA.pdf")
+cowplot::save_plot(file = here::here("figures",name_plot ),
+                  PLOT_ALL, base_height = 20/cm(1), 
+                  base_width = 42/cm(1), dpi = 1200)
+
 ```
