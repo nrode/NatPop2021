@@ -34,7 +34,7 @@ lines <- c("Balanced" = "solid", "Unbalanced" = "dotted")
 ```{r } 
 
 # Power Analyses
-nb_simul <- 10000
+nb_simul <- 10
 
 #Perform siluations
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", 
@@ -76,7 +76,7 @@ tapply(sim$IndicNonGen, sim$SA_NonGen, length)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=100
+nb_per_SA=10
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -202,7 +202,7 @@ name_plot<-paste0("Simul_powertest_normal_",
 ## False positive rate analyses
 ```{r } 
 ### No genetic and no non genetic effects
-nb_simul = 200
+nb_simul = 10
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", rho=0, rho_ng=0, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
@@ -272,7 +272,7 @@ tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
 ## Simulation
 ```{r } 
 
-nb_simul <- 10000
+nb_simul <- 1000
 
 #Perform siluations
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson",  rho = -0.05, rho_ng = -0.05, 
@@ -318,10 +318,13 @@ sim_select_genetic <- select_sample_simul(dataset_sim = sim,
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
                                           minimum_SA = "0")
+
+sim_select_genetic[abs(sim_select_genetic$Fratio_Gen-sim_select_genetic$Fratio_Gen_aov)>=0.1,]
+
 #To check 
-# dim(sim)
-# dim(sim_select_genetic)
-# tapply(sim_select_genetic$index_SA_Gen, sim_select_genetic$SA_Gen, length)
+dim(sim)
+dim(sim_select_genetic)
+tapply(sim_select_genetic$index_SA_Gen, sim_select_genetic$SA_Gen, length)
 
 #Compute proportion of significant simul for each SA values
 data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)), 
@@ -496,7 +499,7 @@ tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
 ## Simulation
 ```{r } 
 
-nb_simul <- 10000
+nb_simul <- 100
 
 #Perform siluations
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",  rho = -0.05, 
@@ -539,7 +542,7 @@ tapply(sim$IndicNonGen, sim$SA_NonGen, length)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=100
+nb_per_SA=10
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -751,13 +754,14 @@ data_PERF <- data_PERF[data_PERF$Original_environment!="WT3",]
 data_PERF <- data_PERF[data_PERF$Test_environment!="GF",]
 data_PERF <- data_PERF[data_PERF$Test_environment!="Grape",] #mvrnom doesn't work with unbalanced matrix
 data_PERF <- droplevels(data_PERF)
+tapply(data_PERF$Population, list(data_PERF$Generation, data_PERF$Population), length)
 ```
 
 # Normal distribution
 ## Simulation
 ```{r } 
 #Simul data 
-nb_simul <- 10000
+nb_simul <- 100
 sim <- sapply(1:nb_simul, simul_fitnessdata_unbalanced, distrib = "normal", 
               unbalanced_dataset = data_PERF, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, rho = -0.05, rho_ng = -0.05, 
@@ -779,7 +783,7 @@ sim <- add_sim_number_SA(sim)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=100
+nb_per_SA=10
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -913,7 +917,7 @@ sim <- add_sim_number_SA(sim)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=100
+nb_per_SA=10
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -1049,7 +1053,7 @@ sim <- add_sim_number_SA(sim)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=100
+nb_per_SA=10
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 

@@ -25,7 +25,7 @@
 
 
 simul_fitnessdata <- function(distrib = "normal", 
-                                     seed = 1, nfruit = 3, nhab = 3, npop_per_fruit = 3, nrep = 1, ntrial = 20,  
+                                     seed = 1, nfruit = 3, nhab = 3, npop_per_fruit = 3, nrep = 10, ntrial = 20,  
                                      sdpop = 0.5, sdfruithab = 1, sdfruithab_ng = 1, 
                                      rho = -1/(nhab-1), rho_ng = 0, sigma = 0.5){
   
@@ -117,13 +117,13 @@ simul_fitnessdata <- function(distrib = "normal",
     data$fitness <- data$GenEff + data$NonGenEff + data$PopEff + rnorm(n=nrow(data), 0, sigma) 
   }else{
     if (distrib == "poisson") {
-    data$fitness_count <- rpois(n=nrow(data), lambda = exp(data$GenEff + data$NonGenEff))
+    data$fitness_count <- rpois(n=nrow(data), lambda = exp(data$GenEff + data$NonGenEff + data$PopEff ))
     data$fitness <- log(data$fitness_count+1)
     }else{
       if (distrib == "binomial") {
       data$fitness_logit <- rbinom(n=nrow(data),
                              size = ntrial, 
-                             prob = (1/(1+exp(-(data$GenEff + data$NonGenEff))))) / ntrial
+                             prob = (1/(1+exp(-(data$GenEff + data$NonGenEff + data$PopEff ))))) / ntrial
       data$fitness <- asin(sqrt(data$fitness_logit))
       }else{
       print("Error: unknown distribution")  

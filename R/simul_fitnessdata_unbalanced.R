@@ -29,6 +29,7 @@ simul_fitnessdata_unbalanced <- function(distrib = "normal", unbalanced_dataset 
   nfruit <- nlevels(as.factor(unbalanced_dataset$Original_environment)) 
   nhab <- nlevels(as.factor(unbalanced_dataset$Test_environment))
   ntrial <- round(mean(as.numeric(as.character(unbalanced_dataset$Nb_eggs)), na.rm = TRUE), digits = 0)
+  
   #Create empty dataset       
   data <- data.frame(Ind = as.factor(1:length(unbalanced_dataset$Test_environment)), 
              Hab = as.factor(unbalanced_dataset$Test_environment), 
@@ -112,23 +113,23 @@ simul_fitnessdata_unbalanced <- function(distrib = "normal", unbalanced_dataset 
   data$NonGenEff <- ifelse(is.na(data$NonGenEff), 0, data$NonGenEff)
   
   # Add variation sdpop
-  levels(data$Pop) <- rnorm(nlevels(data$Pop), 0, sd = sdpop)
-  data$PopEff <- as.numeric(as.character(data$Pop))
-  data$Pop <- as.factor(paste(data$Fruit,data$Pop_fruit,sep = "_")) 
-  
+  data$PopEff <- data$Pop
+  levels(data$PopEff) <- rnorm(nlevels(data$PopEff), 0, sd = sdpop)
+  data$PopEff <- as.numeric(as.character(data$PopEff))
+
   
   # Distribution: calculate fitness
   if (distrib == "normal") {
     data$fitness <- data$GenEff + data$NonGenEff + data$PopEff + rnorm(n=nrow(data), 0, sigma) 
   }else{
     if (distrib == "poisson") {
-      data$fitness_count <- rpois(n=nrow(data), lambda = exp(data$GenEff + data$NonGenEff))
+      data$fitness_count <- rpois(n=nrow(data), lambda = exp(data$GenEff + data$NonGenEff+ data$PopEff ))
       data$fitness <- log(data$fitness_count+1)
     }else{
       if (distrib == "binomial") {
         data$fitness_logit <- rbinom(n=nrow(data),
                                      size = ntrial, 
-                                     prob = (1/(1+exp(-(data$GenEff + data$NonGenEff))))) / ntrial
+                                     prob = (1/(1+exp(-(data$GenEff + data$NonGenEff + data$PopEff ))))) / ntrial
         data$fitness <- asin(sqrt(data$fitness_logit))
       }else{
         print("Error: unknown distribution")  
@@ -137,50 +138,6 @@ simul_fitnessdata_unbalanced <- function(distrib = "normal", unbalanced_dataset 
   }
   
   
-  
-  
-  
-  ##################################################
-  ## Estimate genetic and non-genetic SA ###
-  ##################################################
-  
-  m00 <- lm(fitness ~ pop_gen + hab_gen + SA + SAIndicG0, data = data)
-  indic <- grep("SA",names(coef(m00)))
-  
-  SAcoef <- coef(m00)[indic]
-  names(SAcoef) <- c("SAGen_Est", "SANonGen_Est")
-  
-  #######################################################
-  ## Analysis of genetic effects lmer ###
-  #######################################################
-  ## Model to get the df of the interaction
-  m_perGen <- lm(fitness ~ pop_gen + hab_gen + 
-                   Fruit:Hab:IndicG0 + Fruit:Hab:IndicG2 + 
-                   SA:IndicG0 + SA, data = data)
-  
-  m00 <- lme4::lmer(fitness ~ Pop + Hab + SA + (1|Fruit:Hab), data = data)
-  
-  
-  indic <- grep("SA",names(lme4::fixef(m00)))
-  
-  Fratio_Gen = as.numeric(lme4::fixef(m00)[indic[1]]^2/vcov(m00)[indic[1],indic[1]])
-  pvalue_Gen = 1 - pf(Fratio_Gen, 1, anova(m_perGen)[5, 1])
-  
-  #######################################################
-  ## Analysis of genetic and non-genetic effects lmer ###
-  #######################################################
-  ## Model to get the df of the interaction
-  m_perGen <- lm(fitness~ pop_gen + hab_gen + 
-                   Fruit:Hab:IndicG0 + Fruit:Hab + 
-                   SA:IndicG0+SA, data = data)
-  
-  m0 <- lme4::lmer(fitness ~ pop_gen + hab_gen + SA + SAIndicG0 + (1|Fruit:Hab)+
-                     (0+lme4::dummy(Gen, "G0")|Fruit:Hab), data = data)
-  
-  indic <- grep("SA",names(lme4::fixef(m0)))
-  
-  Fratio_NonGen = as.numeric(lme4::fixef(m0)[indic[2]]^2/vcov(m0)[indic[2],indic[2]])
-  pvalue_NonGen = 1 - pf(Fratio_NonGen, 1, anova(m_perGen)[6, 1])
   
   
   #######################################################
@@ -192,7 +149,21 @@ simul_fitnessdata_unbalanced <- function(distrib = "normal", unbalanced_dataset 
   
   ## F test for SA
   Fratio = (anova(m1)[3,2]/anova(m1)[4,2])/(1/anova(m1)[4, 1])
-  pvalue = 1 - pf(Fratio, 1, anova(m1)[4, 1]) #the correct test (see equation D7 in Appendix D of the paper)
+  pvalue = 1 - pf(Fratio, 1, anova(m1)[4, 1]) 
+  
+  
+  #######################################################
+  ## Analysis of genetic effects lmer ###
+  #######################################################
+  ## Model to get the df of the interaction
+  m00 <- lme4::lmer(fitness ~ Pop + Hab + SA + (1|Fruit:Hab), data = data)
+  
+  indic <- grep("SA",names(lme4::fixef(m00)))
+  
+  Fratio_Gen = as.numeric(lme4::fixef(m00)[indic[1]]^2/vcov(m00)[indic[1],indic[1]])
+  pvalue_Gen = 1 - pf(Fratio_Gen, 1, anova(m1)[4, 1])
+  
+  
   
   #######################################################
   ## Analysis of genetic and non-genetic effects lm   ###
@@ -207,6 +178,34 @@ simul_fitnessdata_unbalanced <- function(distrib = "normal", unbalanced_dataset 
   ## F test for SA
   Fratio_NonGen_aov = (anova(m2)[4,2]/anova(m2)[6,2])/(1/anova(m2)[6, 1])
   pvalue_NonGen_aov = 1 - pf(Fratio_NonGen_aov, 1, anova(m2)[6, 1]) #the correct test (see equation D7 in Appendix D of the paper)
+  
+  
+  
+  
+  
+  #######################################################
+  ## Analysis of genetic and non-genetic effects lmer ###
+  #######################################################
+  m0 <- lme4::lmer(fitness ~ pop_gen + hab_gen + SA + SAIndicG0 + (1|Fruit:Hab)+
+                     (0+lme4::dummy(Gen, "G0")|Fruit:Hab), data = data)
+  
+  indic <- grep("SA",names(lme4::fixef(m0)))
+  
+  Fratio_NonGen = as.numeric(lme4::fixef(m0)[indic[2]]^2/vcov(m0)[indic[2],indic[2]])
+  pvalue_NonGen = 1 - pf(Fratio_NonGen, 1, anova(m2)[6, 1])
+  
+  
+
+  ##################################################
+  ## Estimate genetic and non-genetic SA ###
+  ##################################################
+  
+  m00 <- lm(fitness ~ pop_gen + hab_gen + SA + SAIndicG0, data = data)
+  indic <- grep("SA",names(coef(m00)))
+  
+  SAcoef <- coef(m00)[indic]
+  names(SAcoef) <- c("SAGen_Est", "SANonGen_Est")
+  
   
   return(c(seed=seed, SA_Gen_True = SA_Gen_True, SA_NonGen_True=SA_NonGen_True,
            SAcoef, rho = rho, rho_ng = rho_ng, 
