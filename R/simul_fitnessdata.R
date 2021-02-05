@@ -25,8 +25,8 @@
 
 
 simul_fitnessdata <- function(distrib = "normal", 
-                                     seed = 1, nfruit = 3, nhab = 3, npop_per_fruit = 3, nrep = 10, ntrial = 20,  
-                                     sdpop = 0.5, sdfruithab = 1, sdfruithab_ng = 1, 
+                                     seed = 1, nfruit = 3, nhab = 3, npop_per_fruit = 5, nrep = 10, ntrial = 20,  
+                                    sdbox = NA, sdpop = 0.5, sdfruithab = 1, sdfruithab_ng = 1, 
                                      rho = -1/(nhab-1), rho_ng = 0, sigma = 0.5){
   
   ## Dataset
@@ -107,18 +107,30 @@ simul_fitnessdata <- function(distrib = "normal",
   data$NonGenEff <- ifelse(is.na(data$NonGenEff), 0, data$NonGenEff)
   
   # Add variation sdpop
-  levels(data$Pop) <- rnorm(nlevels(data$Pop), 0, sd = sdpop)
-  data$PopEff <- as.numeric(as.character(data$Pop))
-  data$Pop <- as.factor(paste(data$Fruit,data$Pop_fruit,sep = "_")) 
-  
+  data$PopEff <-  data$Pop
+  levels(data$PopEff) <- rnorm(nlevels(data$PopEff), 0, sd = sdpop)
+  data$PopEff <- as.numeric(as.character(data$PopEff))
 
   # Distribution: calculate fitness
   if (distrib == "normal") {
     data$fitness <- data$GenEff + data$NonGenEff + data$PopEff + rnorm(n=nrow(data), 0, sigma) 
   }else{
     if (distrib == "poisson") {
-    data$fitness_count <- rpois(n=nrow(data), lambda = exp(data$GenEff + data$NonGenEff + data$PopEff ))
-    data$fitness <- log(data$fitness_count+1)
+      if(is.na(sdbox)){
+        data$fitness_count <- rpois(n=nrow(data), lambda = exp(data$GenEff + data$NonGenEff + data$PopEff ))
+        data$fitness <- log(data$fitness_count+1)
+      }else{
+        ## We consider that each "Ind" associated with nhab environments in the dataset correspond to the measure of the same population in a given generation in a "preference box" including the nhab environments
+        data$BoxID <- as.factor(paste(data$Pop, data$Ind, data$Gen, sep="_"))
+
+        # Add variation among boxes
+        data$BoxEff <- data$BoxID
+        levels(data$BoxEff) <- rnorm(nlevels(data$BoxEff), 0, sd = sdbox)
+        data$BoxEff <- as.numeric(as.character(data$BoxEff))
+        data$fitness_count <- rpois(n=nrow(data), lambda = exp(data$GenEff + data$NonGenEff + data$PopEff + data$BoxEff))
+        data$fitness <- log(data$fitness_count+1)
+      }
+
     }else{
       if (distrib == "binomial") {
       data$fitness_logit <- rbinom(n=nrow(data),
@@ -133,7 +145,7 @@ simul_fitnessdata <- function(distrib = "normal",
   
   
     
-
+if(is.na(sdbox)){
   
   ##################################################
   ## Estimate genetic and non-genetic SA ###
@@ -203,6 +215,10 @@ simul_fitnessdata <- function(distrib = "normal",
   Fratio_NonGen_aov = (anova(m2)[4,2]/anova(m2)[6,2])/(1/anova(m2)[6, 1])
   pvalue_NonGen_aov = 1 - pf(Fratio_NonGen_aov, 1, anova(m2)[6, 1]) #the correct test (see equation D7 in Appendix D of the paper)
   
+}else{
+  #... TO DO add models with boxID effect
+}
+
   return(c(seed=seed, SA_Gen_True = SA_Gen_True, SA_NonGen_True=SA_NonGen_True,
            SAcoef, rho = rho, rho_ng = rho_ng, 
            Fratio_Gen = Fratio_Gen, pvalue_Gen = pvalue_Gen,
