@@ -6,12 +6,14 @@
 \usage{
 simul_fitnessdata(
   distrib = "normal",
+  design = "balanced",
   seed = 1,
   nfruit = 3,
   nhab = 3,
-  npop_per_fruit = 3,
-  nrep = 1,
+  npop_per_fruit = 5,
+  nrep = 10,
   ntrial = 20,
+  sdbox = NA,
   sdpop = 0.5,
   sdfruithab = 1,
   sdfruithab_ng = 1,
@@ -22,6 +24,8 @@ simul_fitnessdata(
 }
 \arguments{
 \item{distrib}{Distribution of data: "normal", "poisson" or "binomial"}
+
+\item{design}{If design = "unbalanced" -> sample dataset}
 
 \item{seed}{Seed used for simulation}
 
@@ -55,6 +59,6 @@ pvalue_Gen, Fratio_NonGen, pvalue_NonGen, Fratio_Gen_aov, pvalue_Gen_aov, Fratio
 Simulate fitness data
 }
 \examples{
-simul_fitnessdata_normal(distrib = "normal", seed = 1, nfruit = 3, nhab = 3, npop_per_fruit = 3,
+simul_fitnessdata_normal(distrib = "normal", design = "balanced", seed = 1, nfruit = 3, nhab = 3, npop_per_fruit = 3,
 nrep = 1, sdpop = 0,  sdfruithab = 1, sdfruithab_ng = 1, rho=-1/(nhab-1), rho_ng=-1/(nhab-1)
 }

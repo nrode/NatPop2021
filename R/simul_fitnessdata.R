@@ -2,6 +2,7 @@
 #'
 #' @description Simulate fitness data
 #' @param distrib Distribution of data: "normal", "poisson" or "binomial"
+#' @param design If design = "unbalanced" -> sample dataset
 #' @param seed Seed used for simulation
 #' @param nfruit Number of selective fruits 
 #' @param npop_per_fruit Number of populations per fruit
@@ -20,16 +21,18 @@
 #' @export 
 #'
 #' @examples
-#'simul_fitnessdata_normal(distrib = "normal", seed = 1, nfruit = 3, nhab = 3, npop_per_fruit = 3,
+#'simul_fitnessdata_normal(distrib = "normal", design = "balanced", seed = 1, nfruit = 3, nhab = 3, npop_per_fruit = 3,
 #' nrep = 1, sdpop = 0,  sdfruithab = 1, sdfruithab_ng = 1, rho=-1/(nhab-1), rho_ng=-1/(nhab-1)
 
 
-simul_fitnessdata <- function(distrib = "normal", 
-                                     seed = 1, nfruit = 3, nhab = 3, npop_per_fruit = 5, nrep = 10, ntrial = 20,  
-                                    sdbox = NA, sdpop = 0.5, sdfruithab = 1, sdfruithab_ng = 1, 
-                                     rho = -1/(nhab-1), rho_ng = 0, sigma = 0.5){
+simul_fitnessdata <- function(distrib = "normal", design = "balanced",
+                              seed = 1, nfruit = 3, nhab = 3, npop_per_fruit = 5, nrep = 10, ntrial = 20,  
+                              sdbox = NA, sdpop = 0.5, sdfruithab = 1, sdfruithab_ng = 1, 
+                              rho = -1/(nhab-1), rho_ng = 0, sigma = 0.5){
   
-  ## Dataset
+  ########################################################
+  ########           Create dataframe             ########
+  ########################################################
   data <- expand.grid(Ind = as.character(1:nrep),
                       Hab = as.character(1:nhab), 
                       Fruit = as.character(1:nfruit),
@@ -37,6 +40,42 @@ simul_fitnessdata <- function(distrib = "normal",
                       Gen = c("G0", "G2"))
   data$Pop <- as.factor(paste(data$Fruit,data$Pop_fruit,sep = "_"))
   data$SA<-as.factor(ifelse(data$Fruit == data$Hab, 1, 0))
+  
+  
+  ########################################################
+  ########     Balanced vs Unbalanced dataset     ########
+  ########################################################
+  if (design == "unbalanced") {
+
+    #Number of row in the balanced design 
+    nb_row_balanced <- nrep * nfruit * nhab * npop_per_fruit * 2 #for two generations
+    #Number of row that there would be if there was one less replicate per combination
+    nb_row_unbalanced <- (nrep-1) * nfruit * nhab * npop_per_fruit * 2
+    
+    #Select number of row for unbalanced design in balanced dataset 
+    row_sample <- sample(1:nb_row_balanced,nb_row_unbalanced, replace = FALSE)
+    #Sample number of row for balanced design in unbalanced dataset 
+      #Like that: the number of data is the same im balanced and unbalanced 
+                  # but some combinations are more or less repeated. 
+    row_unbalanced <- sample(row_sample,nb_row_balanced, replace = TRUE)
+    
+    #Select row in balanced dataset corresponsdong to the unbalanced sample
+    data_unbalanced <- data[row_unbalanced,]
+    
+    #Check: 
+    # dim(data)
+    # dim(data_unbalanced)
+    # tapply(data$Ind,list(data$Pop_fruit,data$Fruit,data$Hab,data$Gen),length)
+    # tapply(data_unbalanced$Ind,list(data_unbalanced$Pop_fruit,data_unbalanced$Fruit,
+    #                                 data_unbalanced$Hab,data_unbalanced$Gen),length)
+    
+    data <- data_unbalanced
+  }
+  
+  
+  ########################################################
+  ########           Add indic variables          ########
+  ########################################################
   data$IndicG0<-as.numeric(ifelse (as.character(data$Gen) == "G0", 1, 0))
   data$IndicG2<-as.numeric(ifelse (as.character(data$Gen) == "G2", 1, 0))
   
@@ -51,6 +90,11 @@ simul_fitnessdata <- function(distrib = "normal",
   data$hab_gen <- as.factor(paste(data$Hab, data$Gen, sep = "_"))
   data$pop_gen <- as.factor(paste(data$Pop, data$Gen, sep = "_"))
 
+  
+  
+  ########################################################
+  ########        Matrix: Genetic effect          ########
+  ########################################################
   ## Sample genetic interaction Fruit x habitat
   set.seed(seed)
   mat_fruithab <- matrix(rho*sdfruithab*sdfruithab, nfruit, nhab)
@@ -78,6 +122,11 @@ simul_fitnessdata <- function(distrib = "normal",
   
   data <- merge(x = data, y = fruithab, by = "fruit_hab")
   
+  
+  
+  ########################################################
+  ########    Matrix: Non genetic effect          ########
+  ########################################################
   ## Sample non genetic interaction Fruit x habitat
   mat_fruithab_ng <- matrix(rho_ng*sdfruithab_ng*sdfruithab_ng, nfruit, nhab)
   diag(mat_fruithab_ng) <- sdfruithab_ng*sdfruithab_ng
@@ -111,7 +160,11 @@ simul_fitnessdata <- function(distrib = "normal",
   levels(data$PopEff) <- rnorm(nlevels(data$PopEff), 0, sd = sdpop)
   data$PopEff <- as.numeric(as.character(data$PopEff))
 
-  # Distribution: calculate fitness
+  
+  
+  ########################################################
+  #########    Distribution: calculate fitness    ########
+  ########################################################
   if (distrib == "normal") {
     data$fitness <- data$GenEff + data$NonGenEff + data$PopEff + rnorm(n=nrow(data), 0, sigma) 
   }else{
@@ -143,51 +196,20 @@ simul_fitnessdata <- function(distrib = "normal",
     } 
     }
   
+
+  
+  
+  
+  ########################################################
+  ########               Box or not               ########
+  ########################################################
   
     
-if(is.na(sdbox)){
+  if(is.na(sdbox)){
   
-  ##################################################
-  ## Estimate genetic and non-genetic SA ###
-  ##################################################
-  
-  m00 <- lm(fitness ~ pop_gen + hab_gen + SA + SAIndicG0, data = data)
-  indic <- grep("SA",names(coef(m00)))
-  
-  SAcoef <- coef(m00)[indic]
-  names(SAcoef) <- c("SAGen_Est", "SANonGen_Est")
-  
-  #######################################################
-  ## Analysis of genetic effects lmer ###
-  #######################################################
-  ## Model to get the df of the interaction
-  m_perGen <- lm(fitness ~ pop_gen + hab_gen + 
-                   Fruit:Hab:IndicG0 + Fruit:Hab:IndicG2 + 
-                   SA:IndicG0 + SA, data = data)
-  
-  m00 <- lme4::lmer(fitness ~ Pop + Hab + SA + (1|Fruit:Hab), data = data)
+
   
   
-  indic <- grep("SA",names(lme4::fixef(m00)))
-  
-  Fratio_Gen = as.numeric(lme4::fixef(m00)[indic[1]]^2/vcov(m00)[indic[1],indic[1]])
-  pvalue_Gen = 1 - pf(Fratio_Gen, 1, anova(m_perGen)[5, 1])
-  
-  #######################################################
-  ## Analysis of genetic and non-genetic effects lmer ###
-  #######################################################
-  ## Model to get the df of the interaction
-  m_perGen <- lm(fitness~ pop_gen + hab_gen + 
-                   Fruit:Hab:IndicG0 + Fruit:Hab + 
-                   SA:IndicG0+SA, data = data)
-  
-  m0 <- lme4::lmer(fitness ~ pop_gen + hab_gen + SA + SAIndicG0 + (1|Fruit:Hab)+
-                     (0+lme4::dummy(Gen, "G0")|Fruit:Hab), data = data)
-  
-  indic <- grep("SA",names(lme4::fixef(m0)))
-  
-  Fratio_NonGen = as.numeric(lme4::fixef(m0)[indic[2]]^2/vcov(m0)[indic[2],indic[2]])
-  pvalue_NonGen = 1 - pf(Fratio_NonGen, 1, anova(m_perGen)[6, 1])
   
   
   #######################################################
@@ -199,7 +221,21 @@ if(is.na(sdbox)){
   
   ## F test for SA
   Fratio = (anova(m1)[3,2]/anova(m1)[4,2])/(1/anova(m1)[4, 1])
-  pvalue = 1 - pf(Fratio, 1, anova(m1)[4, 1]) #the correct test (see equation D7 in Appendix D of the paper)
+  pvalue = 1 - pf(Fratio, 1, anova(m1)[4, 1]) 
+  
+  
+  #######################################################
+  ## Analysis of genetic effects lmer ###
+  #######################################################
+  ## Model to get the df of the interaction
+  m00 <- lme4::lmer(fitness ~ Pop + Hab + SA + (1|Fruit:Hab), data = data)
+  
+  indic <- grep("SA",names(lme4::fixef(m00)))
+  
+  Fratio_Gen = as.numeric(lme4::fixef(m00)[indic[1]]^2/vcov(m00)[indic[1],indic[1]])
+  pvalue_Gen = 1 - pf(Fratio_Gen, 1, anova(m1)[4, 1])
+  
+  
   
   #######################################################
   ## Analysis of genetic and non-genetic effects lm   ###
@@ -209,16 +245,59 @@ if(is.na(sdbox)){
   
   ## F test for SA
   Fratio_Gen_aov = (anova(m2)[3,2]/anova(m2)[5,2])/(1/anova(m2)[5, 1])
-  pvalue_Gen_aov = 1 - pf(Fratio_Gen_aov, 1, anova(m2)[5, 1]) #the correct test (see equation D7 in Appendix D of the paper)
+  pvalue_Gen_aov = 1 - pf(Fratio_Gen_aov, 1, anova(m2)[5, 1]) 
+  
   
   ## F test for SA
   Fratio_NonGen_aov = (anova(m2)[4,2]/anova(m2)[6,2])/(1/anova(m2)[6, 1])
-  pvalue_NonGen_aov = 1 - pf(Fratio_NonGen_aov, 1, anova(m2)[6, 1]) #the correct test (see equation D7 in Appendix D of the paper)
+  pvalue_NonGen_aov = 1 - pf(Fratio_NonGen_aov, 1, anova(m2)[6, 1]) 
+  
+  
+  
+  
+  #######################################################
+  ## Analysis of genetic and non-genetic effects lmer ###
+  #######################################################
+  m0 <- lme4::lmer(fitness ~ pop_gen + hab_gen + SA + SAIndicG0 + (1|Fruit:Hab)+
+                     (0+lme4::dummy(Gen, "G0")|Fruit:Hab), data = data)
+  
+  indic <- grep("SA",names(lme4::fixef(m0)))
+  
+  Fratio_NonGen = as.numeric(lme4::fixef(m0)[indic[2]]^2/vcov(m0)[indic[2],indic[2]])
+  pvalue_NonGen = 1 - pf(Fratio_NonGen, 1, anova(m2)[6, 1])
+  
+  
+  
+  
+  
+  
+  
+  
+  ##################################################
+  ## Estimate genetic and non-genetic SA ###
+  ##################################################
+  
+  m00 <- lm(fitness ~ pop_gen + hab_gen + SA + SAIndicG0, data = data)
+  indic <- grep("SA",names(coef(m00)))
+  
+  SAcoef <- coef(m00)[indic]
+  names(SAcoef) <- c("SAGen_Est", "SANonGen_Est")
+  
+  
+  
+  
   
 }else{
   #... TO DO add models with boxID effect
 }
 
+  
+  
+  
+  
+  
+  
+  
   return(c(seed=seed, SA_Gen_True = SA_Gen_True, SA_NonGen_True=SA_NonGen_True,
            SAcoef, rho = rho, rho_ng = rho_ng, 
            Fratio_Gen = Fratio_Gen, pvalue_Gen = pvalue_Gen,
