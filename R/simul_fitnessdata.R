@@ -26,9 +26,9 @@
 
 
 simul_fitnessdata <- function(distrib = "normal", design = "balanced",
-                              seed = 1, nfruit = 3, nhab = 3, npop_per_fruit = 5, nrep = 10, ntrial = 20,  
+                              seed = 1, nfruit = 3, nhab = 3, npop_per_fruit = 5, nrep = 3, ntrial = 20,  
                               sdbox = NA, sdpop = 0.5, sdfruithab = 1, sdfruithab_ng = 1, 
-                              rho = -1/(nhab-1), rho_ng = 0, sigma = 0.5){
+                              rho = -1/(nhab-1), rho_ng = 0, sigma = 0.5, disp_design=0.0001){
   
   ########################################################
   ########           Create dataframe             ########
@@ -39,21 +39,25 @@ simul_fitnessdata <- function(distrib = "normal", design = "balanced",
                       Pop_fruit = as.character(1:npop_per_fruit),
                       Gen = c("G0", "G2"))
   data$Pop <- as.factor(paste(data$Fruit,data$Pop_fruit,sep = "_"))
-  data$SA<-as.factor(ifelse(data$Fruit == data$Hab, 1, 0))
+  data$SA <- as.factor(ifelse(data$Fruit == data$Hab, 1, 0))
   
   
   ########################################################
   ########     Balanced vs Unbalanced dataset     ########
   ########################################################
   if (design == "unbalanced") {
-
+    nrow(data)
     #Number of row in the balanced design 
     nb_row_balanced <- nrep * nfruit * nhab * npop_per_fruit * 2 #for two generations
     #Number of row that there would be if there was one less replicate per combination
     nb_row_unbalanced <- (nrep-1) * nfruit * nhab * npop_per_fruit * 2
     
     #Select number of row for unbalanced design in balanced dataset 
-    row_sample <- sample(1:nb_row_balanced,nb_row_unbalanced, replace = FALSE)
+    row_sample <- sample(1:nb_row_balanced, nb_row_unbalanced, replace = FALSE)
+    library(gtools)
+    
+    row_unbalanced <- sample(1:nrow(data), nrow(data), replace = TRUE, prob=gtools::rdirichlet(n=1, alpha=rep(1/disp_design, nrow(data))))
+
     #Sample number of row for balanced design in unbalanced dataset 
       #Like that: the number of data is the same im balanced and unbalanced 
                   # but some combinations are more or less repeated. 
@@ -72,7 +76,7 @@ simul_fitnessdata <- function(distrib = "normal", design = "balanced",
     data <- data_unbalanced
   }
   
-  
+
   ########################################################
   ########           Add indic variables          ########
   ########################################################
@@ -218,6 +222,7 @@ simul_fitnessdata <- function(distrib = "normal", design = "balanced",
   
   m1 <- aov(fitness ~ pop_gen + hab_gen + SA + Fruit:Hab, 
             contrasts = list(Fruit = "contr.sum", Hab = "contr.sum"), data = data)
+  
   
   ## F test for SA
   Fratio = (anova(m1)[3,2]/anova(m1)[4,2])/(1/anova(m1)[4, 1])
