@@ -68,7 +68,7 @@ simul_fitnessdata <- function(distrib = "normal", design = "balanced",
     # tapply(data$Ind,list(data$Pop_fruit,data$Fruit,data$Hab,data$Gen),length)
     # tapply(data_unbalanced$Ind,list(data_unbalanced$Pop_fruit,data_unbalanced$Fruit,
     #                                 data_unbalanced$Hab,data_unbalanced$Gen),length)
-    
+
     data <- data_unbalanced
   }
   
@@ -288,7 +288,82 @@ simul_fitnessdata <- function(distrib = "normal", design = "balanced",
   
   
 }else{
-  #... TO DO add models with boxID effect
+  
+  
+  
+  #######################################################
+  ## Analysis of genetic effects lm   ###
+  #######################################################
+  
+  m1 <- aov(fitness ~ pop_gen + hab_gen + SA + Fruit:Hab + BoxID, 
+            contrasts = list(Fruit = "contr.sum", Hab = "contr.sum"), data = data)
+  
+  ## F test for SA
+  Fratio = (anova(m1)[3,2]/anova(m1)[5,2])/(1/anova(m1)[5, 1])
+  pvalue = 1 - pf(Fratio, 1, anova(m1)[5, 1]) 
+  
+  
+  #######################################################
+  ## Analysis of genetic effects lmer ###
+  #######################################################
+  ## Model to get the df of the interaction
+  m00 <- lme4::lmer(fitness ~ Pop + Hab + SA + (1|Fruit:Hab) + (1|BoxID), data = data)
+  
+  indic <- grep("SA",names(lme4::fixef(m00)))
+  
+  Fratio_Gen = as.numeric(lme4::fixef(m00)[indic[1]]^2/vcov(m00)[indic[1],indic[1]])
+  pvalue_Gen = 1 - pf(Fratio_Gen, 1, anova(m1)[5, 1])
+  
+  
+  
+  #######################################################
+  ## Analysis of genetic and non-genetic effects lm   ###
+  #######################################################
+  m2 <- aov(fitness ~ pop_gen + hab_gen + SA:IndicG0 + SA +
+              Fruit:Hab + Fruit:Hab:IndicG0 + BoxID, data = data)
+  
+  ## F test for SA
+  Fratio_Gen_aov = (anova(m2)[3,2]/anova(m2)[6,2])/(1/anova(m2)[6, 1])
+  pvalue_Gen_aov = 1 - pf(Fratio_Gen_aov, 1, anova(m2)[6, 1]) 
+  
+  
+  ## F test for SA
+  Fratio_NonGen_aov = (anova(m2)[5,2]/anova(m2)[7,2])/(1/anova(m2)[7, 1])
+  pvalue_NonGen_aov = 1 - pf(Fratio_NonGen_aov, 1, anova(m2)[7, 1]) 
+  
+  
+  
+  
+  #######################################################
+  ## Analysis of genetic and non-genetic effects lmer ###
+  #######################################################
+  m0 <- lme4::lmer(fitness ~ pop_gen + hab_gen + SA + SAIndicG0 + (1|Fruit:Hab)+
+                     (0+lme4::dummy(Gen, "G0")|Fruit:Hab) + (1|BoxID), data = data)
+  
+  indic <- grep("SA",names(lme4::fixef(m0)))
+  
+  Fratio_NonGen = as.numeric(lme4::fixef(m0)[indic[2]]^2/vcov(m0)[indic[2],indic[2]])
+  pvalue_NonGen = 1 - pf(Fratio_NonGen, 1, anova(m2)[7, 1])
+  
+  
+  
+  
+  
+  
+  
+  
+  ##################################################
+  ## Estimate genetic and non-genetic SA ###
+  ##################################################
+  
+  m00 <- lm(fitness ~ pop_gen + hab_gen + SA + SAIndicG0 + BoxID, data = data)
+  indic <- grep("SA",names(coef(m00)))
+  
+  SAcoef <- coef(m00)[indic]
+  names(SAcoef) <- c("SAGen_Est", "SANonGen_Est")
+  
+  
+  
 }
 
   
