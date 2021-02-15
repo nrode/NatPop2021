@@ -34,10 +34,10 @@ lines <- c("Balanced" = "solid", "Unbalanced" = "dotted")
 ```{r } 
 
 # Power Analyses
-nb_simul <- 1000
+nb_simul <- 10000
 
 #Perform siluations
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", 
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", design = "balanced",
               rho = -0.05, rho_ng = -0.05, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
@@ -76,7 +76,7 @@ tapply(sim$IndicNonGen, sim$SA_NonGen, length)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=100
+nb_per_SA=450
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -203,7 +203,8 @@ name_plot<-paste0("Simul_powertest_normal_",
 ### No genetic and no non genetic effects
 ```{r } 
 nb_simul = 10
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", rho=0, rho_ng=0, 
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", design = "balanced",
+              rho=0, rho_ng=0, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
 
@@ -225,7 +226,8 @@ mean(sim$IndicNonGen_aov)
 
 ### Genetic effects and no non-genetic effects
 ```{r } 
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", rho=-0.1, rho_ng=0,  
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", design = "balanced",
+              rho=-0.1, rho_ng=0,  
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
 
@@ -252,7 +254,8 @@ tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
 
 ### Non genetic effects and no genetic effects
 ```{r } 
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", rho=0, rho_ng=-0.1,  
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal",design = "balanced",
+              rho=0, rho_ng=-0.1,  
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
 sim <- as.data.frame(t(sim))
@@ -281,10 +284,10 @@ tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
 ## Simulation
 ```{r } 
 
-nb_simul <- 1000
+nb_simul <- 10000
 
 #Perform siluations
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson",  
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson", design = "balanced", 
               rho = -0.05, rho_ng = -0.05, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
@@ -323,7 +326,7 @@ tapply(sim$IndicNonGen, sim$SA_NonGen, length)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=100
+nb_per_SA=450
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -451,7 +454,8 @@ power_plot_poisson
 ### No genetic and no non genetic effects
 ```{r } 
 nb_simul = 10
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson", rho=0, rho_ng=0,  
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson", design = "balanced",
+              rho=0, rho_ng=0,  
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
 
@@ -472,7 +476,8 @@ mean(sim$IndicNonGen_aov)
 
 ### Genetic effects and no non-genetic effects
 ```{r } 
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson", rho=-0.1, rho_ng=0,  
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson", design = "balanced",
+              rho=-0.1, rho_ng=0,  
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
 
@@ -494,7 +499,8 @@ mean(sim$IndicNonGen_aov)
 
 ### Non genetic effects and no genetic effects
 ```{r } 
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson", rho=0, rho_ng=-0.1, 
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson",design = "balanced",
+              rho=0, rho_ng=-0.1, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
 
@@ -517,10 +523,11 @@ tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
 ## Simulation
 ```{r } 
 
-nb_simul <- 100
+nb_simul <- 10000
 
 #Perform siluations
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",  rho = -0.05, 
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",design = "balanced",
+              rho = -0.05, 
               rho_ng = -0.05, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5, ntrial = 60)
@@ -560,7 +567,7 @@ tapply(sim$IndicNonGen, sim$SA_NonGen, length)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=10
+nb_per_SA=450
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -706,7 +713,8 @@ name_plot<-paste0("Simul_powertest_ALLDATA_",
 ### No genetic and no non genetic effects
 ```{r } 
 nb_simul = 10
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",  rho=0, rho_ng=0, 
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial", design = "balanced",
+              rho=0, rho_ng=0, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
 sim <- as.data.frame(t(sim))
@@ -727,7 +735,8 @@ mean(sim$IndicNonGen_aov)
 
 ### Genetic effects and no non-genetic effects
 ```{r } 
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",rho=-0.1, rho_ng=0,
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial", design = "balanced",
+              rho=-0.1, rho_ng=0,
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
 sim <- as.data.frame(t(sim))
@@ -748,7 +757,8 @@ mean(sim$IndicNonGen_aov)
 ### Non genetic effects and no genetic effects
 ```{r } 
 ### 
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",rho=0, rho_ng=-0.1,
+sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial", design = "balanced",
+              rho=0, rho_ng=-0.1,
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
               sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
 sim <- as.data.frame(t(sim))
@@ -771,7 +781,7 @@ tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
 ## Simulation
 ```{r } 
 #Simul data 
-nb_simul <- 1000
+nb_simul <- 10000
 sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal",  design = "unbalanced",
               rho = -0.05, rho_ng = -0.05, 
               npop_per_fruit = 5, nfruit = 3, nhab = 3, nrep = 10, sdpop = 0.5, 
@@ -795,7 +805,7 @@ sim <- add_sim_number_SA(sim)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=100
+nb_per_SA=450
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -932,7 +942,7 @@ sim <- add_sim_number_SA(sim)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=10
+nb_per_SA=450
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -1069,7 +1079,7 @@ sim <- add_sim_number_SA(sim)
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 #Save the same number of simuls for each SA value
-nb_per_SA=10
+nb_per_SA=450
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
                                           type_SA = "genetic",
                                           nb_simul_per_SA = nb_per_SA, 
@@ -1235,22 +1245,22 @@ POWER_ALL
 
 
 #Save plot
-# name_plot<-paste0("Simul_powertest_ALLDATA_BALANCED_and_UNBALANCED",
-#       nb_simul,"nbsimul_",nb_per_SA,
-#       "nbsimulperSA.pdf")
-# cowplot::save_plot(file =here::here("figures",name_plot ),
-#                   POWER_ALL, base_height = 40/cm(1), 
-#                   base_width = 42/cm(1), dpi = 1200)
-# 
+name_plot<-paste0("Simul_powertest_ALLDATA_BALANCED_and_UNBALANCED",
+      nb_simul,"nbsimul_",nb_per_SA,
+      "nbsimulperSA.pdf")
+cowplot::save_plot(file =here::here("figures",name_plot ),
+                  POWER_ALL, base_height = 40/cm(1),
+                  base_width = 42/cm(1), dpi = 1200)
 
 
 
-PLOT_ALL<-cowplot::plot_grid(plot_nongenetic_normal_ALL,
-                                   plot_nongenetic_poisson_ALL,
-                                   plot_nongenetic_binomial_ALL,
-                                   plot_genetic_normal_ALL,
+
+PLOT_ALL<-cowplot::plot_grid(plot_genetic_normal_ALL,
                                    plot_genetic_poisson_ALL,
                                    plot_genetic_binomial_ALL,
+                                   plot_nongenetic_normal_ALL,
+                                   plot_nongenetic_poisson_ALL,
+                                   plot_nongenetic_binomial_ALL,
                           #labels=c("A", "B"), 
                           #label_size = 15,
                           ncol =3, nrow = 2,
