@@ -11,7 +11,7 @@ simul_fitnessdata(
   nfruit = 3,
   nhab = 3,
   npop_per_fruit = 5,
-  nrep = 10,
+  nrep = 3,
   ntrial = 20,
   sdbox = NA,
   sdpop = 0.5,
@@ -19,7 +19,8 @@ simul_fitnessdata(
   sdfruithab_ng = 1,
   rho = -1/(nhab - 1),
   rho_ng = 0,
-  sigma = 0.5
+  sigma = 0.5,
+  disp_design = 1e-04
 )
 }
 \arguments{

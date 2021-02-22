@@ -15,6 +15,7 @@
 #' @param sigma Residual variance across replicates
 #' @param rho Genetic covariance (from which emerges SA genetic)
 #' @param rho_ng Non genetic covariance (from which emerges SA non genetic)
+#' @param disp_design to unbalanced the design: more disp_design is high -> more 1/disp_design is low -> more the disgn is unblanced
 #' 
 #' @return vector seed, SA_Gen_True, SA_NonGen_True, SAcoef, rho, rho_ng, Fratio_Gen, 
 #' pvalue_Gen, Fratio_NonGen, pvalue_NonGen, Fratio_Gen_aov, pvalue_Gen_aov, Fratio_NonGen_aov, pvalue_NonGen_aov
@@ -46,34 +47,36 @@ simul_fitnessdata <- function(distrib = "normal", design = "balanced",
   ########     Balanced vs Unbalanced dataset     ########
   ########################################################
   if (design == "unbalanced") {
-    nrow(data)
-    #Number of row in the balanced design 
-    nb_row_balanced <- nrep * nfruit * nhab * npop_per_fruit * 2 #for two generations
-    #Number of row that there would be if there was one less replicate per combination
-    nb_row_unbalanced <- (nrep-1) * nfruit * nhab * npop_per_fruit * 2
     
-    #Select number of row for unbalanced design in balanced dataset 
-    row_sample <- sample(1:nb_row_balanced, nb_row_unbalanced, replace = FALSE)
-    library(gtools)
-    
-    row_unbalanced <- sample(1:nrow(data), nrow(data), replace = TRUE, prob=gtools::rdirichlet(n=1, alpha=rep(1/disp_design, nrow(data))))
-
-    #Sample number of row for balanced design in unbalanced dataset 
-      #Like that: the number of data is the same im balanced and unbalanced 
-                  # but some combinations are more or less repeated. 
-    row_unbalanced <- sample(row_sample,nb_row_balanced, replace = TRUE)
+    #Select row for unbalanced design in balanced dataset:
+    row_unbalanced <- sample(1:nrow(data), nrow(data), replace = TRUE, 
+                             prob=gtools::rdirichlet(n = 1, 
+                                                     alpha=rep(1/disp_design, nrow(data))))
     
     #Select row in balanced dataset corresponsdong to the unbalanced sample
     data_unbalanced <- data[row_unbalanced,]
     
-    #Check: 
+    # #Check: 
     # dim(data)
     # dim(data_unbalanced)
     # tapply(data$Ind,list(data$Pop_fruit,data$Fruit,data$Hab,data$Gen),length)
     # tapply(data_unbalanced$Ind,list(data_unbalanced$Pop_fruit,data_unbalanced$Fruit,
     #                                 data_unbalanced$Hab,data_unbalanced$Gen),length)
-
+    # var(tapply(data_unbalanced$Ind,list(data_unbalanced$Pop_fruit,data_unbalanced$Fruit,
+    #                                 data_unbalanced$Hab,data_unbalanced$Gen),length), na.rm = TRUE)
     data <- data_unbalanced
+    
+    
+    #Check effect of disp_design parameter
+    # for (i in 0.1:10) {
+    #   disp_design <- i 
+    #   row_unbalanced <- sample(1:nrow(data), nrow(data), replace = TRUE, 
+    #                            prob=gtools::rdirichlet(n = 1, 
+    #                                                    alpha=rep(1/disp_design, nrow(data))))
+    #   data_unbalanced <- data[row_unbalanced,]
+    #   print(var(tapply(data_unbalanced$Ind,list(data_unbalanced$Pop_fruit,data_unbalanced$Fruit,
+    #                                             data_unbalanced$Hab,data_unbalanced$Gen),length), na.rm = TRUE))
+    # }
   }
   
 

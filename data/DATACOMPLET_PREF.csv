@@ -1,4 +1,4 @@
-﻿Generation,Experiment,Box,Date_P,Pop_fruit,Population,Line,Column,Treatment,Nb_eggs,Date_C_O,Obs_O
+﻿Generation,Experiment,BoxID,Date_P,Original_environment,Population,Line,Column,Test_environment,Nb_eggs,Date_C_O,Obs_O
 G0,Plasticity,860,19/09/2018,Blackberry,Blackberry33,1,1,Cranberry,0,13/12/2018,CD
 G0,Plasticity,860,19/09/2018,Blackberry,Blackberry33,1,2,Fig,0,13/12/2018,CD
 G0,Plasticity,860,19/09/2018,Blackberry,Blackberry33,1,3,Raspberry,0,13/12/2018,CD
