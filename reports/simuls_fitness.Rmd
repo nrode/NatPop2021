@@ -127,9 +127,9 @@ sigma_datapoisson_box <- sigma(mperf_poisson_box)
 #NUMBER OF SIMULS
 ```{r } 
 # Power Analyses
-nb_simul <- 10000
+nb_simul <- 5000
 #Save the same number of simuls for each SA value
-nb_per_SA <- 450
+nb_per_SA <- 45
 # 
 # #Number of simuls for each SA non genetic value
 # tapply(sim$index_SA_NonGen, sim$SA_NonGen, length)
@@ -144,17 +144,37 @@ nb_per_SA <- 450
 ### Balanced
 ```{r } 
 #Perform siluations
-sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", design = "balanced",
+sim1 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", design = "balanced",
               rho = -0.05, rho_ng = -0.05, 
               npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, nhab = nhab_data, 
               nrep = nrep_data, sdpop = 0.5, sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
-sim <- as.data.frame(t(sim))
+sim1 <- as.data.frame(t(sim1))
+
+sim2 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", design = "balanced",
+              rho = -0.5, rho_ng = -0.5, 
+              npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, nhab = nhab_data, 
+              nrep = nrep_data, sdpop = 0.5, sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
+sim2 <- as.data.frame(t(sim2))
+
+
+sim3 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", design = "balanced",
+              rho = 0, rho_ng = 0, 
+              npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, nhab = nhab_data, 
+              nrep = nrep_data, sdpop = 0.5, sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
+sim3 <- as.data.frame(t(sim3))
+
+# Concatenate value
+sim <- rbind(sim1,sim2, sim3)
 
 #Add indic SA
 sim <- add_indic_sign(sim)
 
 #Add number of simul for each SA value to keep only 100 simuls per SA value
 sim <- add_sim_number_SA(sim)
+
+
+tapply(sim$index_SA_NonGen, sim$SA_NonGen, length)
+
 
 
 ## Local adaptation (genetic)
@@ -963,7 +983,6 @@ sim <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson",
               nrep = nrep_data_box, sdpop = sdpop_datapoisson_box, sdbox = sdbox_datapoisson_box,
               sdfruithab = sdfruithab_datapoisson_box, sdfruithab_ng = sdfruithab_ng_datapoisson_box, 
               sigma = sigma_datapoisson_box)
-
 
 sim <- as.data.frame(t(sim))
 sim <- add_indic_sign(sim)
