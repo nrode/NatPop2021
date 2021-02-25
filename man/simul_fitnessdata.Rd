@@ -51,6 +51,8 @@ simul_fitnessdata(
 \item{rho_ng}{Non genetic covariance (from which emerges SA non genetic)}
 
 \item{sigma}{Residual variance across replicates}
+
+\item{disp_design}{to unbalanced the design: more disp_design is high -> more 1/disp_design is low -> more the disgn is unblanced}
 }
 \value{
 vector seed, SA_Gen_True, SA_NonGen_True, SAcoef, rho, rho_ng, Fratio_Gen,

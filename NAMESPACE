@@ -2,6 +2,7 @@
 
 export(add_indic_sign)
 export(add_sim_number_SA)
+export(import_data)
 export(select_sample_simul)
 export(simul_fitnessdata)
 export(simul_fitnessdata_unbalanced)
