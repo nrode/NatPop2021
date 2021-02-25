@@ -34,7 +34,7 @@ simul_fitnessdata_unbalanced <- function(distrib = "normal", unbalanced_dataset 
   data <- data.frame(Ind = as.factor(1:length(unbalanced_dataset$Test_environment)), 
              Hab = as.factor(unbalanced_dataset$Test_environment), 
              Fruit = as.factor(unbalanced_dataset$Original_environment), 
-             Pop_fruit = as.factor(unbalanced_dataset$Pop_code), 
+             Pop_fruit = as.factor(unbalanced_dataset$Population), 
              Gen = as.factor(unbalanced_dataset$Generation))
   
   #Replace levels of Hab and Fruit by number 
