@@ -2,17 +2,20 @@
 #'
 #' @description Reads a fitness data file in table format and subset it to return the corrct dataframe  
 #' @param dataset Fitness dataset
-#' @param remove_testenvt remove all data measured on this test_environment
+#' @param remove_testenvt remove all data measured on this test_environment (could be a vector with several test environment)
 #' @param remove_pop remove all data of this population
-#' @param remove_rate remove data where number of adults is higher than the number of eggs
+#' @param remove_rate if TRUE remove data where number of adults is higher than the number of eggs
+#' @param trait can be only "preference" of "performance"
+#' 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#'data_PERF <- import_data(dataset = "DATACOMPLET_PERF.csv", remove_testenvt = c("Grape","GF"), remove_pop = "WT3", remove_rate = NA)
+#'data_PERF <- import_data(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
+#' remove_testenvt = c("Grape","GF"), remove_pop = "WT3", remove_rate = NA)
 
-import_data <- function(dataset = "DATACOMPLET_PERF.csv", 
+import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
                         remove_testenvt = c("Grape","GF"), 
                         remove_pop = "WT3",
                         remove_rate = NA){
@@ -31,12 +34,24 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv",
   data_complet$Original_environment<-as.factor(data_complet$Original_environment)
   data_complet$Test_environment <- as.factor(data_complet$Test_environment)
   data_complet$Population <- as.factor(data_complet$Population)
-  data_complet$Row<-as.factor(data_complet$Row)
-  data_complet$Column<-as.factor(data_complet$Column)  
-  data_complet$Rack<-as.factor(data_complet$Rack)
   data_complet$Obs_O<-as.factor(data_complet$Obs_O)
-  data_complet$Obs_A<-as.factor(data_complet$Obs_A)
+  data_complet$Column<-as.factor(data_complet$Column)  
   
+  if (trait == "performance") {
+    data_complet$Obs_A<-as.factor(data_complet$Obs_A)
+    data_complet$Row<-as.factor(data_complet$Row)
+    data_complet$Rack<-as.factor(data_complet$Rack)
+  }else{
+    if (trait == "preference") {
+      data_complet$Line<-as.factor(data_complet$Line)
+      data_complet$BoxID<-as.factor(data_complet$BoxID)
+      data_complet$Nb_eggs <- as.numeric(as.character(data_complet$Nb_eggs))
+    }else{
+      print("Error: trait unknown")
+    } 
+  }
+  
+
   
   ######## 
   ######## Subset dataset
@@ -60,7 +75,17 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv",
   ######## 
   ######## Add indic and useful variables
   ######## 
-  data$SA <- as.factor(ifelse(data$Original_environment == data$Test_environment, 1, 0))
+  if(is.na(remove_rate)){ 
+  levels(data$Original_environment) <- c(levels(data$Original_environment),levels(data$Test_environment))
+  levels(data$Test_environment) <- c(levels(data$Test_environment),levels(data$Original_environment))
+  }
+  
+  if(is.na(remove_testenvt[1])){ 
+    levels(data$Original_environment) <- c(levels(data$Original_environment),levels(data$Test_environment))
+    levels(data$Test_environment) <- c(levels(data$Test_environment),levels(data$Original_environment))
+  }
+  
+  data$SA <- as.factor(ifelse(data$Original_environment == data$Test_environment, 0, 1))
   data$IndicG0 <- as.numeric(ifelse (data$Generation == "G0", 1, 0))
   data$IndicG2 <- as.numeric(ifelse(data$Generation == "G2", 1, 0))
   
@@ -80,9 +105,13 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv",
   data$pop_gen <- as.factor(paste(data$Population, 
                                   data$Generation, sep = "_"))
   
+  data <- droplevels(data)
+  
+  
   ######## 
-  ######## Add emergence rate
+  ######## Add emergence rate for performance
   ######## 
+  if (trait == "performance") {
   temp_g0remv <- length(data$Nb_eggs[data$Nb_adults>data$Nb_eggs&
                                        data$Generation=="G0"])
   temp_g2remv <- length(data$Nb_eggs[data$Nb_adults>data$Nb_eggs&
@@ -111,6 +140,9 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv",
       
   }
 
+  }
+  
+  
   
   return(data)
 }

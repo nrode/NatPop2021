@@ -6,6 +6,7 @@
 \usage{
 import_data(
   dataset = "DATACOMPLET_PERF.csv",
+  trait = "performance",
   remove_testenvt = c("Grape", "GF"),
   remove_pop = "WT3",
   remove_rate = NA
@@ -14,11 +15,13 @@ import_data(
 \arguments{
 \item{dataset}{Fitness dataset}
 
-\item{remove_testenvt}{remove all data measured on this test_environment}
+\item{trait}{can be only "preference" of "performance"}
+
+\item{remove_testenvt}{remove all data measured on this test_environment (could be a vector with several test environment)}
 
 \item{remove_pop}{remove all data of this population}
 
-\item{remove_rate}{remove data where number of adults is higher than the number of eggs}
+\item{remove_rate}{if TRUE remove data where number of adults is higher than the number of eggs}
 }
 \value{
 
@@ -27,5 +30,6 @@ import_data(
 Reads a fitness data file in table format and subset it to return the corrct dataframe
 }
 \examples{
-data_PERF <- import_data(dataset = "DATACOMPLET_PERF.csv", remove_testenvt = c("Grape","GF"), remove_pop = "WT3", remove_rate = NA)
+data_PERF <- import_data(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
+remove_testenvt = c("Grape","GF"), remove_pop = "WT3", remove_rate = NA)
 }

@@ -24,6 +24,7 @@ usethis::use_package("reshape")
 usethis::use_package("ggplot2")
 usethis::use_package("cowplot")
 usethis::use_package("gtools")
+usethis::use_package("usefun")
 
 
 
