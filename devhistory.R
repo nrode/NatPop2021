@@ -26,6 +26,7 @@ usethis::use_package("cowplot")
 usethis::use_package("gtools")
 usethis::use_package("usefun")
 usethis::use_package("lattice")
+usethis::use_package("MuMIn")
 
 
 

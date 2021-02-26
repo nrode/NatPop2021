@@ -26,4 +26,5 @@ Imports:
     here,
     lme4,
     ggplot2,
-    cowplot
+    cowplot,
+    MuMIn
