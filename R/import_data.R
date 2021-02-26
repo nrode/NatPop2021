@@ -75,6 +75,8 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
   ######## 
   ######## Add indic and useful variables
   ######## 
+  
+  #Problem for SA when levels Test_environment is different than Original environment
   if(is.na(remove_rate)){ 
   levels(data$Original_environment) <- c(levels(data$Original_environment),levels(data$Test_environment))
   levels(data$Test_environment) <- c(levels(data$Test_environment),levels(data$Original_environment))
@@ -84,6 +86,23 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
     levels(data$Original_environment) <- c(levels(data$Original_environment),levels(data$Test_environment))
     levels(data$Test_environment) <- c(levels(data$Test_environment),levels(data$Original_environment))
   }
+  
+  
+  if (trait == "performance") {
+  data$EggScore <- as.factor(ifelse(data$Nb_eggs<51, 1, 
+                                    ifelse(data$Nb_eggs<101, 2, 
+                                           ifelse(data$Nb_eggs<151, 3, 4))))
+  data$EggScoreFive <- as.factor(ifelse(data$Nb_eggs<51, 1, 
+                                        ifelse(data$Nb_eggs<101, 2,
+                                               ifelse(data$Nb_eggs<151, 3, 
+                                                      ifelse(data$Nb_eggs<201, 4, 5)))))
+  data$EggScoreSmall <- as.factor(ifelse(data$Nb_eggs<51, 1, 
+                                         ifelse(data$Nb_eggs<76, 2, 
+                                                ifelse(data$Nb_eggs<101, 3, 
+                                                       ifelse(data$Nb_eggs<126, 4, 
+                                                              ifelse(data$Nb_eggs<151, 5, 6))))))
+  }
+  
   
   data$SA <- as.factor(ifelse(data$Original_environment == data$Test_environment, 0, 1))
   data$IndicG0 <- as.numeric(ifelse (data$Generation == "G0", 1, 0))
