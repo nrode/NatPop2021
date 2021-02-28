@@ -58,16 +58,16 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
   plot_title <- ifelse(gen == "G0", "First generation", "Third generation")
   
   if("Obs_A" %in% colnames(dataset)  & trait == "Nb_eggs"){
-    yaxis_labelprint <- paste0("Standardized number of eggs\n in ", fruit1)
+    yaxis_labelprint <- paste0("Standardized number of eggs\n in ", fruit2)
   }else{
     if("Obs_A" %in% colnames(dataset)  & trait == "Nb_adults"){
-      yaxis_labelprint <- paste0("Standardized number of adults\n in ", fruit1)
+      yaxis_labelprint <- paste0("Standardized number of adults\n in ", fruit2)
     }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        yaxis_labelprint <- paste0("Standardized emergence rate\n in ", fruit1)
+        yaxis_labelprint <- paste0("Standardized emergence rate\n in ", fruit2)
       }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
-          yaxis_labelprint <- paste0("Standardized preference\n in ", fruit1)
+          yaxis_labelprint <- paste0("Standardized preference\n in ", fruit2)
         }else{
           print("Error: unknown combinaison dataset x trait")
         }
@@ -77,16 +77,16 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
   
   # Plot title and x axis title
   if("Obs_A" %in% colnames(dataset)  & trait == "Nb_eggs"){
-    xaxis_labelprint <- paste0("Standardized number of eggs\n in ", fruit2)
+    xaxis_labelprint <- paste0("Standardized number of eggs\n in ", fruit1)
   }else{
     if("Obs_A" %in% colnames(dataset)  & trait == "Nb_adults"){
-      xaxis_labelprint <- paste0("Standardized number of adults\n in ", fruit2)
+      xaxis_labelprint <- paste0("Standardized number of adults\n in ", fruit1)
     }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        xaxis_labelprint <- paste0("Standardized emergence rate\n in ", fruit2)
+        xaxis_labelprint <- paste0("Standardized emergence rate\n in ", fruit1)
       }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
-          xaxis_labelprint <- paste0("Standardized preference\n in ", fruit2)
+          xaxis_labelprint <- paste0("Standardized preference\n in ", fruit1)
         }else{
           print("Error: unknown combinaison dataset x trait")
         }
@@ -121,6 +121,8 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
     #                height=0.02,size=0.2,alpha=1) + 
     xlab(xaxis_labelprint)  +
     ylab(yaxis_labelprint)  +
+    geom_vline(xintercept = 0, linetype="dashed", color = "grey")+
+    geom_hline(yintercept = 0, linetype="dashed", color = "grey") +
     ggtitle(plot_title) +
     scale_color_manual(name="Fly populations from:",   
                        breaks=c("Cherry", "Strawberry","Blackberry"),
