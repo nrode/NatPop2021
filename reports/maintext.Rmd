@@ -171,7 +171,18 @@ m2 <- aov(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 (PLOT_eggs_G0 <- plot_RTP_residuals(dataset = data_PERF, trait = "Nb_eggs", gen = "G0"))
 (PLOT_eggs_G2 <- plot_RTP_residuals(dataset = data_PERF, trait = "Nb_eggs", gen = "G2"))
 
+###PLOT 
+(PAIR_BLACK_CHERRY_G2_EGGS <- plot_PairwisePOP_residuals(dataset = data_PERF, 
+                                                           trait = "Nb_eggs", gen = "G2", 
+                                                           fruit1 = "Cherry", fruit2 = "Blackberry"))
 
+(PAIR_CHERRY_STRAW_G2_EGGS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
+                                                            trait = "Nb_eggs", gen = "G2",
+                                                            fruit1 = "Strawberry", fruit2 = "Cherry"))
+
+(PAIR_STRW_BLACK_G2_EGGS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
+                                                          trait = "Nb_eggs", gen = "G2",
+                                                          fruit1 = "Blackberry", fruit2 = "Strawberry"))
 ```
 
 
@@ -370,7 +381,21 @@ m2 <- aov(log(Nb_adults+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
  
 
 
+###PLOT 
+(PAIR_BLACK_CHERRY_G2_ADULTS <- plot_PairwisePOP_residuals(dataset = data_PERF, 
+                                                           trait = "Nb_adults", gen = "G2", 
+                                                           fruit1 = "Cherry", fruit2 = "Blackberry"))
+
+(PAIR_CHERRY_STRAW_G2_ADULTS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
+                                                            trait = "Nb_adults", gen = "G2",
+                                                            fruit1 = "Strawberry", fruit2 = "Cherry"))
+
+(PAIR_STRW_BLACK_G2_ADULTS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
+                                                          trait = "Nb_adults", gen = "G2",
+                                                          fruit1 = "Blackberry", fruit2 = "Strawberry"))
 ```
+
+
 
 
 
@@ -645,17 +670,23 @@ legend("topright", levels(data_Rate_G2$Original_environment),
        col=as.numeric(as.factor(levels(data_Rate_G2$Original_environment))), pch=16)
 
 ## Strawberry ~ Cherry
-plot(meanbypopbytestenv$Cherry, meanbypopbytestenv$Strawberry, col=as.numeric(data_Rate_G2$Original_environment[match(rownames(meanbypopbytestenv), data_Rate_G2$Population)]), xlab="Cherry", ylab="Strawberry", pch=16)
+plot(meanbypopbytestenv$Cherry,  meanbypopbytestenv$Strawberry, col=as.numeric(data_Rate_G2$Original_environment[match(rownames(meanbypopbytestenv), data_Rate_G2$Population)]), xlab="Cherry", ylab="Strawberry", pch=16)
 legend("bottomright", levels(data_Rate_G2$Original_environment), col=as.numeric(as.factor(levels(data_Rate_G2$Original_environment))), pch=16)
 
 ## Strawberry ~ Blackberry
-plot(meanbypopbytestenv$Blackberry~ meanbypopbytestenv$Strawberry, col=as.numeric(data_Rate_G2$Original_environment[match(rownames(meanbypopbytestenv), data_Rate_G2$Population)]), xlab="Blackberry", ylab="Strawberry", pch=16)
+plot(meanbypopbytestenv$Blackberry, meanbypopbytestenv$Strawberry, col=as.numeric(data_Rate_G2$Original_environment[match(rownames(meanbypopbytestenv), data_Rate_G2$Population)]), xlab="Blackberry", ylab="Strawberry", pch=16)
 legend("topright", levels(data_Rate_G2$Original_environment), col=as.numeric(as.factor(levels(data_Rate_G2$Original_environment))), pch=16)
 
 
+###PLOT 
+(PAIR_BLACK_CHERRY_G2_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G2", 
+                                       fruit1 = "Cherry", fruit2 = "Blackberry"))
 
+(PAIR_CHERRY_STRAW_G2_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G2", 
+                                       fruit1 = "Strawberry", fruit2 = "Cherry"))
 
-
+(PAIR_STRW_BLACK_G2_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G2", 
+                                       fruit1 = "Blackberry", fruit2 = "Strawberry"))
 ```
 
 
@@ -822,13 +853,28 @@ m2 <- aov(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 PLOT_pref_G0 <- plot_RTP_residuals(dataset = data_PREF_three, trait = "Nb_eggs", gen = "G0")
 PLOT_pref_G2 <- plot_RTP_residuals(dataset = data_PREF_three, trait = "Nb_eggs", gen = "G2")
 
+
+
+
+###PLOT 
+(PAIR_BLACK_CHERRY_G2_PREF <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
+                                                           trait = "Nb_eggs", gen = "G2", 
+                                                           fruit1 = "Cherry", fruit2 = "Blackberry"))
+
+(PAIR_CHERRY_STRAW_G2_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
+                                                            trait = "Nb_eggs", gen = "G2",
+                                                            fruit1 = "Strawberry", fruit2 = "Cherry"))
+
+(PAIR_STRW_BLACK_G2_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
+                                                          trait = "Nb_eggs", gen = "G2",
+                                                          fruit1 = "Blackberry", fruit2 = "Strawberry"))
 ```
 
 
 
 
 
-# PLOT
+# PLOT MEAN ORIGINAL ENVT
 ```{r }
 legend <- lemon::g_legend(PLOT_pref_G0)
 
@@ -888,3 +934,61 @@ cowplot::save_plot(file =here::here("figures","Reciprocal_experiment_ThirdGenera
 
 ```
 
+
+
+
+# PLOT HETEROGENEITY
+```{r }
+
+legend <- lemon::g_legend(PAIR_CHERRY_STRAW_G2_PREF)
+
+############## THIRD GENERATION 
+HETEROGENEITY_PLOT_THIRD <- cowplot::ggdraw() +
+  cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_EGGS+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0, y = 0.75, width = 0.25, height = 0.25) +
+  cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_EGGS+theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.30, y = 0.75, width = 0.25, height = 0.25) +
+  cowplot::draw_plot(PAIR_STRW_BLACK_G2_EGGS+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0.60, y = 0.75, width = 0.25, height = 0.25) +    
+  #cowplot::draw_plot(legend, x = 0.85, y = 0.8, width = 0.0001, height = 0.0001) +
+  cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_RATE+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0, y = 0.5, width = 0.25, height = 0.25) +
+  cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_RATE+theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.30, y = 0.5, width = 0.25, height = 0.25) +
+  cowplot::draw_plot(PAIR_STRW_BLACK_G2_RATE+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0.60, y = 0.5, width = 0.25, height = 0.25) +    
+  cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_ADULTS+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0, y = 0.25, width = 0.25, height = 0.25) +
+  cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_ADULTS+theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.30, y = 0.25, width = 0.25, height = 0.25) +
+  cowplot::draw_plot(PAIR_STRW_BLACK_G2_ADULTS+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0.60, y = 0.25, width = 0.25, height = 0.25) +    
+  cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_PREF+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0, y = 0, width = 0.25, height = 0.25) +
+  cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_PREF+theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.30, y = 0, width = 0.25, height = 0.25) +
+  cowplot::draw_plot(PAIR_STRW_BLACK_G2_PREF+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0.60, y = 0, width = 0.25, height = 0.25) +    
+  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) 
+  HETEROGENEITY_PLOT_THIRD
+
+
+cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop_ThirdGeneration.pdf"),
+                  HETEROGENEITY_PLOT_THIRD, base_height = 35/cm(1),
+                  base_width = 35/cm(1), dpi = 1200)
+
+
+
+```
