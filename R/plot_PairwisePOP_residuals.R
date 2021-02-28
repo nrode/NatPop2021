@@ -108,10 +108,41 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
   }
   
   
+  
+  #Color of axis: 
+  if(fruit1 == "Cherry"){
+    col1 <- "#BC3C6D"
+  }else{
+    if(fruit1 == "Strawberry"){
+      col1 <- "#3FAA96"
+    }else{
+      if(fruit1 == "Blackberry"){
+        col1 <- "#301934"
+      }
+    }
+  }
+  
+  
+  if(fruit2 == "Cherry"){
+    col2 <- "#BC3C6D"
+  }else{
+    if(fruit2 == "Strawberry"){
+      col2 <- "#3FAA96"
+    }else{
+      if(fruit2 == "Blackberry"){
+        col2 <- "#301934"
+      }
+    }
+  }
+  
+  
+  #Plot
   plot_pair <- ggplot(data = data_fruit1_fruit2,
                       aes(x = fruit1, 
                           y = fruit2, 
                           color = Original_environment)) +
+    geom_vline(xintercept = 0, linetype ="dashed", color = "grey")+
+    geom_hline(yintercept = 0, linetype ="dashed", color = "grey") +
     geom_point(size=3, stroke=1.3) + 
     # geom_errorbar(aes(ymin = lowCIlogfitnesschange_Cranberry,
     #                   ymax = upCIlogfitnesschange_Cranberry),
@@ -121,8 +152,6 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
     #                height=0.02,size=0.2,alpha=1) + 
     xlab(xaxis_labelprint)  +
     ylab(yaxis_labelprint)  +
-    geom_vline(xintercept = 0, linetype="dashed", color = "grey")+
-    geom_hline(yintercept = 0, linetype="dashed", color = "grey") +
     ggtitle(plot_title) +
     scale_color_manual(name="Fly populations from:",   
                        breaks=c("Cherry", "Strawberry","Blackberry"),
@@ -130,11 +159,13 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
                        values=c("#BC3C6D","#3FAA96", "#301934")) +
     theme_LO_sober + 
     theme(panel.grid.major.y = element_blank(),
-          panel.grid.minor.y = element_blank())
+          panel.grid.minor.y = element_blank(),
+          axis.title.x = element_text(colour = col1),
+          axis.title.y = element_text(colour = col2))
   plot_pair
   
 
-  
+
   
   return(plot_pair) 
 }
