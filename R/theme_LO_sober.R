@@ -1,7 +1,7 @@
 #' @title Sober theme for ggplot
 #'
 #' @description Object: Sober theme for ggplot
-#' @importFrom ggplot2 facet_wrap unit aes scale_linetype_manual coord_flip element_blank arrow scale_alpha_manual geom_polygon coord_cartesian guide_legend geom_segment annotate element_text element_line element_rect geom_abline geom_bar  geom_errorbar geom_errorbarh geom_point ggplot ggtitle guides labs scale_color_manual scale_fill_manual scale_shape_manual theme unit xlab xlim ylab ylim geom_text geom_line geom_hline position_dodge geom_path
+#' @importFrom ggplot2 facet_wrap unit aes scale_linetype_manual geom_histogram geom_boxplot coord_flip element_blank arrow scale_alpha_manual geom_polygon coord_cartesian guide_legend geom_segment annotate element_text element_line element_rect geom_abline geom_bar  geom_errorbar geom_errorbarh geom_point ggplot ggtitle guides labs scale_color_manual scale_fill_manual scale_shape_manual theme unit xlab xlim ylab ylim geom_text geom_line geom_hline position_dodge geom_path
 #'
 #' @return
 #' @export

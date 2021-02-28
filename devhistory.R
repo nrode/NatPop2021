@@ -28,7 +28,9 @@ usethis::use_package("usefun")
 usethis::use_package("lattice")
 usethis::use_package("MuMIn")
 usethis::use_package("Rmisc")
-
+usethis::use_package("cowplot")
+usethis::use_package("lemon")
+usethis::use_package("data.table")
 
 
 ## Create a R directory and a file for functions
@@ -39,8 +41,8 @@ usethis::use_r("add_sim_number_SA")
 usethis::use_r("select_sample_simul")
 usethis::use_r("theme_LO_sober")
 usethis::use_r("import_data")
-usethis::use_r("plot_residuals_RecTransExp")
-
+usethis::use_r("plot_RTP_residuals")
+usethis::use_r("plot_PairwisePOP_residuals")
 
 ## Update NAMESPACE file
 devtools::document()
