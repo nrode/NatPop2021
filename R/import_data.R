@@ -130,32 +130,33 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
   ######## Add emergence rate for performance
   ######## 
   if (trait == "performance") {
+  #Data G0 vs G2
   temp_g0 <- length(data$Nb_eggs[data$Generation=="G0"])
   temp_g2 <- length(data$Nb_eggs[data$Generation=="G2"])
   
-  if(remove_rate == TRUE){ 
-    #Remove eggs = NA
-    NA_eggs_G0 <- dim(data[is.na(data$Nb_eggs)&data$Generation=="G0",])[1]
-    NA_eggs_G2 <- dim(data[is.na(data$Nb_eggs)&data$Generation=="G2",])[1]
-    data <- data[!is.na(data$Nb_eggs),]
-    
-    #Remove adults = NA
-    NA_adults <- dim(data[is.na(data$Nb_adults),])[1]
-    data <- data[!is.na(data$Nb_adults),]
-    
-    #Remove eggs = 0
-    NA_zeroeggs_G0 <- dim(data[data$Nb_eggs==0&data$Generation=="G0",])[1]
-    NA_zeroeggs_G2 <- dim(data[data$Nb_eggs==0&data$Generation=="G2",])[1]
-    data <- data[data$Nb_eggs!=0,]
-    
-    #Remove adults > eggs
-    temp_g0remv <- length(data$Nb_eggs[data$Nb_adults>data$Nb_eggs&
-                                         data$Generation=="G0"])
-    temp_g2remv <- length(data$Nb_eggs[data$Nb_adults>data$Nb_eggs&
-                                         data$Generation=="G2"])
-    data <- data[data$Nb_adults<=data$Nb_eggs,]
-    
-    #Emegence Rate
+  #Remove eggs = NA
+  NA_eggs_G0 <- dim(data[is.na(data$Nb_eggs)&data$Generation=="G0",])[1]
+  NA_eggs_G2 <- dim(data[is.na(data$Nb_eggs)&data$Generation=="G2",])[1]
+  data_rate_clean <- data[!is.na(data$Nb_eggs),]
+  
+  #Remove adults = NA
+  NA_adults <- dim(data_rate_clean[is.na(data_rate_clean$Nb_adults),])[1]
+  data_rate_clean <- data_rate_clean[!is.na(data_rate_clean$Nb_adults),]
+  
+  #Remove eggs = 0
+  NA_zeroeggs_G0 <- dim(data_rate_clean[data_rate_clean$Nb_eggs==0&data_rate_clean$Generation=="G0",])[1]
+  NA_zeroeggs_G2 <- dim(data_rate_clean[data_rate_clean$Nb_eggs==0&data_rate_clean$Generation=="G2",])[1]
+  data_rate_clean <- data_rate_clean[data_rate_clean$Nb_eggs!=0,]
+  
+  #Remove adults > eggs
+  temp_g0remv <- length(data_rate_clean$Nb_eggs[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs&
+                                            data_rate_clean$Generation=="G0"])
+  temp_g2remv <- length(data_rate_clean$Nb_eggs[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs&
+                                            data_rate_clean$Generation=="G2"])
+  data_rate_clean <- data_rate_clean[data_rate_clean$Nb_adults<=data_rate_clean$Nb_eggs,]
+
+  
+  if(is.na(remove_rate)){ 
     data$Rate <- data$Nb_adults / data$Nb_eggs
     
     print(paste0("Data (" , temp_g0, " and ", temp_g2, 
@@ -166,15 +167,19 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
                  " tubes for the first and third generation respectively); or ", 
                  "iii) the number of eggs was zero -Emergence rate = NaN- (",NA_zeroeggs_G0, " and ",NA_zeroeggs_G2 , 
                  " tubes for the first and third generation respectively); or ", 
-                 "iv) the number of adults was higher than the number of eggs (",temp_g0remv, " and " ,temp_g2remv,
-                 " tubes for the first and third generation respectively) were removed."))
+                 "iv) the number of adults was higher than the initial number of eggs (",temp_g0remv, " and " ,temp_g2remv,
+                 " tubes for the first and third generation respectively) were not removed."))
     
-    
-  }else{ 
-    if(is.na(remove_rate)){ 
+  }else{
+    if(remove_rate == TRUE){ 
+      
+      #Assign data_rate_clean to data
+      data <- data_rate_clean
+      
+      #Emegence Rate
       data$Rate <- data$Nb_adults / data$Nb_eggs
-
-            print(paste0("Data (" , temp_g0, " and ", temp_g2, 
+      
+      print(paste0("Data (" , temp_g0, " and ", temp_g2, 
                    " tubes for the first and third generation respectively) where i) the number of eggs was NA (", 
                    NA_eggs_G0 ," and ", NA_eggs_G2,
                    " tubes for the first and third generation respectively); or ", 
@@ -182,9 +187,10 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
                    " tubes for the first and third generation respectively); or ", 
                    "iii) the number of eggs was zero -Emergence rate = NaN- (",NA_zeroeggs_G0, " and ",NA_zeroeggs_G2 , 
                    " tubes for the first and third generation respectively); or ", 
-                   "iv) the number of adults was higher than the initial number of eggs (",temp_g0remv, " and " ,temp_g2remv,
-                   " tubes for the first and third generation respectively) were not removed."))
-
+                   "iv) the number of adults was higher than the number of eggs (",temp_g0remv, " and " ,temp_g2remv,
+                   " tubes for the first and third generation respectively) were removed."))
+      
+      
     }else{
       print("Error: unknown remove_rate")
     }

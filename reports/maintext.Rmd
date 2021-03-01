@@ -47,7 +47,11 @@ data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv",
                          remove_testenvt = c("Grape","GF"), 
                          remove_pop = "WT3", 
                          remove_rate = TRUE)
+head(data_PERF_Rate)
+tapply(data_PERF_Rate$Nb_adults,list(data_PERF_Rate$Original_environment,
+                                     data_PERF_Rate$Generation),length)
 
+tapply(data_PERF_Rate$Rate,data_PERF_Rate$Generation,mean)
 
 ###########################
 #PREFERENCE 
