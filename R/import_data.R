@@ -104,7 +104,7 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
   }
   
   
-  data$SA <- as.factor(ifelse(data$Original_environment == data$Test_environment, 0, 1))
+  data$SA <- as.factor(ifelse(data$Original_environment == data$Test_environment, 1, 0))
   data$IndicG0 <- as.numeric(ifelse (data$Generation == "G0", 1, 0))
   data$IndicG2 <- as.numeric(ifelse(data$Generation == "G2", 1, 0))
   

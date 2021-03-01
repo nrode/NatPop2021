@@ -80,7 +80,7 @@ plot_RTP_residuals <- function(dataset = data_PERF, trait = "Nb_eggs", gen = "G0
     plot2 <- plot + 
       geom_point(aes(alpha = SA, fill = interaction(SA, Original_environment)), 
                  position = pd, size = 4) + 
-      scale_alpha_manual(values = c(1,0)) + 
+      scale_alpha_manual(values = c(0,1)) + 
       guides(fill = FALSE, alpha = FALSE) 
 
     

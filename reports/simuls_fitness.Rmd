@@ -668,10 +668,7 @@ tapply(sim$IndicNonGen_aov[sim$index_SA_NonGen<101], sim$SA_NonGen[sim$index_SA_
 
 tapply(sim$IndicGen, sim$SA_Gen, length)
 tapply(sim$IndicNonGen, sim$SA_NonGen, length)
-```
 
-##### TEST
-```{r } 
 
 ####################################
 ###### Plot genetic
@@ -710,10 +707,7 @@ plot_genetic_poisson<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_genet)) +
    scale_linetype_manual(values = lines)
 plot_genetic_poisson
 
-```
 
-##### TEST
-```{r } 
 
 
 ################################# 
