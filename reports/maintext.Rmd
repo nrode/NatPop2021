@@ -997,8 +997,9 @@ cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop_ThirdGen
 ```{r }
 head(data_PERF_Rate)
 library(lme4)
+data_PERF_Rate$SAneg <- as.factor(ifelse(data_PERF_Rate$Original_environment==data_PERF_Rate$Test_environment, 1, 0))
 
-m <- lmer(asin(sqrt(Rate))~ SA + SA*IndicG0 + Test_environment:Generation  + (1|Population:Test_environment) + (0 + dummy(Generation, "G0")|Population:Test_environment), data=data_PERF_Rate[!is.na(data_PERF_Rate$Rate),])
+m <- lmer(asin(sqrt(Rate))~ SAneg + SAneg*IndicG0 + Test_environment:Generation  + (1|Population:Test_environment) + (0 + dummy(Generation, "G0")|Population:Test_environment), data=data_PERF_Rate[!is.na(data_PERF_Rate$Rate),])
 summary(m)
 
 data.frame(VarCorr(m))$vcov
