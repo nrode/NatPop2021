@@ -21,6 +21,11 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 devtools::load_all()
 ```
 
+#NUMBER OF SIMULS
+```{r } 
+nb_simul <- 1000
+```
+
 
 
 # DATA 
@@ -90,8 +95,85 @@ dim(data_PREF)
 ```
 
 
-# Simulations Rate
+# Preliminary check of the function
 ```{r }
-sapply(1:500, simul_powertest_nongenet, SAng= 0.032)
+#Check: 
+sim <- sapply(1:1000, simul_powertest_nongenet, SAng= 0.032)
+sim <- as.data.frame(t(sim))
+
+#SA genet
+mean(sim$SAGen)
+mean(sim$SAGen_Est)
+
+#SA Non genet
+mean(sim$SANonGen)
+mean(sim$SANonGen_Est)
+
+#SA and SAnon genet estimated with simulated data are similar than 
+  #SA and SAnon genet estimated with real data
+
+#Proportion of simuls where tests are significant:
+mean(sim$IndicGen)
+mean(sim$IndicNonGen)
 
 ```
+
+
+# Emergence Rate
+```{r }
+#nb_simul = 500
+val_SAng <- seq(from = 0, to = 1, by = 0.05)
+
+
+#Table with all combination seed x SAng tested
+val_simul<-c(1:nb_simul)
+value_param <- expand.grid("val_SAng" = val_SAng,
+                           "val_simul" = val_simul)
+
+#mapply to perform several seed and several SAng
+sim <- mapply(simul_powertest_nongenet, 
+              seed = value_param$val_simul, 
+              SAng = value_param$val_SAng)
+sim <- as.data.frame(t(as.data.frame(sim)))
+
+
+head(sim)
+
+
+
+
+
+
+#Dataset proportion
+data_prop <- data.frame(val_SAng = val_SAng, 
+                 prop_gen_sign = tapply(sim$IndicGen, 
+                                        sim$SAng, mean), 
+                 prop_nongen_sign = tapply(sim$IndicNonGen, 
+                                        sim$SAng, mean))
+data_prop
+
+#Plot des simuls
+power_test <- ggplot2::ggplot(data = data_prop, aes(x=val_SAng)) + 
+  geom_point(aes(y = prop_nongen_sign), size = 3) + 
+  geom_line(aes(y = prop_nongen_sign), size = 1) + 
+  geom_vline(xintercept = 0.03152, linetype = "dashed", color = "red", size = 0.5) + 
+  ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
+  xlab("Intensity of non-genetic local adaptation (SA)")  +
+  ggtitle("Emergence rate")  +
+  ylim(0,1) +
+  theme_LO_sober  
+power_test
+
+
+  
+name_plot<-paste0("Simul_powertest_nongeneticdetection_",
+      nb_simul,"nbsimulperSAng.pdf")
+cowplot::save_plot(file =here::here("figures",name_plot ),
+                  power_test, base_height = 14/cm(1),
+                  base_width = 20/cm(1), dpi = 1200)
+
+
+
+
+```
+

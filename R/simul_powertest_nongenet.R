@@ -134,8 +134,8 @@ simul_powertest_nongenet <- function(seed = 1, SAng = 0.32){
   
   
   return(c(seed=seed, SAng = SAng, 
-    SAGen = SAcoef["SAGen"], SANonGen = SAcoef["SANonGen"],
-    SAGen_Est = SAcoef_Est["SAGen_Est"], SANonGen_Est = SAcoef_Est["SANonGen_Est"], 
+    SAcoef["SAGen"], SAcoef["SANonGen"],
+    SAcoef_Est["SAGen_Est"], SAcoef_Est["SANonGen_Est"], 
     Fratio_Gen = Fratio_Gen, pvalue_Gen = pvalue_Gen,
     Fratio_NonGen = Fratio_NonGen, pvalue_NonGen = pvalue_NonGen, 
     IndicGen = IndicGen, IndicNonGen = IndicNonGen))
