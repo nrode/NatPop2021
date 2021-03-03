@@ -15,7 +15,7 @@ plot_PairwisePOP_residuals(
 \arguments{
 \item{trait}{the trait}
 
-\item{gen}{the generation of dataset}
+\item{gen}{the generation of dataset but can be Both}
 
 \item{fruit1}{fruit for y-axis}
 
@@ -28,5 +28,5 @@ plot of the residuals of the trait on the three environement
 Create plot for reciprocal transplant experiment
 }
 \examples{
-plot_PairwisePOP_residuals(dataset = data_PERF, trait = "Nb_eggs", gen = "G0",fruit1 = "Cherry",fruit2 = "Blackberry")
+plot_PairwisePOP_residuals(dataset = data_PERF, trait = "Nb_eggs", gen = "Both",fruit1 = "Cherry",fruit2 = "Blackberry")
 }

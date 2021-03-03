@@ -40,19 +40,57 @@ plot_RTP_residuals <- function(dataset = data_PERF, trait = "Nb_eggs", gen = "G0
   
   pd <- position_dodge(0.6) # move them .05 to the left and right
   
+  
+  if(trait == "Nb_eggs"){
+    ## Test for Local Adaptation
+    lm_val = lm(y ~ Test_environment + Population + SA + Test_environment:Original_environment, 
+                data = data)
+    
+    Fratio = anova(lm_val)[3,3]/anova(lm_val)[4,3]
+    pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[4,1])
+    df1 = anova(lm_val)[3,1]
+    df2 = anova(lm_val)[4,1]
+    }else{
+    if(trait == "Rate" | trait == "Nb_adults"){
+      lm_val = lm(y ~ Test_environment + Population + SA + log(Nb_eggs+1) +
+                    Test_environment:Original_environment, 
+                  data = data)
+      
+      Fratio = anova(lm_val)[3,3]/anova(lm_val)[5,3]
+      pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[5,1])
+      df1 = anova(lm_val)[3,1]
+      df2 = anova(lm_val)[5,1]
+      }else{
+      print("Error: unknown trait")
+    }
+  }
+
+  
+  #Equation
+  equation <- as.character(as.expression(substitute(italic(F)[df1~","~df2]~"="~Fratio~";"~italic(P)~"="~pvalue,
+                                                list(Fratio = format(Fratio, digits = 2, nsmall=2),
+                                                     df1 = format(df1, digits = 2), 
+                                                     df2 = format(df2, digits = 2), 
+                                                     pvalue = format(pvalue, digits = 2)))))
+  
+
+  #Ylim 
+  max_plot <- 1.1 * max(TEMP_SUM$Resid+TEMP_SUM$ci)
+  
+  
   # Plot title and y axis title
   plot_title <- ifelse(gen == "G0", "First generation", "Third generation")
   if("Obs_A" %in% colnames(dataset)  & trait == "Nb_eggs"){
-    yaxis_labelprint <- paste0("Standardized number of eggs")
+    yaxis_labelprint <- paste0("Residuals(oviposition stimulation)")
   }else{
     if("Obs_A" %in% colnames(dataset)  & trait == "Nb_adults"){
-      yaxis_labelprint <- paste0("Standardized number of adults")
+      yaxis_labelprint <- paste0("Residuals(number of adults)")
     }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        yaxis_labelprint <- paste0("Standardized emergence rate")
+        yaxis_labelprint <- paste0("Residuals(emergence rate)")
       }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
-          yaxis_labelprint <- paste0("Standardized preference")
+          yaxis_labelprint <- paste0("Residuals(oviposition preference)")
         }else{
         print("Error: unknown combinaison dataset x trait")
         }
@@ -66,6 +104,7 @@ plot_RTP_residuals <- function(dataset = data_PERF, trait = "Nb_eggs", gen = "G0
                                fill = "white")) + 
     geom_errorbar(aes(ymin=Resid-ci, ymax = Resid+ci),
                   width=.1, position=pd, size = 1) +
+    annotate('text', x = 3.5, y = max_plot, label = equation, parse = TRUE, hjust = 1, size = 4) + 
     geom_point(size = 4, position=pd, fill="white", shape = 21, stroke = 1.5) + 
     scale_color_manual(name="Fly populations from:",   
                        breaks=c("Cherry", "Strawberry","Blackberry"),

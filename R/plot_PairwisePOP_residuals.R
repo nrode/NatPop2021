@@ -1,7 +1,7 @@
 #' Plot for reciprocal transplant experiment
 #'
 #' @description Create plot for reciprocal transplant experiment
-#' @param gen the generation of dataset
+#' @param gen the generation of dataset but can be Both
 #' @param trait the trait 
 #' @param fruit1 fruit for y-axis
 #' @param fruit2 fruit for x-axis
@@ -11,14 +11,22 @@
 #' @export 
 #'
 #' @examples
-#'plot_PairwisePOP_residuals(dataset = data_PERF, trait = "Nb_eggs", gen = "G0",fruit1 = "Cherry",fruit2 = "Blackberry")
+#'plot_PairwisePOP_residuals(dataset = data_PERF, trait = "Nb_eggs", gen = "Both",fruit1 = "Cherry",fruit2 = "Blackberry")
 
 
 plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate", gen = "G2", 
-                                       fruit1 = "Cherry",fruit2 = "Blackberry"){
+                                       fruit1 = "Cherry", fruit2 = "Blackberry"){
   
   # Subset dataset
+  if (gen == "G0" | gen == "G2") {
   data <- dataset[dataset$Generation == gen,]
+  }else{
+    if (gen == "Both") {
+      data <- dataset
+    }else {
+      print("Error: unknown generation")
+    }
+  }
   data <- data[complete.cases(data[,trait]), ]
   
   
@@ -34,40 +42,52 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
   }
   
   #Extract resid 
-  lm_resid <- lm(y ~ Test_environment + Population, data=data)
-  data$Resid <- residuals(lm_resid)
+  if (gen == "G0" | gen == "G2") {
+    lm_resid <- lm(y ~ Test_environment + Population, data=data)
+    data$Resid <- residuals(lm_resid)
+  }else{
+    if (gen == "Both") {
+      lm_resid <- lm(y ~ hab_gen + pop_gen, data=data)
+      data$Resid <- residuals(lm_resid)
+    
+      }else {
+      print("Error: unknown generation")
+    }
+  }
+  
   
   
   ##Dataset summary
   TEMP_SUM <- Rmisc::summarySE(data,
                                measurevar="Resid",
-                               groupvars=c("Original_environment","Population", "Test_environment","SA"))
+                               groupvars=c("Original_environment","Population", "Test_environment","SA", "Generation"))
   
   
+  #Subset per pair of fruits
   TEMP_SUM_FRUIT <- TEMP_SUM[TEMP_SUM$Test_environment==fruit1|
                                TEMP_SUM$Test_environment==fruit2,]
   
   
   data_fruit1_fruit2<-data.table::dcast(data.table::setDT(TEMP_SUM_FRUIT), 
-                                                   Population + Original_environment ~ Test_environment,
+                                                   Population + Original_environment + Generation ~ Test_environment,
                                                    value.var  = c("Resid"))
 
   
   
   # Plot title and y axis title
-  plot_title <- ifelse(gen == "G0", "First generation", "Third generation")
+  plot_title <- ifelse(gen == "G0", "First generation", ifelse(gen == "G2","Third generation", " "))
   
   if("Obs_A" %in% colnames(dataset)  & trait == "Nb_eggs"){
-    yaxis_labelprint <- paste0("Standardized number of eggs\n in ", fruit2)
+    yaxis_labelprint <- paste0("Residuals(oviposition stimulation)\n in ", fruit2)
   }else{
     if("Obs_A" %in% colnames(dataset)  & trait == "Nb_adults"){
-      yaxis_labelprint <- paste0("Standardized number of adults\n in ", fruit2)
+      yaxis_labelprint <- paste0("Residuals(number of adults)\n in ", fruit2)
     }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        yaxis_labelprint <- paste0("Standardized emergence rate\n in ", fruit2)
+        yaxis_labelprint <- paste0("Residuals(emergence rate)\n in ", fruit2)
       }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
-          yaxis_labelprint <- paste0("Standardized preference\n in ", fruit2)
+          yaxis_labelprint <- paste0("Residuals(oviposition preference)\n in ", fruit2)
         }else{
           print("Error: unknown combinaison dataset x trait")
         }
@@ -77,16 +97,16 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
   
   # Plot title and x axis title
   if("Obs_A" %in% colnames(dataset)  & trait == "Nb_eggs"){
-    xaxis_labelprint <- paste0("Standardized number of eggs\n in ", fruit1)
+    xaxis_labelprint <- paste0("Residuals(oviposition stimulation)\n in ", fruit1)
   }else{
     if("Obs_A" %in% colnames(dataset)  & trait == "Nb_adults"){
-      xaxis_labelprint <- paste0("Standardized number of adults\n in ", fruit1)
+      xaxis_labelprint <- paste0("Residuals(number of adults)\n in ", fruit1)
     }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        xaxis_labelprint <- paste0("Standardized emergence rate\n in ", fruit1)
+        xaxis_labelprint <- paste0("Residuals(emergence rate)\n in ", fruit1)
       }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
-          xaxis_labelprint <- paste0("Standardized preference\n in ", fruit1)
+          xaxis_labelprint <- paste0("Residuals(oviposition preference)\n in ", fruit1)
         }else{
           print("Error: unknown combinaison dataset x trait")
         }
@@ -95,16 +115,16 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
   }
 
   
-  if(colnames(data_fruit1_fruit2)[3] == fruit1){
-    data_fruit1_fruit2$fruit1 <- data_fruit1_fruit2[,3]
-  }else{
-    data_fruit1_fruit2$fruit2 <- data_fruit1_fruit2[,3]
-  }
-
   if(colnames(data_fruit1_fruit2)[4] == fruit1){
     data_fruit1_fruit2$fruit1 <- data_fruit1_fruit2[,4]
   }else{
     data_fruit1_fruit2$fruit2 <- data_fruit1_fruit2[,4]
+  }
+
+  if(colnames(data_fruit1_fruit2)[5] == fruit1){
+    data_fruit1_fruit2$fruit1 <- data_fruit1_fruit2[,5]
+  }else{
+    data_fruit1_fruit2$fruit2 <- data_fruit1_fruit2[,5]
   }
   
   
@@ -137,6 +157,7 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
   
   
   #Plot
+  if (gen == "G0" | gen == "G2") {
   plot_pair <- ggplot(data = data_fruit1_fruit2,
                       aes(x = fruit1, 
                           y = fruit2, 
@@ -144,12 +165,7 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
     geom_vline(xintercept = 0, linetype ="dashed", color = "grey")+
     geom_hline(yintercept = 0, linetype ="dashed", color = "grey") +
     geom_point(size=3, stroke=1.3) + 
-    # geom_errorbar(aes(ymin = lowCIlogfitnesschange_Cranberry,
-    #                   ymax = upCIlogfitnesschange_Cranberry),
-    #               width=0.02,size=0.2,alpha=1) + 
-    # geom_errorbarh(aes(xmin = lowCIlogfitnesschange_Strawberry,
-    #                    xmax = upCIlogfitnesschange_Cranberry),
-    #                height=0.02,size=0.2,alpha=1) + 
+    #guides(fill = FALSE) +
     xlab(xaxis_labelprint)  +
     ylab(yaxis_labelprint)  +
     ggtitle(plot_title) +
@@ -164,8 +180,36 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
           axis.title.y = element_text(colour = col2))
   plot_pair
   
-
-
+  }else{
+    if (gen == "Both") {
+      plot_pair <- ggplot(data = data_fruit1_fruit2,
+                          aes(x = fruit1, 
+                              y = fruit2, 
+                              color = Original_environment, 
+                              shape = Generation)) +
+        geom_vline(xintercept = 0, linetype = "dashed", color = "grey")+
+        geom_hline(yintercept = 0, linetype = "dashed", color = "grey") +
+        geom_point(size=3, stroke=1.3) + 
+        #guides(fill = FALSE) +
+        xlab(xaxis_labelprint)  +
+        ylab(yaxis_labelprint)  +
+        ggtitle(plot_title) +
+        scale_color_manual(name="Fly populations from:",   
+                           breaks=c("Cherry", "Strawberry","Blackberry"),
+                           labels=c("Cherry","Strawberry","Blackberry"),
+                           values=c("#BC3C6D","#3FAA96", "#301934")) +
+        scale_shape_manual(values = c(21,16)) +
+        theme_LO_sober + 
+        theme(panel.grid.major.y = element_blank(),
+              panel.grid.minor.y = element_blank(),
+              axis.title.x = element_text(colour = col1),
+              axis.title.y = element_text(colour = col2))
+      plot_pair 
+      
+    }else {
+      print("Error: unknown generation")
+    }
+  }
   
   return(plot_pair) 
 }
