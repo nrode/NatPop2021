@@ -564,11 +564,12 @@ m1 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
           data = data_PERF_Rate)
 
 
+
 ## Correction for number of eggs
 m2 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
             Original_environment:Test_environment + 
             Original_environment:Test_environment:IndicG0 +
-            log(Nb_eggs+1), 
+            log(Nb_eggs), 
           data = data_PERF_Rate)
 
 
@@ -612,7 +613,7 @@ MuMIn::model.sel(m1, m2, m3, m4, m5)
   
 m1 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA + 
             Original_environment:Test_environment +
-            log(Nb_eggs+1),
+            log(Nb_eggs),
           contrasts = list(Original_environment = "contr.sum", 
                            Test_environment = "contr.sum"), 
           data = data_PERF_Rate)
@@ -630,7 +631,7 @@ m1 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA +
 m2 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
             Original_environment:Test_environment + 
             Original_environment:Test_environment:IndicG0 +
-            log(Nb_eggs+1), 
+            log(Nb_eggs), 
           data = data_PERF_Rate)
 
 
@@ -825,6 +826,28 @@ m2 <- aov(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 (r2_SA_genet <- 1-(anova(m2)[6, 3]/((anova(m2)[3, 2]+anova(m2)[6, 2])/(anova(m2)[3, 1]+anova(m2)[6, 1]))))
 
 (r2_SA_nongenet <- 1-(anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+anova(m2)[7, 1]))))
+
+
+
+
+#Local adaptation pattern: 
+lm_val = lm(log(Nb_eggs+1) ~ Test_environment + Population + SA + 
+                      Test_environment:Original_environment + BoxID, 
+                    data = data_PREF[data_PREF$Generation=="G0",])
+
+(Fratio = anova(lm_val)[3,3]/anova(lm_val)[5,3])
+(pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[5,1]))
+(df1 = anova(lm_val)[3,1])
+(df2 = anova(lm_val)[5,1])
+
+lm_val = lm(log(Nb_eggs+1) ~ Test_environment + Population + SA + 
+                      Test_environment:Original_environment + BoxID, 
+                    data = data_PREF[data_PREF$Generation=="G2",])
+
+(Fratio = anova(lm_val)[3,3]/anova(lm_val)[5,3])
+(pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[5,1]))
+(df1 = anova(lm_val)[3,1])
+(df2 = anova(lm_val)[5,1])
 
 ```
 
@@ -1028,23 +1051,23 @@ LOCAL_ADAPTATION_PLOT_THIRD
 
 ## ALL GENERATIONS 
 LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() + 
-  cowplot::draw_plot(PLOT_eggs_G0 + theme(legend.position = "none", 
+  cowplot::draw_plot(PLOT_pref_G0 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_rate_G0 + theme(legend.position = "none", 
+  cowplot::draw_plot(PLOT_eggs_G0 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_pref_G0 + theme(legend.position = "none", 
+  cowplot::draw_plot(PLOT_rate_G0 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
-  cowplot::draw_plot(PLOT_eggs_G2 + theme(legend.position = "none", 
+  cowplot::draw_plot(PLOT_pref_G2 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.01, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_rate_G2 + theme(legend.position = "none", 
+  cowplot::draw_plot(PLOT_eggs_G2 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.31, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_pref_G2 + theme(legend.position = "none", 
+  cowplot::draw_plot(PLOT_rate_G2 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.61, y = 0, width = 0.25, height = 0.45) + 
   cowplot::draw_plot_label(c("First generation", "A", "B", "C", " ",
@@ -1128,32 +1151,32 @@ legend <- lemon::g_legend(PAIR_CHERRY_STRAW_PREF)
   
 ############## THIRD GENERATION 
 HETEROGENEITY_PLOT <- cowplot::ggdraw() +
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_EGGS+theme(legend.position = "none", 
+  cowplot::draw_plot(PAIR_BLACK_CHERRY_PREF+theme(legend.position = "none", 
                                         plot.title = element_blank()),
             x = 0, y = 0.66, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_EGGS+theme(legend.position = "none", 
+  cowplot::draw_plot(PAIR_CHERRY_STRAW_PREF+theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.30, y = 0.66, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_EGGS+theme(legend.position = "none", 
+  cowplot::draw_plot(PAIR_STRW_BLACK_PREF+theme(legend.position = "none", 
                                         plot.title = element_blank()),
             x = 0.60, y = 0.66, width = 0.28, height = 0.28) +    
   #cowplot::draw_plot(legend, x = 0.85, y = 0.8, width = 0.0001, height = 0.0001) +
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_RATE+theme(legend.position = "none", 
+  cowplot::draw_plot(PAIR_BLACK_CHERRY_EGGS+theme(legend.position = "none", 
                                         plot.title = element_blank()),
             x = 0, y = 0.33, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_RATE+theme(legend.position = "none", 
+  cowplot::draw_plot(PAIR_CHERRY_STRAW_EGGS+theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.30, y = 0.33, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_RATE+theme(legend.position = "none", 
+  cowplot::draw_plot(PAIR_STRW_BLACK_EGGS+theme(legend.position = "none", 
                                         plot.title = element_blank()),
             x = 0.60, y = 0.33, width = 0.28, height = 0.28) +    
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_PREF+theme(legend.position = "none", 
+  cowplot::draw_plot(PAIR_BLACK_CHERRY_RATE+theme(legend.position = "none", 
                                         plot.title = element_blank()),
             x = 0, y = 0, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_PREF+theme(legend.position = "none", 
+  cowplot::draw_plot(PAIR_CHERRY_STRAW_RATE+theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.30, y = 0, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_PREF+theme(legend.position = "none", 
+  cowplot::draw_plot(PAIR_STRW_BLACK_RATE+theme(legend.position = "none", 
                                         plot.title = element_blank()),
             x = 0.60, y = 0, width = 0.28, height = 0.28) +    
   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001)  + 

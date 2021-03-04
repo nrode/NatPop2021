@@ -4,7 +4,7 @@
 \alias{plot_RTP_residuals}
 \title{Plot for reciprocal transplant experiment}
 \usage{
-plot_RTP_residuals(dataset = data_PERF, trait = "Nb_eggs", gen = "G0")
+plot_RTP_residuals(dataset = data_PREF_three, trait = "Nb_eggs", gen = "G0")
 }
 \arguments{
 \item{trait}{the trait}

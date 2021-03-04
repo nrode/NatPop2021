@@ -11,7 +11,7 @@
 #'plot_RTP_residuals(dataset = data_PERF, trait = "Nb_eggs", gen = "G0")
 
 
-plot_RTP_residuals <- function(dataset = data_PERF, trait = "Nb_eggs", gen = "G0"){
+plot_RTP_residuals <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen = "G0"){
  
   # Subset dataset
   data <- dataset[dataset$Generation == gen,]
@@ -42,6 +42,7 @@ plot_RTP_residuals <- function(dataset = data_PERF, trait = "Nb_eggs", gen = "G0
   
   
   if(trait == "Nb_eggs"){
+    if("Obs_A" %in% colnames(dataset)){
     ## Test for Local Adaptation
     lm_val = lm(y ~ Test_environment + Population + SA + Test_environment:Original_environment, 
                 data = data)
@@ -51,8 +52,23 @@ plot_RTP_residuals <- function(dataset = data_PERF, trait = "Nb_eggs", gen = "G0
     df1 = anova(lm_val)[3,1]
     df2 = anova(lm_val)[4,1]
     }else{
-    if(trait == "Rate" | trait == "Nb_adults"){
-      lm_val = lm(y ~ Test_environment + Population + SA + log(Nb_eggs+1) +
+      if("BoxID" %in% colnames(dataset)) {
+      lm_val = lm(y ~ Test_environment + Population + SA + 
+                    Test_environment:Original_environment + BoxID, 
+                  data = data)
+      
+      Fratio = anova(lm_val)[3,3]/anova(lm_val)[5,3]
+      pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[5,1])
+      df1 = anova(lm_val)[3,1]
+      df2 = anova(lm_val)[5,1]
+      }else{
+        print("Error: unknown trait")
+        }
+  }
+  
+    }else{
+    if(trait == "Rate"){
+      lm_val = lm(y ~ Test_environment + Population + SA + log(Nb_eggs) +
                     Test_environment:Original_environment, 
                   data = data)
       
@@ -61,7 +77,18 @@ plot_RTP_residuals <- function(dataset = data_PERF, trait = "Nb_eggs", gen = "G0
       df1 = anova(lm_val)[3,1]
       df2 = anova(lm_val)[5,1]
       }else{
-      print("Error: unknown trait")
+        if (trait == "Nb_adults"){
+          lm_val = lm(y ~ Test_environment + Population + SA + log(Nb_eggs+1) +
+                        Test_environment:Original_environment, 
+                      data = data)
+          
+          Fratio = anova(lm_val)[3,3]/anova(lm_val)[5,3]
+          pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[5,1])
+          df1 = anova(lm_val)[3,1]
+          df2 = anova(lm_val)[5,1]
+        }else{
+          print("Error: unknown trait")
+        }
     }
   }
 

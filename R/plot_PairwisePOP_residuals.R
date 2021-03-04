@@ -41,6 +41,8 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
     }
   }
   
+  
+  ######### MODELS
   #Extract resid 
   if (gen == "G0" | gen == "G2") {
     lm_resid <- lm(y ~ Test_environment + Population, data=data)
@@ -56,24 +58,37 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
   }
   
   
-  
-  ##Dataset summary
+  ######### Dataset summary
   TEMP_SUM <- Rmisc::summarySE(data,
                                measurevar="Resid",
-                               groupvars=c("Original_environment","Population", "Test_environment","SA", "Generation"))
+                               groupvars=c("Original_environment","Population", 
+                                           "Test_environment","SA", "Generation"))
   
   
   #Subset per pair of fruits
   TEMP_SUM_FRUIT <- TEMP_SUM[TEMP_SUM$Test_environment==fruit1|
                                TEMP_SUM$Test_environment==fruit2,]
   
-  
+  ######### TRANSFORM DATASET
   data_fruit1_fruit2<-data.table::dcast(data.table::setDT(TEMP_SUM_FRUIT), 
-                                                   Population + Original_environment + Generation ~ Test_environment,
+                                                   Population + Original_environment +  Generation ~ Test_environment,
                                                    value.var  = c("Resid"))
 
+  #Add vector with the mean of the number of tubes for weighted correlation
+  data_fruit1_fruit2$N <- NA
+  for(i in levels(data_fruit1_fruit2$Population)){
+    for(j in levels(data_fruit1_fruit2$Generation))
+    data_fruit1_fruit2$N[data_fruit1_fruit2$Population==i&
+                           data_fruit1_fruit2$Generation==j] <- sum(TEMP_SUM_FRUIT$N[TEMP_SUM_FRUIT$Test_environment==fruit1&
+                                                                                      TEMP_SUM_FRUIT$Population==i&
+                                                                                       TEMP_SUM_FRUIT$Generation==j],
+                                                                   TEMP_SUM_FRUIT$N[TEMP_SUM_FRUIT$Test_environment==fruit2&
+                                                                                      TEMP_SUM_FRUIT$Population==i&
+                                                                                      TEMP_SUM_FRUIT$Generation==j])/2
+  }
   
   
+  ######### PLOT
   # Plot title and y axis title
   plot_title <- ifelse(gen == "G0", "First generation", ifelse(gen == "G2","Third generation", " "))
   
@@ -115,6 +130,7 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
   }
 
   
+  ## Add columns fruit1 and fruit2
   if(colnames(data_fruit1_fruit2)[4] == fruit1){
     data_fruit1_fruit2$fruit1 <- data_fruit1_fruit2[,4]
   }else{
@@ -156,6 +172,60 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
   }
   
   
+  ######### CORRELATION
+  
+  
+  if (gen == "G0" | gen == "G2") {
+    weightedcor <- sjstats:::weighted_correlation(data_fruit1_fruit2,
+                                                  x = fruit2, 
+                                                  y = fruit1, 
+                                                  weights = N, 
+                                                  ci.lvl = 0.95)
+    rho <- as.numeric(weightedcor$estimate[1])
+    eq_rho <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcor~"["~inf~";"~sup~"]",
+                   list(generation = ifelse(gen=="G0", "G1","G3"),
+                        weightedcor = format(rho, digits = 2, nsmall=2), 
+                        inf = format(weightedcor$ci[1], digits = 2),
+                        sup = format(weightedcor$ci[2], digits = 2)))))
+    
+  }else{
+    if (gen == "Both") {
+      weightedcor_G0 <- sjstats:::weighted_correlation(data_fruit1_fruit2[data_fruit1_fruit2$Generation=="G0",],
+                                                    x = fruit2, 
+                                                    y = fruit1, 
+                                                    weights = N, 
+                                                    ci.lvl = 0.95)
+      rho_g0 <- as.numeric(weightedcor_G0$estimate[1])
+      
+      weightedcor_G2 <- sjstats:::weighted_correlation(data_fruit1_fruit2[data_fruit1_fruit2$Generation=="G2",],
+                                                       x = fruit2, 
+                                                       y = fruit1, 
+                                                       weights = N, 
+                                                       ci.lvl = 0.95)
+      rho_g2 <- as.numeric(weightedcor_G2$estimate[1])
+      
+      eq_rho_G0 <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcorG0~";"~"["~infg0~";"~supg0~"]",
+                                                      list(generation = "G1",
+                                                           weightedcorG0 = format(rho_g0, digits = 2), 
+                                                           infg0 = format(weightedcor_G0$ci[1], digits = 2),
+                                                           supg0 = format(weightedcor_G0$ci[2], digits = 2)))))
+      eq_rho_G2 <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcorG2~";"~"["~infg2~";"~supg2~"]",
+                                                         list(generation = "G3",
+                                                              weightedcorG2 = format(rho_g2, digits = 2), 
+                                                              infg2 = format(weightedcor_G2$ci[1], digits = 2),
+                                                              supg2 = format(weightedcor_G2$ci[2], digits = 2)))))
+      
+      
+    }else {
+      print("Error: unknown generation")
+    }
+  }
+  
+  #lim 
+  y_lim <- 0.8*max(data_fruit1_fruit2$fruit2, na.rm = TRUE)
+  y_lim2 <- 0.7*max(data_fruit1_fruit2$fruit2, na.rm = TRUE)
+  x_lim <- 0.6*max(data_fruit1_fruit2$fruit1, na.rm = TRUE)
+  
   #Plot
   if (gen == "G0" | gen == "G2") {
   plot_pair <- ggplot(data = data_fruit1_fruit2,
@@ -168,6 +238,10 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
     #guides(fill = FALSE) +
     xlab(xaxis_labelprint)  +
     ylab(yaxis_labelprint)  +
+    geom_text(x = x_lim, y = y_lim, 
+              label = eq_rho,
+              parse = TRUE, 
+              color="black", size = 3.5) +
     ggtitle(plot_title) +
     scale_color_manual(name="Fly populations from:",   
                        breaks=c("Cherry", "Strawberry","Blackberry"),
@@ -191,6 +265,14 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
         geom_hline(yintercept = 0, linetype = "dashed", color = "grey") +
         geom_point(size=3, stroke=1.3) + 
         #guides(fill = FALSE) +
+        geom_text(x = x_lim, y = y_lim, 
+                  label = eq_rho_G0,
+                  parse = TRUE, 
+                  color="black", size = 3.5) +
+        geom_text(x = x_lim, y = y_lim2, 
+                  label = eq_rho_G2,
+                  parse = TRUE, 
+                  color="black", size = 3.5) +
         xlab(xaxis_labelprint)  +
         ylab(yaxis_labelprint)  +
         ggtitle(plot_title) +
