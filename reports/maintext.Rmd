@@ -1180,13 +1180,13 @@ HETEROGENEITY_PLOT <- cowplot::ggdraw() +
                                         plot.title = element_blank()),
             x = 0.60, y = 0, width = 0.28, height = 0.28) +    
   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001)  + 
-  cowplot::draw_plot_label(c("Oviposition stimulation", 
-                             "Emergence rate", 
-                             "Oviposition preference"),  
-                  x = c(0.5,0.5,0.5), 
+  cowplot::draw_plot_label(c("Oviposition preference", 
+                             "Oviposition stimulation", 
+                             "Emergence rate"),  
+                  x = c(0.45,0.45,0.45), 
                   y = c(0, 0.35, 0.65), 
-                  hjust = c(0,0,0,0,0,0,0,0,0,0), 
-                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+                  hjust = c(0,0,0), 
+                  vjust = c(1.5, 1.5, 1.5),
                   size = 16) 
 HETEROGENEITY_PLOT
 
