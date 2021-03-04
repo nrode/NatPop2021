@@ -127,9 +127,9 @@ sigma_datapoisson_box <- sigma(mperf_poisson_box)
 #NUMBER OF SIMULS
 ```{r } 
 # Power Analyses
-nb_simul <- 5000
+nb_simul <- 10000
 #Save the same number of simuls for each SA value
-nb_per_SA <- 500
+nb_per_SA <- 1000
 # 
 # #Number of simuls for each SA non-genetic value
 # tapply(sim$index_SA_NonGen, sim$SA_NonGen, length)
@@ -497,6 +497,7 @@ plot_genetic_normal_balancedvsunbalanced<-ggplot2::ggplot(data = data_proportion
    ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
    xlab("Intensity of genetic local adaptation (SA)")  +
    ggtitle("Normal data") +
+   ylim(0,1) +
    theme_LO_sober  + 
    ggtitle("Normal data") + 
    labs(color = "Methods", linetype = "Unbalanced\ndesign") +
@@ -519,6 +520,7 @@ plot_nongenetic_normal_balancedvsunbalanced<-ggplot2::ggplot(data = data_proport
    ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
    xlab("Intensity of non-genetic local adaptation (SA)")  +
    ggtitle("Normal data") +
+   ylim(0,1) +
    theme_LO_sober  + 
    ggtitle("Normal data") + 
    labs(color = "Methods", linetype = "Unbalanced\ndesign") +
@@ -996,6 +998,7 @@ plot_genetic_poisson_balancedvsunbalanced<-ggplot2::ggplot(data = data_proportio
    ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
    xlab("Intensity of genetic local adaptation (SA)")  +
    ggtitle("Poisson data") +
+   ylim(0,1) +
    theme_LO_sober  + 
    labs(color = "Methods", linetype = "Unbalanced\ndesign") +
    scale_color_manual(values = c("#459B76","#DCA237")) +
@@ -1014,6 +1017,7 @@ plot_nongenetic_poisson_balancedvsunbalanced<-ggplot2::ggplot(data = data_propor
    aes(x = val_SA_nongenet, y = proportion, color = method, linetype = design)) + 
    geom_point(size = 2) + 
    geom_line(size = 1) + 
+   ylim(0,1) +
    ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
    xlab("Intensity of non-genetic local adaptation (SA)")  +
    ggtitle("Poisson data") +
@@ -1493,6 +1497,7 @@ plot_genetic_binomial_balancedvsunbalanced<-ggplot2::ggplot(data = data_proporti
    ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
    xlab("Intensity of genetic local adaptation (SA)")  +
    ggtitle("Binomial data") +
+   ylim(0,1) +
    theme_LO_sober  + 
    labs(color = "Methods", linetype = "Unbalanced\ndesign") +
    scale_color_manual(values = c("#459B76","#DCA237")) +
@@ -1510,6 +1515,7 @@ data_proportion_nongen$design <- as.factor(data_proportion_nongen$design)
 plot_nongenetic_binomial_balancedvsunbalanced<-ggplot2::ggplot(data = data_proportion_nongen, 
    aes(x = val_SA_nongenet, y = proportion, color = method, linetype = design)) + 
    geom_point(size = 2) + 
+   ylim(0,1) +
    geom_line(size = 1) + 
    ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
    xlab("Intensity of non-genetic local adaptation (SA)")  +
@@ -1893,6 +1899,7 @@ data_proportion_gen$sd_box <- as.factor(data_proportion_gen$sd_box)
 plot_genetic_poisson_ALL_box<-ggplot2::ggplot(data = data_proportion_gen, 
    aes(x = val_SA_genet, y = proportion, color = method, linetype = sd_box)) + 
    geom_point(size = 2) + 
+   ylim(0,1) +
    geom_line(size = 1, alpha = 0.7) + 
    ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
    xlab("Intensity of genetic local adaptation (SA)")  +
@@ -1918,6 +1925,7 @@ data_proportion_nongen$sd_box <- as.factor(data_proportion_nongen$sd_box)
 plot_nongenetic_poisson_ALL_box<-ggplot2::ggplot(data = data_proportion_nongen, 
    aes(x = val_SA_nongenet, y = proportion, color = method, linetype = sd_box)) + 
    geom_point(size = 2) + 
+   ylim(0,1) +
    geom_line(size = 1) + 
    ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
    xlab("Intensity of non-genetic local adaptation (SA)")  +
