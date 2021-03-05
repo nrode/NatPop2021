@@ -137,6 +137,7 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
   #Remove eggs = NA
   NA_eggs_G0 <- dim(data[is.na(data$Nb_eggs)&data$Generation=="G0",])[1]
   NA_eggs_G2 <- dim(data[is.na(data$Nb_eggs)&data$Generation=="G2",])[1]
+  tapply(data[is.na(data$Nb_eggs),]$Nb_eggs,list(data[is.na(data$Nb_eggs),]$Generation,data[is.na(data$Nb_eggs),]$SA),length)
   data_rate_clean <- data[!is.na(data$Nb_eggs),]
   
   #Remove adults = NA
@@ -146,6 +147,8 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
   #Remove eggs = 0
   NA_zeroeggs_G0 <- dim(data_rate_clean[data_rate_clean$Nb_eggs==0&data_rate_clean$Generation=="G0",])[1]
   NA_zeroeggs_G2 <- dim(data_rate_clean[data_rate_clean$Nb_eggs==0&data_rate_clean$Generation=="G2",])[1]
+  tapply(data_rate_clean[data_rate_clean$Nb_eggs==0,]$Nb_eggs,
+         list(data_rate_clean[data_rate_clean$Nb_eggs==0,]$Generation,data_rate_clean[data_rate_clean$Nb_eggs==0,]$SA),length)
   data_rate_clean <- data_rate_clean[data_rate_clean$Nb_eggs!=0,]
   
   #Remove adults > eggs
@@ -153,6 +156,9 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
                                             data_rate_clean$Generation=="G0"])
   temp_g2remv <- length(data_rate_clean$Nb_eggs[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs&
                                             data_rate_clean$Generation=="G2"])
+  tapply(data_rate_clean[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs,]$Nb_eggs,
+         list(data_rate_clean[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs,]$Generation,
+              data_rate_clean[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs,]$SA),length)
   data_rate_clean <- data_rate_clean[data_rate_clean$Nb_adults<=data_rate_clean$Nb_eggs,]
 
   
