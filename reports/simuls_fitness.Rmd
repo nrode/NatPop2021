@@ -127,7 +127,7 @@ sigma_datapoisson_box <- sigma(mperf_poisson_box)
 #NUMBER OF SIMULS
 ```{r } 
 # Power Analyses
-nb_simul <- 10000
+nb_simul <- 100
 #Save the same number of simuls for each SA value
 nb_per_SA <- 1000
 # 
@@ -135,7 +135,7 @@ nb_per_SA <- 1000
 # tapply(sim$index_SA_NonGen, sim$SA_NonGen, length)
 
 #False positive rate 
-nb_simul_fpr <- 100
+nb_simul_fpr <- 10000
 ```
 
 

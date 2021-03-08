@@ -3,6 +3,8 @@
 #' @description Simulation to estimate the power of detection non genetic local adaptation 
 #' @param seed Seed used for simulation
 #' @param SAng Estimate of the  non genetic SA effect
+#' @param dup Value to duplicate dataset (If dup=1 no duplication)
+
 #' 
 #' @return vector: seed, SAng, SAGen, SANonGen, SAGen_Est, SANonGen_Est, Fratio_Gen, 
 #' pvalue_Gen, Fratio_NonGen, pvalue_NonGen, IndicGen, IndicNonGen
@@ -13,7 +15,7 @@
 #'simul_powertest_nongenet(seed = 1, SAng = 0.32)
 
 
-simul_powertest_nongenet <- function(seed = 1, SAng = 0.32){
+simul_powertest_nongenet <- function(seed = 1, SAng = 0.32,   dup = 1){
   
   set.seed(seed)
   
@@ -24,6 +26,7 @@ simul_powertest_nongenet <- function(seed = 1, SAng = 0.32){
                     (0 + lme4::dummy(Generation, "G0")|Population:Test_environment),
                   data = data_PERF_Rate)
   #summary(m)
+  
   
   #Extract SA value for later
   indic <- grep("SA",names(lme4::fixef(m)))
@@ -40,7 +43,9 @@ simul_powertest_nongenet <- function(seed = 1, SAng = 0.32){
   
   ##### SIMULATED DATASTE 
   ## New dataset for the simulated data
-  sim_data <- data_PERF_Rate
+  ## Duplicate dataset
+  sim_data <- data_PERF_Rate[rep(1:nrow(data_PERF_Rate), each = dup), ]
+
   
   
   ## Design matrix for the simulated data

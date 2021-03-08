@@ -5,7 +5,7 @@
 \title{Simulate fitness and calculate SA}
 \usage{
 simul_fitnessdata(
-  distrib = "normal",
+  distrib = "poisson",
   design = "balanced",
   seed = 1,
   nfruit = 3,

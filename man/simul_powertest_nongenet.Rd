@@ -4,12 +4,14 @@
 \alias{simul_powertest_nongenet}
 \title{Power test non genetic local adaptation}
 \usage{
-simul_powertest_nongenet(seed = 1, SAng = 0.32)
+simul_powertest_nongenet(seed = 1, SAng = 0.32, dup = 1)
 }
 \arguments{
 \item{seed}{Seed used for simulation}
 
 \item{SAng}{Estimate of the  non genetic SA effect}
+
+\item{dup}{Value to duplicate dataset (If dup=1 no duplication)}
 }
 \value{
 vector: seed, SAng, SAGen, SANonGen, SAGen_Est, SANonGen_Est, Fratio_Gen,

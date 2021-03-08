@@ -119,10 +119,10 @@ mean(sim$IndicNonGen)
 ```
 
 
-# Emergence Rate
+# Egg-to-adult viability
 ```{r }
-#nb_simul = 500
-val_SAng <- seq(from = 0, to = 1, by = 0.05)
+nb_simul = 200
+val_SAng <- seq(from = 0, to = 1, by = 0.2)
 
 
 #Table with all combination seed x SAng tested
@@ -137,11 +137,6 @@ sim <- mapply(simul_powertest_nongenet,
 sim <- as.data.frame(t(as.data.frame(sim)))
 
 
-head(sim)
-
-
-
-
 
 
 #Dataset proportion
@@ -152,6 +147,9 @@ data_prop <- data.frame(val_SAng = val_SAng,
                                         sim$SAng, mean))
 data_prop
 
+
+
+
 #Plot des simuls
 power_test <- ggplot2::ggplot(data = data_prop, aes(x=val_SAng)) + 
   geom_point(aes(y = prop_nongen_sign), size = 3) + 
@@ -159,7 +157,7 @@ power_test <- ggplot2::ggplot(data = data_prop, aes(x=val_SAng)) +
   geom_vline(xintercept = 0.03152, linetype = "dashed", color = "red", size = 0.5) + 
   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
   xlab("Intensity of non-genetic local adaptation (SA)")  +
-  ggtitle("Emergence rate")  +
+  ggtitle("Egg-to-adult viability")  +
   ylim(0,1) +
   theme_LO_sober  
 power_test
@@ -173,6 +171,36 @@ cowplot::save_plot(file =here::here("figures",name_plot ),
                   base_width = 20/cm(1), dpi = 1200)
 
 
+
+
+
+
+
+################# 
+################# PROBLEM GENETIC VS NON GENETIC
+################# 
+colors <- c("Genetic" = "red", "Non-genetic" = "black")
+#Plot des simuls
+power_test <- ggplot2::ggplot(data = data_prop, aes(x=val_SAng)) + 
+  geom_point(aes(y = prop_nongen_sign, color="Non-genetic"), size = 3) + 
+  geom_line(aes(y = prop_nongen_sign, color="Non-genetic"), size = 1) + 
+  geom_point(aes(y = prop_gen_sign, color="Genetic"), size = 3) + 
+  geom_line(aes(y = prop_gen_sign, color="Genetic"), size = 1) + 
+  geom_vline(xintercept = 0.03152, linetype = "dashed", color = "red", size = 0.5) + 
+  ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
+  xlab("Intensity of non-genetic local adaptation (SA)")  +
+  ggtitle("Egg-to-adult viability")  +
+  labs(color = "Power test") +
+  scale_color_manual(values = colors) +
+  ylim(0,1) +
+  theme_LO_sober  
+power_test
+
+name_plot<-paste0("Simul_powertest_nongeneticdetection_vs_geneticdetection",
+      nb_simul,"nbsimulperSAng.pdf")
+cowplot::save_plot(file =here::here("figures",name_plot ),
+                  power_test, base_height = 14/cm(1),
+                  base_width = 20/cm(1), dpi = 1200)
 
 
 ```
