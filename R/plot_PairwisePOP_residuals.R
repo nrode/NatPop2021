@@ -181,7 +181,7 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
                                                   ci.lvl = 0.95)
     rho <- as.numeric(weightedcor$estimate[1])
     eq_rho <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcor~"["~inf~";"~sup~"]",
-                   list(generation = ifelse(gen=="G0", "G1","G3"),
+                   list(generation = ifelse(gen=="G0", "G0","G2"),
                         weightedcor = format(rho, digits = 2, nsmall=2), 
                         inf = format(weightedcor$ci[1], digits = 2),
                         sup = format(weightedcor$ci[2], digits = 2)))))
@@ -203,12 +203,12 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
       rho_g2 <- as.numeric(weightedcor_G2$estimate[1])
       
       eq_rho_G0 <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcorG0~"["~infg0~";"~supg0~"]",
-                                                      list(generation = "G1",
+                                                      list(generation = "G0",
                                                            weightedcorG0 = format(rho_g0, digits = 2), 
                                                            infg0 = format(weightedcor_G0$ci[1], digits = 1),
                                                            supg0 = format(weightedcor_G0$ci[2], digits = 1)))))
       eq_rho_G2 <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcorG2~"["~infg2~";"~supg2~"]",
-                                                         list(generation = "G3",
+                                                         list(generation = "G2",
                                                               weightedcorG2 = format(rho_g2, digits = 2), 
                                                               infg2 = format(weightedcor_G2$ci[1], digits = 1),
                                                               supg2 = format(weightedcor_G2$ci[2], digits = 1)))))
