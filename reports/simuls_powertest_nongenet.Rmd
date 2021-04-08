@@ -98,7 +98,7 @@ dim(data_PREF)
 # Preliminary check of the function
 ```{r }
 #Check: 
-sim <- sapply(1:1000, simul_powertest_nongenet, SAng= 0.032)
+sim <- sapply(1:1000, simul_powertest_nongenet, SAng= 0.032,  dup = 1)
 sim <- as.data.frame(t(sim))
 
 #SA genet
@@ -121,43 +121,45 @@ mean(sim$IndicNonGen)
 
 # Egg-to-adult viability
 ```{r }
-nb_simul = 200
-val_SAng <- seq(from = 0, to = 1, by = 0.2)
+nb_simul = 1000
+val_SAng <- seq(from = 0, to = 1, by = 0.1)
 
 
 #Table with all combination seed x SAng tested
 val_simul<-c(1:nb_simul)
 value_param <- expand.grid("val_SAng" = val_SAng,
-                           "val_simul" = val_simul)
+                           "val_simul" = val_simul, 
+                           "val_duplication" = c(1,2,10,100))
 
 #mapply to perform several seed and several SAng
 sim <- mapply(simul_powertest_nongenet, 
               seed = value_param$val_simul, 
-              SAng = value_param$val_SAng)
+              SAng = value_param$val_SAng, 
+              dup = value_param$val_duplication)
 sim <- as.data.frame(t(as.data.frame(sim)))
 
 
-
-
 #Dataset proportion
-data_prop <- data.frame(val_SAng = val_SAng, 
-                 prop_gen_sign = tapply(sim$IndicGen, 
-                                        sim$SAng, mean), 
-                 prop_nongen_sign = tapply(sim$IndicNonGen, 
-                                        sim$SAng, mean))
-data_prop
-
-
+TEMP <- as.data.frame(tapply(sim$IndicNonGen, list(sim$SAng,sim$dup), mean))
+TEMP$val_SAng <- rownames(TEMP)
+data_prop <- tidyr::gather(TEMP, "duplication", "prop_nongen_sign", 1:dim(TEMP)[2]-1)
+data_prop$duplication <- factor(data_prop$duplication, levels = c("1","2","10","100"))
 
 
 #Plot des simuls
-power_test <- ggplot2::ggplot(data = data_prop, aes(x=val_SAng)) + 
-  geom_point(aes(y = prop_nongen_sign), size = 3) + 
-  geom_line(aes(y = prop_nongen_sign), size = 1) + 
+power_test <- ggplot2::ggplot(data = data_prop, 
+                              aes(x = val_SAng, 
+                                  y = prop_nongen_sign,
+                                  group = duplication,
+                                  color = duplication)) + 
+  geom_point(size = 3) + 
+  geom_line(size = 1) + 
   geom_vline(xintercept = 0.03152, linetype = "dashed", color = "red", size = 0.5) + 
   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
   xlab("Intensity of non-genetic local adaptation (SA)")  +
   ggtitle("Egg-to-adult viability")  +
+  labs(color = "Number\nof datasets") +
+  scale_color_manual(values=c("#D36582","#a1dab4","#41b6c4","#225ea8"))+
   ylim(0,1) +
   theme_LO_sober  
 power_test
@@ -179,6 +181,13 @@ cowplot::save_plot(file =here::here("figures",name_plot ),
 ################# 
 ################# PROBLEM GENETIC VS NON GENETIC
 ################# 
+data_prop <- data.frame(val_SAng = val_SAng, 
+                 prop_gen_sign = tapply(sim$IndicGen[sim$dup==1], 
+                                        sim$SAng[sim$dup==1], mean), 
+                 prop_nongen_sign = tapply(sim$IndicNonGen[sim$dup==1], 
+                                         sim$SAng[sim$dup==1], mean))
+
+
 colors <- c("Genetic" = "red", "Non-genetic" = "black")
 #Plot des simuls
 power_test <- ggplot2::ggplot(data = data_prop, aes(x=val_SAng)) + 
