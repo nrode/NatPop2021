@@ -168,9 +168,9 @@ power_test
   
 name_plot<-paste0("Simul_powertest_nongeneticdetection_",
       nb_simul,"nbsimulperSAng.pdf")
-cowplot::save_plot(file =here::here("figures",name_plot ),
-                  power_test, base_height = 14/cm(1),
-                  base_width = 20/cm(1), dpi = 1200)
+# cowplot::save_plot(file =here::here("figures",name_plot ),
+#                   power_test, base_height = 14/cm(1),
+#                   base_width = 20/cm(1), dpi = 1200)
 
 
 
@@ -207,10 +207,10 @@ power_test
 
 name_plot<-paste0("Simul_powertest_nongeneticdetection_vs_geneticdetection",
       nb_simul,"nbsimulperSAng.pdf")
-cowplot::save_plot(file =here::here("figures",name_plot ),
-                  power_test, base_height = 14/cm(1),
-                  base_width = 20/cm(1), dpi = 1200)
-
+# cowplot::save_plot(file =here::here("figures",name_plot ),
+#                   power_test, base_height = 14/cm(1),
+#                   base_width = 20/cm(1), dpi = 1200)
+# 
 
 ```
 
