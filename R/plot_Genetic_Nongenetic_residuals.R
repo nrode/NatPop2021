@@ -1,0 +1,215 @@
+#' Plot for reciprocal transplant experiment
+#'
+#' @description Create plot for reciprocal transplant experiment
+#' @param effect can be "Genetic" or "Non-genetic"
+#' @param trait the trait 
+#' 
+#' @return plot of the residuals of the trait on the three environement
+#' @export 
+#'
+#' @examples
+#'plot_RTP_residuals(dataset = data_PERF, trait = "Nb_eggs", effect = "Genetic")
+
+
+plot_RTP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate", effect = "Genetic"){
+  
+  # Subset dataset
+  data <- dataset
+  data <- data[complete.cases(data[,trait]), ]
+  
+  
+  # Transform variables
+  if(trait == "Nb_eggs" | trait == "Nb_adults" ){
+    data$y <- log(data[,trait]+1)
+  }else{
+    if(trait == "Rate"){
+      data$y <- asin(sqrt(data[,trait]))
+    }else{
+      print("Error: unknown trait")
+    }
+  }
+  
+  #Extract resid 
+  lm_resid <- lm(y ~ Test_environment:Generation + Population:Generation, data=data)
+  data$Resid <- residuals(lm_resid)
+
+  ##Dataset summary
+  TEMP_SUM <- Rmisc::summarySE(data,
+                               measurevar="Resid",
+                               groupvars=c("Generation","Original_environment","Test_environment","SA"))
+  #tapply(data$Resid,list(data$Original_environment,data$Test_environment,data$Generation),mean)
+  #tapply(data$Resid,list(data$Original_environment,data$Test_environment,data$Generation),sd)
+  
+  
+  ##Transform in genetic vs non genetic dataset
+  SUM_Genetic_NonGenetic <- TEMP_SUM
+  SUM_Genetic_NonGenetic$Effect <- ifelse(SUM_Genetic_NonGenetic$Generation=="G0","Non-genetic","Genetic")
+  #Calcul mean and sd as:
+    #mean(genetic)=mean(G2)
+    #sd(genetic)=sd(G2)
+    #mean(nnon-genetic)=mean(G0)-mean(G2)
+    #sd(genetic)=sqrt(var(G0)-var(G2))
+  
+  #Genetic effect
+  SUM_Genetic_NonGenetic$mean_effect <-  ifelse(SUM_Genetic_NonGenetic$Effect=="Genetic",SUM_Genetic_NonGenetic$Resid,NA)
+  SUM_Genetic_NonGenetic$sd_effect <-  ifelse(SUM_Genetic_NonGenetic$Effect=="Genetic",SUM_Genetic_NonGenetic$sd,NA)
+  
+  #Nongenetic effect
+  for (i in levels(SUM_Genetic_NonGenetic$Original_environment)) {
+      for (j in levels(SUM_Genetic_NonGenetic$Test_environment)) {
+        SUM_Genetic_NonGenetic$mean_effect[SUM_Genetic_NonGenetic$Original_environment==i&
+                                             SUM_Genetic_NonGenetic$Test_environment==j&
+                                             SUM_Genetic_NonGenetic$Generation=="G0"] <-
+          SUM_Genetic_NonGenetic$Resid[SUM_Genetic_NonGenetic$Original_environment==i&
+                                         SUM_Genetic_NonGenetic$Test_environment==j&
+                                         SUM_Genetic_NonGenetic$Generation=="G0"] - 
+          SUM_Genetic_NonGenetic$Resid[SUM_Genetic_NonGenetic$Original_environment==i&
+                                         SUM_Genetic_NonGenetic$Test_environment==j&
+                                         SUM_Genetic_NonGenetic$Generation=="G2"]
+        
+        SUM_Genetic_NonGenetic$sd_effect[SUM_Genetic_NonGenetic$Original_environment==i&
+                                             SUM_Genetic_NonGenetic$Test_environment==j&
+                                             SUM_Genetic_NonGenetic$Generation=="G0"] <-
+          sqrt((SUM_Genetic_NonGenetic$sd[SUM_Genetic_NonGenetic$Original_environment==i&
+                                         SUM_Genetic_NonGenetic$Test_environment==j&
+                                         SUM_Genetic_NonGenetic$Generation=="G0"])^2-
+                 (SUM_Genetic_NonGenetic$sd[SUM_Genetic_NonGenetic$Original_environment==i&
+                                         SUM_Genetic_NonGenetic$Test_environment==j&
+                                         SUM_Genetic_NonGenetic$Generation=="G2"])^2)
+     }
+   }
+      
+  SUM_Genetic_NonGenetic <- SUM_Genetic_NonGenetic[,c("Effect","Original_environment","Test_environment",
+                                                      "SA","mean_effect","sd_effect")]
+  
+  
+  ##### Subset with the generation
+  #Dataset with the mean
+  SUM_Genetic_NonGenetic <- SUM_Genetic_NonGenetic[SUM_Genetic_NonGenetic$Effect == effect,]
+  #Dataset for the analysis
+  if(effect == "Genetic"){
+    data <- data[data$Generation == "G0",]
+  }else{
+    if(effect == "Non-genetic"){
+      data <- data[data$Generation == "G2",]
+    }else{
+      print("Error: generation trait")
+    }
+  
+    
+  
+  if(trait == "Nb_eggs"){
+    if("Obs_A" %in% colnames(dataset)){
+      ## Test for Local Adaptation
+      lm_val = lm(y ~ Test_environment + Population + SA + Test_environment:Original_environment, 
+                  data = data)
+      
+      Fratio = anova(lm_val)[3,3]/anova(lm_val)[4,3]
+      pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[4,1])
+      df1 = anova(lm_val)[3,1]
+      df2 = anova(lm_val)[4,1]
+    }else{
+      if("BoxID" %in% colnames(dataset)) {
+        lm_val = lm(y ~ Test_environment + Population + SA + 
+                      Test_environment:Original_environment + BoxID, 
+                    data = data)
+        
+        Fratio = anova(lm_val)[3,3]/anova(lm_val)[5,3]
+        pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[5,1])
+        df1 = anova(lm_val)[3,1]
+        df2 = anova(lm_val)[5,1]
+      }else{
+        print("Error: unknown trait")
+      }
+    }
+    
+  }else{
+    if(trait == "Rate"){
+      lm_val = lm(y ~ Test_environment + Population + SA + log(Nb_eggs) +
+                    Test_environment:Original_environment, 
+                  data = data)
+      
+      Fratio = anova(lm_val)[3,3]/anova(lm_val)[5,3]
+      pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[5,1])
+      df1 = anova(lm_val)[3,1]
+      df2 = anova(lm_val)[5,1]
+    }else{
+      if (trait == "Nb_adults"){
+        lm_val = lm(y ~ Test_environment + Population + SA + log(Nb_eggs+1) +
+                      Test_environment:Original_environment, 
+                    data = data)
+        
+        Fratio = anova(lm_val)[3,3]/anova(lm_val)[5,3]
+        pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[5,1])
+        df1 = anova(lm_val)[3,1]
+        df2 = anova(lm_val)[5,1]
+      }else{
+        print("Error: unknown trait")
+      }
+    }
+  }
+  
+  
+  #Equation
+  equation <- as.character(as.expression(substitute(italic(F)[effect_name~"-"~df1~","~df2]~"="~Fratio~";"~italic(P)~"="~pvalue,
+                                                    list(effect_name = effect,
+                                                         Fratio = format(Fratio, digits = 2, nsmall=2),
+                                                         df1 = format(df1, digits = 2), 
+                                                         df2 = format(df2, digits = 2), 
+                                                         pvalue = format(pvalue, digits = 2)))))
+  equation
+  
+  #Ylim 
+  max_plot <- 1.1 * max(SUM_Genetic_NonGenetic$mean_effect+SUM_Genetic_NonGenetic$sd)
+  
+  
+  # Plot title and y axis title
+  plot_title <- effect
+ 
+  if("Obs_A" %in% colnames(dataset)  & trait == "Nb_eggs"){
+    yaxis_labelprint <- paste0("Residuals(oviposition stimulation)")
+  }else{
+    if("Obs_A" %in% colnames(dataset)  & trait == "Nb_adults"){
+      yaxis_labelprint <- paste0("Residuals(number of adults)")
+    }else{
+      if("Rate" %in% colnames(dataset) && trait == "Rate"){
+        yaxis_labelprint <- paste0("Residuals(egg-to-adult viability)")
+      }else{
+        if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
+          yaxis_labelprint <- paste0("Residuals(oviposition preference)")
+        }else{
+          print("Error: unknown combinaison dataset x trait")
+        }
+      }
+    }
+  }
+  pd <- position_dodge(0.6) # move them .05 to the left and right
+  
+  plot <- ggplot(SUM_Genetic_NonGenetic, aes(x = Test_environment, y = mean_effect,
+                               colour = Original_environment,
+                               group = Original_environment,
+                               fill = "white")) + 
+    geom_errorbar(aes(ymin=mean_effect-sd_effect, ymax = mean_effect+sd_effect),
+                  width=.1, position=pd, size = 1) +
+    annotate('text', x = 3.5, y = max_plot, label = equation, parse = TRUE, hjust = 1, size = 4) + 
+    geom_point(size = 4, position=pd, fill="white", shape = 21, stroke = 1.5) + 
+    scale_color_manual(name="Fly populations from:",   
+                       breaks=c("Cherry", "Strawberry","Blackberry"),
+                       labels=c("Cherry","Strawberry","Blackberry"),
+                       values=c("#BC3C6D","#3FAA96", "#301934")) +
+    ylab(yaxis_labelprint)  +
+    xlab("Test environment")  +
+    ggtitle(plot_title) +
+    theme_LO_sober 
+  
+  ### Add stroke
+  plot2 <- plot + 
+    geom_point(aes(alpha = SA, fill = interaction(SA, Original_environment)), 
+               position = pd, size = 4) + 
+    scale_alpha_manual(values = c(0,1)) + 
+    guides(fill = FALSE, alpha = FALSE) 
+  
+  
+  return(plot2) 
+}
+
