@@ -11,8 +11,7 @@
 #'plot_RTP_residuals(dataset = data_PERF, trait = "Nb_eggs", effect = "Genetic")
 
 
-plot_RTP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate", effect = "Genetic"){
-  
+plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = "Rate", effect = "Genetic"){
   # Subset dataset
   data <- dataset
   data <- data[complete.cases(data[,trait]), ]
@@ -77,47 +76,57 @@ plot_RTP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate", effect 
                                          SUM_Genetic_NonGenetic$Test_environment==j&
                                          SUM_Genetic_NonGenetic$Generation=="G2"])^2)
      }
-   }
+  }
+  
+  #Perform se:
+  SUM_Genetic_NonGenetic$se_effect <- SUM_Genetic_NonGenetic$sd_effect/sqrt(SUM_Genetic_NonGenetic$N)
       
+  
   SUM_Genetic_NonGenetic <- SUM_Genetic_NonGenetic[,c("Effect","Original_environment","Test_environment",
-                                                      "SA","mean_effect","sd_effect")]
-  
-  
-  ##### Subset with the generation
-  #Dataset with the mean
-  SUM_Genetic_NonGenetic <- SUM_Genetic_NonGenetic[SUM_Genetic_NonGenetic$Effect == effect,]
-  #Dataset for the analysis
-  if(effect == "Genetic"){
-    data <- data[data$Generation == "G0",]
-  }else{
-    if(effect == "Non-genetic"){
-      data <- data[data$Generation == "G2",]
-    }else{
-      print("Error: generation trait")
-    }
-  
+                                                      "SA","mean_effect","sd_effect","se_effect")]
+
     
-  
+  #TEST LOCAL ADAPTATION GENETIC vs NON-GENETIC
   if(trait == "Nb_eggs"){
     if("Obs_A" %in% colnames(dataset)){
-      ## Test for Local Adaptation
-      lm_val = lm(y ~ Test_environment + Population + SA + Test_environment:Original_environment, 
-                  data = data)
       
-      Fratio = anova(lm_val)[3,3]/anova(lm_val)[4,3]
-      pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[4,1])
-      df1 = anova(lm_val)[3,1]
-      df2 = anova(lm_val)[4,1]
+      lm_val <- aov(y ~ pop_gen + hab_gen + SA:IndicG0 + SA +
+                  Original_environment:Test_environment + 
+                  Original_environment:Test_environment:IndicG0, 
+                data = data)
+      
+      ## F test for SA
+      (Fratio_Gen <- (anova(lm_val)[3,2]/anova(lm_val)[5,2])/(1/anova(lm_val)[5, 1]))
+      (pvalue_Gen <- 1 - pf(Fratio_Gen, 1, anova(lm_val)[5, 1]) )
+      df1_Gen = 1
+      df2_Gen = anova(lm_val)[5, 1]
+      
+      ## F test for SA
+      (Fratio_NonGen <- (anova(lm_val)[4,2]/anova(lm_val)[6,2])/(1/anova(lm_val)[6, 1]))
+      (pvalue_NonGen <- 1 - pf(Fratio_NonGen, 1, anova(lm_val)[6, 1]) )
+      df1_NonGen = 1
+      df2_NonGen = anova(lm_val)[6, 1]
+      
     }else{
       if("BoxID" %in% colnames(dataset)) {
-        lm_val = lm(y ~ Test_environment + Population + SA + 
-                      Test_environment:Original_environment + BoxID, 
-                    data = data)
+        lm_val <- aov(y ~ pop_gen + hab_gen + SA:IndicG0 + SA +
+                    Original_environment:Test_environment + 
+                    Original_environment:Test_environment:IndicG0 +
+                    BoxID, 
+                  data = data)
         
-        Fratio = anova(lm_val)[3,3]/anova(lm_val)[5,3]
-        pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[5,1])
-        df1 = anova(lm_val)[3,1]
-        df2 = anova(lm_val)[5,1]
+        ## F test for SA
+        (Fratio_Gen <- (anova(lm_val)[3,2]/anova(lm_val)[6,2])/(1/anova(lm_val)[6, 1]))
+        (pvalue_Gen <- 1 - pf(Fratio_Gen, 1, anova(lm_val)[6, 1]) )
+        df1_Gen = 1
+        df2_Gen = anova(lm_val)[6, 1]
+        
+        ## F test for SA
+        (Fratio_NonGen <- (anova(lm_val)[5,2]/anova(lm_val)[7,2])/(1/anova(lm_val)[7, 1]))
+        (pvalue_NonGen <- 1 - pf(Fratio_NonGen, 1, anova(lm_val)[7, 1]) )
+        df1_NonGen = 1
+        df2_NonGen = anova(lm_val)[7, 1]
+        
       }else{
         print("Error: unknown trait")
       }
@@ -125,29 +134,70 @@ plot_RTP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate", effect 
     
   }else{
     if(trait == "Rate"){
-      lm_val = lm(y ~ Test_environment + Population + SA + log(Nb_eggs) +
-                    Test_environment:Original_environment, 
-                  data = data)
       
-      Fratio = anova(lm_val)[3,3]/anova(lm_val)[5,3]
-      pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[5,1])
-      df1 = anova(lm_val)[3,1]
-      df2 = anova(lm_val)[5,1]
+      
+      lm_val <- aov(y ~ pop_gen + hab_gen + SA:IndicG0 + SA +
+                  Original_environment:Test_environment + 
+                  Original_environment:Test_environment:IndicG0 +
+                  log(Nb_eggs), 
+                data = data)
+      
+      
+      ## F test for SA
+      Fratio_Gen <- (anova(lm_val)[3,2]/anova(lm_val)[6,2])/(1/anova(lm_val)[6, 1])
+      pvalue_Gen <- 1 - pf(Fratio_Gen, 1, anova(m2)[6, 1]) 
+      df1_Gen = 1
+      df2_Gen = anova(lm_val)[6, 1]
+      
+      ## F test for SA
+      Fratio_NonGen <- (anova(lm_val)[5,2]/anova(lm_val)[7,2])/(1/anova(lm_val)[7, 1])
+      pvalue_NonGen <- 1 - pf(Fratio_NonGen, 1, anova(lm_val)[7, 1]) 
+      df1_NonGen = 1
+      df2_NonGen = anova(lm_val)[7, 1]
+
     }else{
       if (trait == "Nb_adults"){
-        lm_val = lm(y ~ Test_environment + Population + SA + log(Nb_eggs+1) +
-                      Test_environment:Original_environment, 
-                    data = data)
+        lm_val <- aov(y ~ pop_gen + hab_gen + SA:IndicG0 + SA +
+                        Original_environment:Test_environment + 
+                        Original_environment:Test_environment:IndicG0 +
+                        log(Nb_eggs+1), 
+                      data = data)
         
-        Fratio = anova(lm_val)[3,3]/anova(lm_val)[5,3]
-        pvalue = 1 - pf(Fratio,anova(lm_val)[3,1],anova(lm_val)[5,1])
-        df1 = anova(lm_val)[3,1]
-        df2 = anova(lm_val)[5,1]
+        ## F test for SA
+        Fratio_Gen <- (anova(lm_val)[3,2]/anova(lm_val)[6,2])/(1/anova(lm_val)[6, 1])
+        pvalue_Gen <- 1 - pf(Fratio_Gen, 1, anova(lm_val)[6, 1]) 
+        df1_Gen = 1
+        df2_Gen = anova(lm_val)[6, 1]
+        
+        ## F test for SA
+        Fratio_NonGen <- (anova(lm_val)[5,2]/anova(lm_val)[7,2])/(1/anova(lm_val)[7, 1])
+        pvalue_NonGen <- 1 - pf(Fratio_NonGen, 1, anova(lm_val)[7, 1]) 
+        df1_NonGen = 1
+        df2_NonGen = anova(lm_val)[7, 1]
+        
       }else{
         print("Error: unknown trait")
       }
     }
   }
+  
+  if(effect == "Genetic"){
+    Fratio = Fratio_Gen
+    pvalue = pvalue_Gen
+    df1 = df1_Gen
+    df2 = df2_Gen }else{
+    if(effect == "Non-genetic"){
+      Fratio = Fratio_NonGen
+      pvalue = pvalue_NonGen
+      df1 = df1_NonGen
+      df2 = df2_NonGen  }else{
+      print("Error: effect tested unknown")
+    }
+  }
+  
+
+  
+  
   
   
   #Equation
@@ -159,8 +209,24 @@ plot_RTP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate", effect 
                                                          pvalue = format(pvalue, digits = 2)))))
   equation
   
+  
+  
+  ##### Subset with the generation
+  #Dataset with the mean
+  SUM_Genetic_NonGenetic <- SUM_Genetic_NonGenetic[SUM_Genetic_NonGenetic$Effect == effect,]
+  # #Dataset for the analysis
+  # if(effect == "Genetic"){
+  #   data <- data[data$Generation == "G0",]
+  # }else{
+  #   if(effect == "Non-genetic"){
+  #     data <- data[data$Generation == "G2",]
+  #   }else{
+  #     print("Error: generation trait")
+  #   }
+  # }
+  
   #Ylim 
-  max_plot <- 1.1 * max(SUM_Genetic_NonGenetic$mean_effect+SUM_Genetic_NonGenetic$sd)
+  max_plot <- 1.1 * max(SUM_Genetic_NonGenetic$mean_effect+1.96*SUM_Genetic_NonGenetic$se_effect)
   
   
   # Plot title and y axis title
@@ -189,7 +255,7 @@ plot_RTP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate", effect 
                                colour = Original_environment,
                                group = Original_environment,
                                fill = "white")) + 
-    geom_errorbar(aes(ymin=mean_effect-sd_effect, ymax = mean_effect+sd_effect),
+    geom_errorbar(aes(ymin=mean_effect-1.96*se_effect, ymax = mean_effect+1.96*se_effect),
                   width=.1, position=pd, size = 1) +
     annotate('text', x = 3.5, y = max_plot, label = equation, parse = TRUE, hjust = 1, size = 4) + 
     geom_point(size = 4, position=pd, fill="white", shape = 21, stroke = 1.5) + 
@@ -209,7 +275,9 @@ plot_RTP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate", effect 
     scale_alpha_manual(values = c(0,1)) + 
     guides(fill = FALSE, alpha = FALSE) 
   
-  
+
   return(plot2) 
+
 }
 
+  

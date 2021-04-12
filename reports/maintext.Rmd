@@ -175,6 +175,13 @@ m2 <- aov(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 (PLOT_eggs_G0 <- plot_RTP_residuals(dataset = data_PERF, trait = "Nb_eggs", gen = "G0"))
 (PLOT_eggs_G2 <- plot_RTP_residuals(dataset = data_PERF, trait = "Nb_eggs", gen = "G2"))
 
+(PLOT_GEN_eggs_G0 <- plot_Genetic_Nongenetic_residuals(dataset = data_PERF, 
+                                                   trait = "Nb_eggs", 
+                                                   effect = "Non-genetic"))
+(PLOT_GEN_eggs_G2 <- plot_Genetic_Nongenetic_residuals(dataset = data_PERF, 
+                                                       trait = "Nb_eggs", 
+                                                   effect = "Genetic"))
+
 ###PLOT 
 (PAIR_BLACK_CHERRY_G2_EGGS <- plot_PairwisePOP_residuals(dataset = data_PERF, 
                                                            trait = "Nb_eggs", gen = "G2", 
@@ -399,7 +406,13 @@ m2 <- aov(log(Nb_adults+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 
 (PLOT_adult_G0 <- plot_RTP_residuals(dataset = data_PERF, trait = "Nb_adults", gen = "G0"))
 (PLOT_adult_G2 <- plot_RTP_residuals(dataset = data_PERF, trait = "Nb_adults", gen = "G2"))
- 
+
+(PLOT_GEN_adult_G0 <- plot_Genetic_Nongenetic_residuals(dataset = data_PERF, 
+                                                    trait = "Nb_adults", 
+                                                    effect = "Non-genetic"))
+(PLOT_GEN_adult_G2 <- plot_Genetic_Nongenetic_residuals(dataset = data_PERF, 
+                                                    trait = "Nb_adults", 
+                                                    effect = "Genetic"))
 
 
 ###PLOT 
@@ -661,6 +674,12 @@ m2 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 (PLOT_rate_G0 <- plot_RTP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G0"))
 (PLOT_rate_G2 <- plot_RTP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G2"))
 
+(PLOT_GEN_rate_G0 <- plot_Genetic_Nongenetic_residuals(dataset = data_PERF_Rate, 
+                                                    trait = "Rate", 
+                                                    effect = "Non-genetic"))
+(PLOT_GEN_rate_G2 <- plot_Genetic_Nongenetic_residuals(dataset = data_PERF_Rate, 
+                                                    trait = "Rate", 
+                                                    effect = "Genetic"))
 
 ```
 
@@ -941,6 +960,12 @@ m2 <- aov(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 
 
 
+(PLOT_GEN_pref_G0 <- plot_Genetic_Nongenetic_residuals(dataset = data_PREF_three, 
+                                    trait = "Nb_eggs", effect = "Non-genetic"))
+(PLOT_GEN_pref_G2 <- plot_Genetic_Nongenetic_residuals(dataset = data_PREF_three, 
+                                    trait = "Nb_eggs", effect = "Genetic"))
+
+
 
 ###PLOT 
 (PAIR_BLACK_CHERRY_G2_PREF <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
@@ -981,7 +1006,7 @@ m2 <- aov(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 
 
 
-# PLOT MEAN ORIGINAL ENVT
+# PLOT LOCAL ADAPTATION
 ```{r }
 legend <- lemon::g_legend(PLOT_pref_G0)
 
@@ -1082,6 +1107,51 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
  
  cowplot::save_plot(file =here::here("figures", "LOCAL_ADAPTATION_First_Third.pdf"),
                    LOCAL_ADAPTATION_PLOT,
+                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+
+
+
+```
+
+
+
+
+# PLOT GENETIC vs NON GENETIC
+```{r }
+legend <- lemon::g_legend(PLOT_pref_G0)
+
+Genetic_NonGenetic_PLOT <- cowplot::ggdraw() + 
+  cowplot::draw_plot(PLOT_GEN_pref_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
+  cowplot::draw_plot(PLOT_GEN_eggs_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
+  cowplot::draw_plot(PLOT_GEN_rate_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
+  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
+  cowplot::draw_plot(PLOT_GEN_pref_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.01, y = 0, width = 0.25, height = 0.45) + 
+  cowplot::draw_plot(PLOT_GEN_eggs_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.31, y = 0, width = 0.25, height = 0.45) + 
+  cowplot::draw_plot(PLOT_GEN_rate_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.61, y = 0, width = 0.25, height = 0.45) + 
+  cowplot::draw_plot_label(c("Genetic effects", "A", "B", "C", " ",
+                    "Non-genetic effects", "D", "E", "F", " "),  
+                  x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
+                  y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
+                  hjust = c(0,0,0,0,0,0,0,0,0,0), 
+                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+                  size = 16) 
+ Genetic_NonGenetic_PLOT
+
+ 
+ cowplot::save_plot(file =here::here("figures", "GENETIC_NONGENETIC_First_Third.pdf"),
+                   Genetic_NonGenetic_PLOT,
                    base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
 
 

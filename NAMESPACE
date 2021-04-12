@@ -3,6 +3,7 @@
 export(add_indic_sign)
 export(add_sim_number_SA)
 export(import_data)
+export(plot_Genetic_Nongenetic_residuals)
 export(plot_PairwisePOP_residuals)
 export(plot_RTP_residuals)
 export(select_sample_simul)
