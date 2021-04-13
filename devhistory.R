@@ -46,6 +46,7 @@ usethis::use_r("import_data")
 usethis::use_r("plot_RTP_residuals")
 usethis::use_r("plot_PairwisePOP_residuals")
 usethis::use_r("plot_Genetic_Nongenetic_residuals")
+usethis::use_r("plot_RelationTraits_residuals")
 
 ## Update NAMESPACE file
 devtools::document()
