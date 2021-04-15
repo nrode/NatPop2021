@@ -13,7 +13,7 @@
 #'plot_PairwisePOP_residuals(dataset = data_PERF, trait = "Nb_eggs", gen = "Both",fruit1 = "Cherry",fruit2 = "Blackberry")
 
 
-plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Cranberry", trait2 = "Preference"){
+plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trait2 = "Preference"){
   
   #Load and subset dataset
   if (gen == "G0" | gen == "G2") {
@@ -81,7 +81,9 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Cranberry", trait
   
   #Subset per fruit
   TEMP_SUM_FRUIT <- TEMP_SUM[TEMP_SUM$Test_environment==fruit,]
-]
+  
+  
+  
   ######### PLOT
   # Plot title and x/y axis title
   plot_title <- ifelse(gen == "G0", "First generation", ifelse(gen == "G2","Third generation", " "))
@@ -163,15 +165,15 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Cranberry", trait
   
   #coordinates of equation 
   if (gen == "G0" | gen == "G2") {
-    ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.9
-    xmax <- max(TEMP_SUM_FRUIT$Resid_eggs)*0.5    
+    ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.99
+    xmax <- max(TEMP_SUM_FRUIT$Resid_eggs)*0.3    
   }else{
     
     if (gen == "Both") {
-      ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.9
-      xmax <- max(TEMP_SUM_FRUIT$Resid_eggs)*0.5
-      ymax2 <- max(TEMP_SUM_FRUIT$Resid_rate)*0.8
-      xmax2 <- max(TEMP_SUM_FRUIT$Resid_eggs)*0.5 
+      ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.99
+      xmax <- max(TEMP_SUM_FRUIT$Resid_eggs)*0.3
+      ymax2 <- max(TEMP_SUM_FRUIT$Resid_rate)*0.9
+      xmax2 <- max(TEMP_SUM_FRUIT$Resid_eggs)*0.3
     }else{
       print("Error: unknown generation")
     }
