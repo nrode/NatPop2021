@@ -147,14 +147,17 @@ nb_simul_fpr <- 10000
 #Perform siluations
 sim1 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", design = "balanced",
               rho = -0.05, rho_ng = -0.05, 
-              npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, nhab = nhab_data, 
+              npop_per_fruit = npop_per_fruit_data, 
+              nfruit = nfruit_data, nhab = nhab_data, 
               nrep = nrep_data, sdpop = 0.5, sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
 sim1 <- as.data.frame(t(sim1))
 
 sim2 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", design = "balanced",
               rho = -0.5, rho_ng = -0.5, 
-              npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, nhab = nhab_data, 
-              nrep = nrep_data, sdpop = 0.5, sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
+              npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, 
+              nhab = nhab_data, 
+              nrep = nrep_data, sdpop = 0.5, sdfruithab = 0.5, sdfruithab_ng = 0.5, 
+              sigma = 0.5)
 sim2 <- as.data.frame(t(sim2))
 
 
@@ -588,10 +591,13 @@ tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
 
 #### Non-genetic effects and no genetic effects
 ```{r } 
-sim <- sapply(1:nb_simul_fpr, simul_fitnessdata, distrib = "normal",design = "balanced",
+sim <- sapply(1:nb_simul_fpr, simul_fitnessdata, distrib = "normal",
+              design = "balanced",
               rho=0, rho_ng=-0.1,  
-              npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, nhab = nhab_data, 
-              nrep = nrep_data, sdpop = 0.5, sdfruithab = 0.5, sdfruithab_ng = 0.5, sigma = 0.5)
+              npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, 
+              nhab = nhab_data, 
+              nrep = nrep_data, sdpop = 0.5, sdfruithab = 0.5, sdfruithab_ng = 0.5, 
+              sigma = 0.5)
 sim <- as.data.frame(t(sim))
 sim <- add_indic_sign(sim)
 
@@ -628,16 +634,19 @@ sim1 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson", design = "bal
               rho = 0, rho_ng = 0, 
               npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, nhab = nhab_data, 
               nrep = nrep_data, sdpop = sdpop_datapoisson, 
-              sdfruithab = sdfruithab_datapoisson, sdfruithab_ng = sdfruithab_ng_datapoisson, 
+              sdfruithab = sdfruithab_datapoisson, 
+              sdfruithab_ng = sdfruithab_ng_datapoisson, 
               sigma = sigma_datapoisson)
 sim1 <- as.data.frame(t(sim1))
 
 #Perform siluations
 sim2 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson", design = "balanced",
               rho = -0.05, rho_ng = -0.05, 
-              npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, nhab = nhab_data, 
+              npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, 
+              nhab = nhab_data, 
               nrep = nrep_data, sdpop = sdpop_datapoisson, 
-              sdfruithab = sdfruithab_datapoisson, sdfruithab_ng = sdfruithab_ng_datapoisson, 
+              sdfruithab = sdfruithab_datapoisson, 
+              sdfruithab_ng = sdfruithab_ng_datapoisson, 
               sigma = sigma_datapoisson)
 sim2 <- as.data.frame(t(sim2))
 
@@ -1131,9 +1140,11 @@ rm(data_proportion_gen, data_proportion_nongen,
 #Perform siluations
 sim1 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial", design = "balanced",
               rho = -0.05, rho_ng = -0.05, 
-              npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, nhab = nhab_data, 
+              npop_per_fruit = npop_per_fruit_data, 
+              nfruit = nfruit_data, nhab = nhab_data, 
               nrep = nrep_data, sdpop = sdpop_databinomial,
-              sdfruithab = sdfruithab_databinomial, sdfruithab_ng = sdfruithab_ng_databinomial, 
+              sdfruithab = sdfruithab_databinomial, 
+              sdfruithab_ng = sdfruithab_ng_databinomial, 
               sigma = sigma_databinomial)
 sim1 <- as.data.frame(t(sim1))
 #Perform siluations
@@ -1149,7 +1160,8 @@ sim3 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial", design = "ba
               rho = -0.5, rho_ng = -0.5, 
               npop_per_fruit = npop_per_fruit_data, nfruit = nfruit_data, nhab = nhab_data, 
               nrep = nrep_data, sdpop = sdpop_databinomial,
-              sdfruithab = sdfruithab_databinomial, sdfruithab_ng = sdfruithab_ng_databinomial, 
+              sdfruithab = sdfruithab_databinomial, 
+              sdfruithab_ng = sdfruithab_ng_databinomial, 
               sigma = sigma_databinomial)
 sim3 <- as.data.frame(t(sim3))
 
@@ -1547,6 +1559,7 @@ sim <- add_indic_sign(sim)
   
 ## Local adaptation (genetic)
 mean(sim$IndicGen)
+
 mean(sim$IndicGen_aov)
 
 ## Local adaptation (non-genetic)

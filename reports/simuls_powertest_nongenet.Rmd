@@ -121,6 +121,58 @@ mean(sim$IndicNonGen)
 
 # Egg-to-adult viability
 ```{r }
+#### INCREASE SA NON GENETIC
+nb_simul = 1000
+val_SAng <- seq(from = 0, to = 1, by = 0.1)
+
+
+#Table with all combination seed x SAng tested
+val_simul<-c(1:nb_simul)
+value_param <- expand.grid("val_SAng" = val_SAng,
+                           "val_simul" = val_simul, 
+                           "val_duplication" = c(1))
+
+#mapply to perform several seed and several SAng
+sim <- mapply(simul_powertest_nongenet, 
+              seed = value_param$val_simul, 
+              SAng = value_param$val_SAng, 
+              dup = value_param$val_duplication)
+sim <- as.data.frame(t(as.data.frame(sim)))
+
+
+#Dataset proportion
+TEMP <- as.data.frame(tapply(sim$IndicNonGen, list(sim$SAng,sim$dup), mean))
+TEMP$val_SAng <- rownames(TEMP)
+data_prop <- tidyr::gather(TEMP, "duplication", "prop_nongen_sign", 1:dim(TEMP)[2]-1)
+data_prop$duplication <- factor(data_prop$duplication, levels = c("1"))
+
+
+#Plot des simuls
+power_test_simple <- ggplot2::ggplot(data = data_prop, 
+                              aes(x = val_SAng, 
+                                  y = prop_nongen_sign)) + 
+  geom_point(size = 3) + 
+  geom_line(size = 1) + 
+  geom_vline(xintercept = 0.03152, linetype = "dashed", color = "red", size = 0.5) + 
+  ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
+  xlab("Intensity of non-genetic local adaptation (SA)")  +
+  ggtitle("Egg-to-adult viability")  +
+  ylim(0,1) +
+  theme_LO_sober  
+power_test_simple
+
+
+  
+name_plot<-paste0("Simul_powertest_nongeneticdetection_",
+      nb_simul,"nbsimulperSAng.pdf")
+# cowplot::save_plot(file =here::here("figures",name_plot ),
+#                   power_test, base_height = 14/cm(1),
+#                   base_width = 20/cm(1), dpi = 1200)
+
+
+
+
+#### DUPLICATION DATASET
 nb_simul = 1000
 val_SAng <- seq(from = 0, to = 1, by = 0.1)
 
