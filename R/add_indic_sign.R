@@ -11,8 +11,10 @@
 
 add_indic_sign <- function(dataset_sim = sim) { 
 
-  dataset_sim$SA_Gen <- round(dataset_sim$SA_Gen_True,1)
-  dataset_sim$SA_NonGen <- round(dataset_sim$SA_NonGen_True,1)
+  dataset_sim$binnedrsqgen <- round(dataset_sim$rsqgen, 1)
+  dataset_sim$binnedrsqng <- round(dataset_sim$rsqng, 1)
+  dataset_sim$SA_Gen <- round(dataset_sim$SA_Gen_True, 1)
+  dataset_sim$SA_NonGen <- round(dataset_sim$SA_NonGen_True, 1)
   dataset_sim$IndicGen <- ifelse(dataset_sim$pvalue_Gen<0.05 & dataset_sim$SAGen_Est>0, 1, 0)
   dataset_sim$IndicNonGen <- ifelse(dataset_sim$pvalue_NonGen<0.05 & dataset_sim$SANonGen_Est>0, 1, 0)
   dataset_sim$IndicGen_aov <- ifelse(dataset_sim$pvalue_Gen_aov<0.05 & dataset_sim$SAGen_Est>0, 1, 0)

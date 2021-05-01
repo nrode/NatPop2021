@@ -260,7 +260,9 @@ simul_fitnessdata <- function(distrib = "normal", design = "balanced",
   Fratio_NonGen_aov = (anova(m2)[4,2]/anova(m2)[6,2])/(1/anova(m2)[6, 1])
   pvalue_NonGen_aov = 1 - pf(Fratio_NonGen_aov, 1, anova(m2)[6, 1]) 
   
-  
+  ## Compute R2 = MS Interaction model without SA - MS Interaction model with SA / MS Interaction model without SA
+  rsqgen <- 1-anova(m2)[5, 3]/((anova(m2)[3, 2]+anova(m2)[5, 2])/(anova(m2)[3, 1]+anova(m2)[5, 1]))
+  rsqng <- 1-anova(m2)[6, 3]/((anova(m2)[4, 2]+anova(m2)[6, 2])/(anova(m2)[4, 1]+anova(m2)[6, 1]))
   
   
   #######################################################
@@ -340,6 +342,9 @@ simul_fitnessdata <- function(distrib = "normal", design = "balanced",
   pvalue_NonGen_aov = 1 - pf(Fratio_NonGen_aov, 1, anova(m2)[7, 1]) 
   
   
+  ## Compute R2 = MS Interaction model without SA - MS Interaction model with SA / MS Interaction model without SA
+  rsqgen <- 1-anova(m2)[6, 3]/((anova(m2)[3, 2]+anova(m2)[6, 2])/(anova(m2)[3, 1]+anova(m2)[6, 1]))
+  rsqng <- 1-anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+anova(m2)[7, 1]))
   
   
   #######################################################
@@ -386,7 +391,7 @@ simul_fitnessdata <- function(distrib = "normal", design = "balanced",
            Fratio_Gen = Fratio_Gen, pvalue_Gen = pvalue_Gen,
            Fratio_NonGen = Fratio_NonGen, pvalue_NonGen = pvalue_NonGen, 
            Fratio_Gen_aov = Fratio_Gen_aov, pvalue_Gen_aov = pvalue_Gen_aov, 
-           Fratio_NonGen_aov = Fratio_NonGen_aov, pvalue_NonGen_aov = pvalue_NonGen_aov))
+           Fratio_NonGen_aov = Fratio_NonGen_aov, pvalue_NonGen_aov = pvalue_NonGen_aov, rsqgen=rsqgen, rsqng=rsqng))
   
 }
 

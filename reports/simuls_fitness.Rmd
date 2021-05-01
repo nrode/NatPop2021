@@ -605,15 +605,32 @@ sim <- add_indic_sign(sim)
 mean(sim$IndicGen)
 mean(sim$IndicGen_aov)
 
+## Proportion of simulations with significant genetic local adaptation for each value of SA
 tapply(sim$IndicGen, sim$SA_Gen, mean)
 tapply(sim$IndicGen_aov, sim$SA_Gen, mean)
 
+## Test significant when proportion of pop hab variance explained by SA is greater than 70%
+tapply(sim$IndicGen_aov, sim$binnedrsqgen, length)
+
+## Proportion of simulations with significant genetic local adaptation for each value of non genetic SA
 tapply(sim$IndicGen, sim$SA_NonGen, mean)
 tapply(sim$IndicGen_aov, sim$SA_NonGen, mean)
+
+plot(sim$rsqgen~sim$SA_Gen)
+
+## Proportion of significant test increases with the proportion of non-genetic pop hab variance explained by non-genetic SA
+## Above the expected 5% threshold when proportion of on-genetic pop hab variance explained by non-genetic SA is greater than 50%
+tapply(sim$IndicGen_aov, sim$binnedrsqng, mean)
+
+## We can see that rsqgen is positively correlated to rsqng or SA_NonGen
+boxplot(sim$rsqgen~sim$binnedrsqng)
+boxplot(sim$rsqgen~sim$SA_NonGen)
 
 ## Local adaptation (non-genetic)
 tapply(sim$IndicNonGen, sim$SA_NonGen, mean)
 tapply(sim$IndicNonGen_aov, sim$SA_NonGen, mean)
+
+boxplot(sim$rsqng~sim$SA_NonGen)
 
 ```
 
