@@ -39,8 +39,7 @@ simul_powertest_nongenet <- function(seed = 1, SAng = 0.32,   dup = 1){
   
   ## Replace non genetic SA
   fixef_m[names(fixef_m)=="SA1:IndicG0"] <- SAng 
-  
-  
+
   ##### SIMULATED DATASTE 
   ## New dataset for the simulated data
   ## Duplicate dataset
@@ -89,8 +88,6 @@ simul_powertest_nongenet <- function(seed = 1, SAng = 0.32,   dup = 1){
   ## When generation G2, replace RandomEff2 by 0
   sim_data$RandomEff2 <- ifelse(sim_data$Generation == "G2", 0, sim_data$RandomEff2)
   
-  
-  
   ##### ERROR TERM
   ## Compute the random environmental error
   varres <- sigma(m)
@@ -136,14 +133,16 @@ simul_powertest_nongenet <- function(seed = 1, SAng = 0.32,   dup = 1){
   IndicGen <- ifelse(pvalue_Gen<0.05, 1, 0)
   IndicNonGen <- ifelse(pvalue_NonGen<0.05, 1, 0)
   
-  
+  ## Compute R2 = MS Interaction model without SA - MS Interaction model with SA / MS Interaction model without SA
+  rsqgen <- 1-anova(m2)[5, 3]/((anova(m2)[3, 2]+anova(m2)[5, 2])/(anova(m2)[3, 1]+anova(m2)[5, 1]))
+  rsqng <- 1-anova(m2)[6, 3]/((anova(m2)[4, 2]+anova(m2)[6, 2])/(anova(m2)[4, 1]+anova(m2)[6, 1]))
   
   return(c(seed=seed, dup=dup, SAng = SAng, 
     SAcoef["SAGen"], SAcoef["SANonGen"],
     SAcoef_Est["SAGen_Est"], SAcoef_Est["SANonGen_Est"], 
     Fratio_Gen = Fratio_Gen, pvalue_Gen = pvalue_Gen,
     Fratio_NonGen = Fratio_NonGen, pvalue_NonGen = pvalue_NonGen, 
-    IndicGen = IndicGen, IndicNonGen = IndicNonGen))
+    IndicGen = IndicGen, IndicNonGen = IndicNonGen, rsqgen=rsqgen, rsqng=rsqng))
   
 }
 

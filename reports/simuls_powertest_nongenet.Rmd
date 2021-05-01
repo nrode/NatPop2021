@@ -109,8 +109,7 @@ mean(sim$SAGen_Est)
 mean(sim$SANonGen)
 mean(sim$SANonGen_Est)
 
-#SA and SAnon genet estimated with simulated data are similar than 
-  #SA and SAnon genet estimated with real data
+#SA and SAnon genet estimated with simulated data are similar to the SA and SAnon genet estimated with real data
 
 #Proportion of simuls where tests are significant:
 mean(sim$IndicGen)
