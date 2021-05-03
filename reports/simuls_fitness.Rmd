@@ -127,7 +127,7 @@ sigma_datapoisson_box <- sigma(mperf_poisson_box)
 #NUMBER OF SIMULS
 ```{r } 
 # Power Analyses
-nb_simul <- 100
+nb_simul <- 1000
 #Save the same number of simuls for each SA value
 nb_per_SA <- 1000
 # 
@@ -195,6 +195,7 @@ tapply(sim$IndicNonGen, sim$SA_NonGen, length)
 ####################################
 #Number of simuls for each SA value
 tapply(sim$index_SA_Gen, sim$SA_Gen, length)
+tapply(sim$index_SA_Gen, sim$SA_Gen, length)
 
 
 sim_select_genetic <- select_sample_simul(dataset_sim = sim, 
@@ -203,12 +204,17 @@ sim_select_genetic <- select_sample_simul(dataset_sim = sim,
                                           minimum_SA = "0")
 
 #Compute proportion of significant simul for each SA values
-data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)), 
-                 prop_val_sign = tapply(sim_select_genetic$IndicGen, 
-                                        sim_select_genetic$SA_Gen, mean), 
-                 prop_val_sign_aov = tapply(sim_select_genetic$IndicGen_aov, 
-                                        sim_select_genetic$SA_Gen, mean))
+data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)),
+                        prop_val_sign = tapply(sim_select_genetic$IndicGen,
+                                               sim_select_genetic$SA_Gen, mean),
+                        prop_val_sign_aov = tapply(sim_select_genetic$IndicGen_aov,
+                                                   sim_select_genetic$SA_Gen, mean))
+
+
+
 data_prop$design <- 0
+data_prop$design <- "Balanced"
+
 data_prop_gen <- data_prop
 
 #Plot
@@ -245,6 +251,7 @@ data_prop <- data.frame(val_SA_nongenet = sort(unique(sim_select_nongenetic$SA_N
                  prop_val_sign_aov = tapply(sim_select_nongenetic$IndicNonGen_aov, 
                                         sim_select_nongenetic$SA_NonGen, mean))
 data_prop$design <- 0
+data_prop$design <- "Balanced"
 data_prop_nongen <- data_prop
 
 #Plot
@@ -267,7 +274,7 @@ plot_nongenetic_normal
 
 
 
-### Unbalanced (low)
+### Slighly unbalanced
 ```{r } 
 #Perform siluations
 sim1 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", 
@@ -318,6 +325,7 @@ data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)),
                  prop_val_sign_aov = tapply(sim_select_genetic$IndicGen_aov, 
                                         sim_select_genetic$SA_Gen, mean))
 data_prop$design <- 1
+data_prop$design <- "Slighly unbalanced"
 data_prop_gen <- rbind(data_prop_gen,data_prop)
 
 #Plot
@@ -376,7 +384,7 @@ plot_nongenetic_normal
 
 
 
-### Unbalanced (high)
+### Highly unbalanced
 ```{r } 
 #Perform siluations
 sim1 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "normal", 
@@ -425,7 +433,7 @@ data_prop <- data.frame(val_SA_genet = sort(unique(sim_select_genetic$SA_Gen)),
                                         sim_select_genetic$SA_Gen, mean), 
                  prop_val_sign_aov = tapply(sim_select_genetic$IndicGen_aov, 
                                         sim_select_genetic$SA_Gen, mean))
-data_prop$design <- 4
+data_prop$design <- "Highly unbalanced"
 data_prop_gen <- rbind(data_prop_gen,data_prop)
 
 #Plot
@@ -503,7 +511,7 @@ plot_genetic_normal_balancedvsunbalanced<-ggplot2::ggplot(data = data_proportion
    ylim(0,1) +
    theme_LO_sober  + 
    ggtitle("Normal data") + 
-   labs(color = "Methods", linetype = "Unbalanced\ndesign") +
+   labs(color = "Methods", linetype = "Design") +
    scale_color_manual(values = c("#459B76","#DCA237")) +
    scale_linetype_manual(values = c("solid","dashed","dotted"))
 plot_genetic_normal_balancedvsunbalanced
@@ -526,7 +534,7 @@ plot_nongenetic_normal_balancedvsunbalanced<-ggplot2::ggplot(data = data_proport
    ylim(0,1) +
    theme_LO_sober  + 
    ggtitle("Normal data") + 
-   labs(color = "Methods", linetype = "Unbalanced\ndesign") +
+   labs(color = "Methods", linetype = "Design") +
    scale_color_manual(values = c("#459B76","#DCA237")) +
    scale_linetype_manual(values = c("solid","dashed","dotted"))
 plot_nongenetic_normal_balancedvsunbalanced
@@ -610,7 +618,7 @@ tapply(sim$IndicGen, sim$SA_Gen, mean)
 tapply(sim$IndicGen_aov, sim$SA_Gen, mean)
 
 ## Test significant when proportion of pop hab variance explained by SA is greater than 70%
-tapply(sim$IndicGen_aov, sim$binnedrsqgen, length)
+tapply(sim$IndicGen_aov, sim$SA_Gen, length)
 
 ## Proportion of simulations with significant genetic local adaptation for each value of non genetic SA
 tapply(sim$IndicGen, sim$SA_NonGen, mean)
@@ -620,10 +628,10 @@ plot(sim$rsqgen~sim$SA_Gen)
 
 ## Proportion of significant test increases with the proportion of non-genetic pop hab variance explained by non-genetic SA
 ## Above the expected 5% threshold when proportion of on-genetic pop hab variance explained by non-genetic SA is greater than 50%
-tapply(sim$IndicGen_aov, sim$binnedrsqng, mean)
+tapply(sim$IndicGen_aov, sim$SA_NonGen, mean)
 
 ## We can see that rsqgen is positively correlated to rsqng or SA_NonGen
-boxplot(sim$rsqgen~sim$binnedrsqng)
+boxplot(sim$rsqgen~sim$SA_NonGen)
 boxplot(sim$rsqgen~sim$SA_NonGen)
 
 ## Local adaptation (non-genetic)
@@ -776,7 +784,7 @@ plot_nongenetic_poisson
 
 
 
-### Unbalanced (low)
+### Slighly unbalanced
 ```{r } 
 #Perform siluations
 sim1 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson",
@@ -896,7 +904,7 @@ plot_nongenetic_poisson_unbalanced
 
 
 
-### Unbalanced (high)
+### Highly unbalanced
 ```{r } 
 #Perform siluations
 sim1 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "poisson",
@@ -1026,7 +1034,7 @@ plot_genetic_poisson_balancedvsunbalanced<-ggplot2::ggplot(data = data_proportio
    ggtitle("Poisson data") +
    ylim(0,1) +
    theme_LO_sober  + 
-   labs(color = "Methods", linetype = "Unbalanced\ndesign") +
+   labs(color = "Methods", linetype = "Design") +
    scale_color_manual(values = c("#459B76","#DCA237")) +
    scale_linetype_manual(values = c("solid","dashed","dotted"))
 plot_genetic_poisson_balancedvsunbalanced
@@ -1049,7 +1057,7 @@ plot_nongenetic_poisson_balancedvsunbalanced<-ggplot2::ggplot(data = data_propor
    ggtitle("Poisson data") +
    theme_LO_sober  + 
    ggtitle("Poisson data") + 
-   labs(color = "Methods", linetype = "Unbalanced\ndesign") +
+   labs(color = "Methods", linetype = "Design") +
    scale_color_manual(values = c("#459B76","#DCA237")) +
    scale_linetype_manual(values = c("solid","dashed","dotted"))
 plot_nongenetic_poisson_balancedvsunbalanced
@@ -1282,7 +1290,7 @@ plot_nongenetic_binomial
 
 
 
-### Unbalanced (low)
+### Slighly unbalanced
 ```{r } 
 #Perform siluations
 sim1 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",
@@ -1397,7 +1405,7 @@ plot_nongenetic_binomial_unbalanced
 
 
 
-### Unbalanced (high)
+### Highly unbalanced
 ```{r } 
 #Perform siluations
 sim1 <- sapply(1:nb_simul, simul_fitnessdata, distrib = "binomial",
@@ -1528,7 +1536,7 @@ plot_genetic_binomial_balancedvsunbalanced<-ggplot2::ggplot(data = data_proporti
    ggtitle("Binomial data") +
    ylim(0,1) +
    theme_LO_sober  + 
-   labs(color = "Methods", linetype = "Unbalanced\ndesign") +
+   labs(color = "Methods", linetype = "Design") +
    scale_color_manual(values = c("#459B76","#DCA237")) +
    scale_linetype_manual(values = c("solid","dashed","dotted"))
 plot_genetic_binomial_balancedvsunbalanced
@@ -1550,7 +1558,7 @@ plot_nongenetic_binomial_balancedvsunbalanced<-ggplot2::ggplot(data = data_propo
    xlab("Intensity of non-genetic local adaptation (SA)")  +
    ggtitle("Binomial data") +
    theme_LO_sober  + 
-   labs(color = "Methods", linetype = "Unbalanced\ndesign") +
+   labs(color = "Methods", linetype = "Design") +
    scale_color_manual(values = c("#459B76","#DCA237")) +
    scale_linetype_manual(values = c("solid","dashed","dotted"))
 plot_nongenetic_binomial_balancedvsunbalanced
@@ -1656,9 +1664,9 @@ POWER_ALL
 name_plot<-paste0("Simul_powertest_ALLDATA_BALANCED_and_UNBALANCED",
       nb_simul,"nbsimul_",nb_per_SA,
       "nbsimulperSA.pdf")
-# cowplot::save_plot(file =here::here("figures",name_plot ),
-#                   POWER_ALL, base_height = 20/cm(1),
-#                   base_width = 40/cm(1), dpi = 1200)
+cowplot::save_plot(file = here::here("figures",name_plot ),
+                  POWER_ALL, base_height = 20/cm(1),
+                  base_width = 40/cm(1), dpi = 1200)
 
 
 

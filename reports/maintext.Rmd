@@ -534,6 +534,9 @@ m1 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA +
 ## F test for SA
 (Fratio <- (anova(m1)[3,2]/anova(m1)[4,2])/(1/anova(m1)[4, 1]))
 (pvalue <- 1 - pf(Fratio, 1, anova(m1)[4, 1])) 
+
+
+
   
   
 #######################################################
@@ -635,7 +638,11 @@ m1 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA +
 ## F test for SA
 (Fratio <- (anova(m1)[3,2]/anova(m1)[5,2])/(1/anova(m1)[5, 1]))
 (pvalue <- 1 - pf(Fratio, 1, anova(m1)[5, 1])) 
-  
+
+## Compute R2 = MS Interaction model without SA - MS Interaction model with SA / MS Interaction model without SA
+(rsqgen <- 1-anova(m1)[5, 3]/((anova(m1)[3, 2]+anova(m1)[4, 2])/(anova(m1)[3, 1]+anova(m1)[4, 1])))
+
+
   
 #######################################################
 ## Analysis of non-genetic effects lm   ###
@@ -660,9 +667,17 @@ m2 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 
 ## Compute R2 for SA 
 ## = MS Interaction model without SA - MS Interaction model with SA / MS Interaction model without SA
-(r2_SA_genet <- 1-(anova(m2)[6, 3]/((anova(m2)[3, 2]+anova(m2)[6, 2])/(anova(m2)[3, 1]+anova(m2)[6, 1]))))
+# (r2_SA_genet <- 1-(anova(m2)[6, 3]/((anova(m2)[3, 2]+anova(m2)[6, 2])/(anova(m2)[3, 1]+anova(m2)[6, 1]))))
+# 
+# (r2_SA_nongenet <- 1-(anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+anova(m2)[7, 1]))))
 
-(r2_SA_nongenet <- 1-(anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+anova(m2)[7, 1]))))
+
+  ## Compute R2 = MS Interaction model without SA - MS Interaction model with SA / MS Interaction model without SA
+# rsqgen <- 1-anova(m2)[6, 3]/((anova(m2)[3, 2]+anova(m2)[5, 2])/(anova(m2)[3, 1]+anova(m2)[5, 1]))
+# rsqng <- 1-anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+anova(m2)[7, 1]))
+#   
+# 
+
 
 ```
 
