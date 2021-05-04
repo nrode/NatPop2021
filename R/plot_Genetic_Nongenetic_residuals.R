@@ -29,7 +29,28 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
   }
   
   #Extract resid 
-  lm_resid <- lm(y ~ Test_environment:Generation + Population:Generation, data=data)
+  if(trait == "Rate"){
+    lm_resid <- lm(y ~ Test_environment:Generation + Population:Generation + log(Nb_eggs), data=data)
+  }else{
+    if(trait == "Nb_adults") {
+      lm_resid <- lm(y ~ Test_environment:Generation + Population:Generation + log(Nb_eggs+1), data=data)
+  }else{
+   if(trait == "Nb_eggs"){
+      if("Obs_A" %in% colnames(dataset)){
+        lm_resid <- lm(y ~ Test_environment:Generation + Population:Generation, data=data)
+    }else{ 
+        if("BoxID" %in% colnames(dataset)){
+        lm_resid <- lme4::lmer(y ~ Test_environment:Generation + Population:Generation + (1|BoxID), data=data)
+        }else{
+          print("Error: unknown trait")
+        } 
+        }
+    }else{
+      print("Error: unknown trait")
+    }
+  }
+  }
+  
   data$Resid <- residuals(lm_resid)
 
   ##Dataset summary
