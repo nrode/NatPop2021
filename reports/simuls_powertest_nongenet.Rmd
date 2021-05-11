@@ -37,7 +37,7 @@ nb_simul <- 1000
 data_PERF <- import_data(dataset = "DATACOMPLET_PERF.csv", 
                          trait = "performance",
                          remove_testenvt = c("Grape","GF"), 
-                         remove_pop = "WT3", 
+                         remove_pop = c("WT3"), 
                          remove_rate = NA)
 
 tapply(data_PERF$Nb_adults,list(data_PERF$Original_environment,data_PERF$Generation),length)
@@ -49,7 +49,7 @@ tapply(data_PERF$Nb_adults,list(data_PERF$Original_environment,data_PERF$Generat
 data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv", 
                          trait = "performance",
                          remove_testenvt = c("Grape","GF"), 
-                         remove_pop = "WT3", 
+                         remove_pop = c("WT3"), 
                          remove_rate = TRUE)
 
 
@@ -59,7 +59,7 @@ data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv",
 data_PREF <- import_data(dataset = "DATACOMPLET_PREF.csv", 
                          trait = "preference",
                          remove_testenvt = NA, 
-                         remove_pop = "WT3", 
+                         remove_pop = c("WT3"), 
                          remove_rate = NA)
 
 head(data_PREF)
@@ -78,7 +78,7 @@ data_PREF_three <- import_data(dataset = "DATACOMPLET_PREF.csv",
                          trait = "preference",
                          remove_testenvt = usefun::outersect(levels_test, 
                                                              levels_original), 
-                         remove_pop = "WT3", 
+                         remove_pop = c("WT3"), 
                          remove_rate = NA)
 
 head(data_PREF_three)
@@ -121,7 +121,7 @@ mean(sim$IndicNonGen)
 # Egg-to-adult viability
 ```{r }
 #### INCREASE SA NON GENETIC
-nb_simul = 1000
+nb_simul = 100
 val_SAng <- seq(from = 0, to = 1, by = 0.1)
 
 
@@ -197,6 +197,8 @@ data_prop <- tidyr::gather(TEMP, "duplication", "prop_nongen_sign", 1:dim(TEMP)[
 data_prop$duplication <- factor(data_prop$duplication, levels = c("1","2","10","100"))
 
 
+data_prop$val_SAng <- as.numeric(data_prop$val_SAng)
+
 #Plot des simuls
 power_test <- ggplot2::ggplot(data = data_prop, 
                               aes(x = val_SAng, 
@@ -205,13 +207,16 @@ power_test <- ggplot2::ggplot(data = data_prop,
                                   color = duplication)) + 
   geom_point(size = 3) + 
   geom_line(size = 1) + 
-  geom_vline(xintercept = 0.03152, linetype = "dashed", color = "red", size = 0.5) + 
+  geom_hline(yintercept = 0.8, linetype = "dashed", color = "grey", size = 0.5) + 
   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
   xlab("Intensity of non-genetic local adaptation (SA)")  +
   ggtitle("Egg-to-adult viability")  +
-  labs(color = "Number\nof datasets") +
-  scale_color_manual(values=c("#D36582","#a1dab4","#41b6c4","#225ea8"))+
+  labs(color = "Size of the design\nrelative to our\noriginal design") +
+  scale_color_manual(values=c("#D36582","#a1dab4","#41b6c4","#225ea8"),
+                     breaks=c("1","2","10","100"),
+                    labels=c("X1","X2","X10","X100"))+
   ylim(0,1) +
+  xlim(0,1) +
   theme_LO_sober  
 power_test
 
