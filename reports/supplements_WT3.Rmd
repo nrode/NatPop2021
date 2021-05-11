@@ -1,0 +1,376 @@
+---
+title: "Pop nat analysis"
+author: "Laure Olazcuaga, Nicolas Rode"
+date: "`r format(Sys.Date(), '%d-%B-%Y')`"
+output: 
+  html_document:
+    theme: "journal"
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include =FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+devtools::load_all()
+```
+
+
+
+# DATA 
+```{r }
+#############################
+#PERFORMANCE 
+#############################
+
+data_PERF <- import_data(dataset = "DATACOMPLET_PERF.csv", 
+                         trait = "performance",
+                         remove_testenvt = NA, 
+                         remove_pop = c("Blackberry31", "Blackberry32", "Blackberry33",
+                                        "Blackberry34", "Blackberry35",
+                                        "Blackberry36", "Blackberry37", "Blackberry38",
+                                        "Blackberry39", "Blackberry40",
+                                        "Blackberry43", "Blackberry44", "Blackberry45",
+                                        "Cherry103",    "Cherry104",
+                                        "Cherry3", "Cherry47","Cherry50","Cherry51",
+                                        "Cherry52",
+                                        "Cherry6","Cherry7","Strawberry42",
+                                        "Strawberry44","Strawberry53"),
+                         remove_rate = NA)
+
+head(data_PERF)
+tapply(data_PERF$Nb_adults,list(data_PERF$Original_environment,data_PERF$Generation),length)
+data_PERF$Date_P=as.Date(data_PERF$Date_P, format="%d/%m/%Y")
+
+#############################
+#Egg-to-adult viability
+#############################
+
+data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv", 
+                         trait = "performance",
+                         remove_testenvt = NA, 
+                         remove_pop = c("Blackberry31", "Blackberry32",
+                                        "Blackberry33", "Blackberry34", 
+                                        "Blackberry35",
+                                        "Blackberry36", "Blackberry37",
+                                        "Blackberry38", "Blackberry39", "Blackberry40",
+                                        "Blackberry43", "Blackberry44", "Blackberry45",
+                                        "Cherry103",    "Cherry104",
+                                        "Cherry3", "Cherry47","Cherry50","Cherry51",
+                                        "Cherry52","Cherry6","Cherry7",
+                                        "Strawberry42", "Strawberry44","Strawberry53"), 
+                         remove_rate = TRUE)
+head(data_PERF_Rate)
+tapply(data_PERF_Rate$Nb_adults,list(data_PERF_Rate$Original_environment,
+                                     data_PERF_Rate$Generation),length)
+
+tapply(data_PERF_Rate$Rate,data_PERF_Rate$Generation,mean)
+data_PERF_Rate$Date_P=as.Date(data_PERF_Rate$Date_P, format="%d/%m/%Y")
+
+###########################
+#PREFERENCE 
+###########################
+data_PREF <- import_data(dataset = "DATACOMPLET_PREF.csv", 
+                         trait = "preference",
+                         remove_testenvt = NA, 
+                         remove_pop = c("Blackberry31", "Blackberry32", "Blackberry33",
+                                        "Blackberry34", "Blackberry35",
+                                        "Blackberry36", "Blackberry37", "Blackberry38",
+                                        "Blackberry39", "Blackberry40",
+                                        "Blackberry43", "Blackberry44", "Blackberry45",
+                                        "Cherry103",    "Cherry104",
+                                        "Cherry3", "Cherry47","Cherry50","Cherry51",
+                                        "Cherry52",
+                                        "Cherry6","Cherry7","Strawberry42",
+                                        "Strawberry44","Strawberry53"), 
+                         remove_rate = NA)
+
+head(data_PREF)
+tapply(data_PREF$Nb_eggs,list(data_PREF$Original_environment,data_PREF$Generation),length)
+
+
+
+###########################
+#PREFERENCE 3 fruits
+###########################
+levels_test<-levels(data_PREF$Test_environment)
+levels_original<-levels(data_PREF$Original_environment)
+unique(data_PREF$Test_environment)
+
+data_PREF_three <- import_data(dataset = "DATACOMPLET_PREF.csv", 
+                         trait = "preference",
+                         remove_testenvt = c("Cranberry", "Fig", "Raspberry", "Rosehips", "Kiwi",
+                                             "Tomato", "Apricot", "Grape", "Blackcurrant"), 
+                         remove_pop = c("Blackberry31", "Blackberry32", 
+                                        "Blackberry33", "Blackberry34", 
+                                        "Blackberry35",
+                                        "Blackberry36", "Blackberry37", 
+                                        "Blackberry38", "Blackberry39", "Blackberry40",
+                                        "Blackberry43", "Blackberry44", "Blackberry45",
+                                        "Cherry103",    "Cherry104",
+                                        "Cherry3", "Cherry47","Cherry50","Cherry51",
+                                        "Cherry52",
+                                        "Cherry6","Cherry7","Strawberry42",
+                                        "Strawberry44","Strawberry53"), 
+                         remove_rate = NA)
+
+head(data_PREF_three)
+tapply(data_PREF_three$Nb_eggs,list(data_PREF_three$Original_environment,
+                                    data_PREF_three$Generation),length)
+
+resume_design<-tapply(as.factor(data_PREF_three$BoxID),list(data_PREF_three$Population,
+                                  data_PREF_three$Generation),length)
+mean(resume_design[,1], na.rm = TRUE)/3
+mean(resume_design[,2], na.rm = TRUE)/3
+
+resume_design<-tapply(data_PERF$Nb_eggs,list(data_PERF$Population,
+                                  data_PERF$Generation),length)
+mean(resume_design[,1], na.rm = TRUE)/3
+mean(resume_design[,2], na.rm = TRUE)/3
+
+dim(data_PREF_three)
+dim(data_PREF)
+head(data_PREF)
+
+
+levels(data_PREF$Population)
+```
+
+
+
+# OLD PLOT 
+```{r }
+
+#Moyenne de variance par date (intra date)
+mean(tapply(data_PREF$Nb_eggs,
+            data_PREF$Date_P,var),na.rm=T)
+
+#Variance inter groupe 
+var(tapply(data_PREF$Nb_eggs,
+           data_PREF$Date_P,mean),na.rm=T)
+
+#Var totale
+var(data_PREF$Nb_eggs,na.rm=T)
+
+
+
+##############    EGGS     ##############  
+wt3ploteggs<-ggplot(data=data_PERF, aes(x=Test_environment, y=Nb_eggs)) + 
+  geom_boxplot(alpha=0.5, size=1, outlier.shape=NA) +
+  geom_jitter(aes(color=Generation), size =2.5, alpha=0.5, position=position_jitter(0.2)) +
+  ylab("Number of eggs")  +
+ # ggtitle("WT3") + 
+  scale_fill_manual(values=c("#f2f2f2", "#595858")) + 
+  theme_LO_sober
+wt3ploteggs
+
+
+#Moyenne de variance par date (intra date)
+mean(tapply(data_PERF$Nb_eggs,
+            data_PERF$Date_P,var),na.rm=T)
+
+#Variance inter groupe 
+var(tapply(data_PERF$Nb_eggs,
+           data_PERF$Date_P,mean),na.rm=T)
+
+#Var totale
+var(data_PERF$Nb_eggs,na.rm=T)
+
+
+
+##############    RATE     ##############    
+WT3_rate<-ggplot(data=data_PERF, aes(x=Test_environment, y=Rate)) + 
+  geom_boxplot(alpha=0.5, size=1, outlier.shape=NA) +
+  geom_jitter(aes(color=Generation), size =2.5, alpha=0.5, position=position_jitter(0.2))+
+  ylab("Egg-to-adult viability")  +
+  ylim (0,1) +
+  theme_LO_sober
+WT3_rate
+
+#Moyenne de variance par date (intra date)
+mean(tapply(data_PERF$Rate,
+            data_PERF$Date_P,var),na.rm=T)
+
+#Variance inter groupe 
+var(tapply(data_PERF$Rate,
+           data_PERF$Date_P,mean),na.rm=T)
+
+#Var totale
+var(data_PERF$Rate,na.rm=T)
+
+
+
+
+
+#PRENDRE GF EN REFENCE: 
+#Moyenne de variance par date (intra date)
+mean(tapply(data_PREF[data_PREF$Population=="WT3"&data_PREF$Test_environment=="Cherry",]$Nb_eggs,
+            data_PREF[data_PREF$Population=="WT3"&data_PREF$Test_environment=="Cherry",]$Date_P,var),na.rm=T)
+
+#Variance inter groupe 
+var(tapply(data_PREF[data_PREF$Population=="WT3"&data_PREF$Test_environment=="Cherry",]$Nb_eggs,
+           data_PREF[data_PREF$Population=="WT3"&data_PREF$Test_environment=="Cherry",]$Date_P,mean),na.rm=T)
+
+#Var totale
+var(data_PREF[data_PREF$Population=="WT3"&data_PREF$Test_environment=="Cherry",]$Nb_eggs,na.rm=T)
+
+
+
+
+
+
+
+
+##EGGS
+#INTRA
+mean(tapply(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Nb_eggs,
+            data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Date_P,var),na.rm=T)
+
+#INTER 
+var(tapply(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Nb_eggs,
+           data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Date_P,mean),na.rm=T)
+
+#TOTALE
+var(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Nb_eggs,na.rm=T)
+
+
+##RATE
+#INTRA
+mean(tapply(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Rate,
+            data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Date_P,var),na.rm=T)
+
+#INTER 
+var(tapply(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Rate,
+           data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Date_P,mean),na.rm=T)
+
+#TOTALE
+var(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Rate,na.rm=T)
+
+
+##ADULT
+#INTRA
+mean(tapply(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Nb_adults,
+            data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Date_P,var),na.rm=T)
+
+#INTER 
+var(tapply(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Nb_adults,
+           data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Date_P,mean),na.rm=T)
+
+#TOTALE
+var(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Nb_adults,na.rm=T)
+
+
+
+
+
+
+wt3adult<-ggplot(data=data_PERF,
+                aes(x=Date_P, y=Nb_adults)) + 
+#  facet_wrap( ~ Date_P) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(size =1.2, alpha=0.7, position=position_jitter(0.20)) +
+  ylab("Number of adults")  +
+  xlab("Date")  +
+  ggtitle("WT3") + 
+theme_LO_sober
+wt3adult
+
+wt3adult<-ggplot(data=data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",],
+                aes(x=Date_P, y=Nb_adults)) + 
+#  facet_wrap( ~ Date_P) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(size =1.2, alpha=0.7, position=position_jitter(0.20)) +
+  ylab("Number of adults")  +
+  xlab("Date")  +
+  ggtitle("WT3") + 
+theme_LO_sober
+wt3adult
+```
+
+
+
+
+
+# NEW PLOT 
+## Egg-to-adult viability
+```{r }
+#Extract residuals Rate~Treatment 
+m1 <- aov(asin(sqrt(Rate)) ~ Test_environment, data = data_PERF_Rate)
+data_PERF_Rate$resid <- residuals(m1)
+
+
+wt3rate<-ggplot(data = data_PERF_Rate,
+                aes(x = Date_P, y = resid)) + 
+  #geom_boxplot(outlier.shape = NA) +
+  geom_point(size = 2, alpha = 0.7) +
+  ylab("Egg-to-adult viability\nstandardized")  +
+  xlab("Date")  +
+theme_LO_sober
+wt3rate
+
+
+#Variance intra date
+m1 <- lme4::lmer(asin(sqrt(Rate)) ~ Test_environment + (1|Date_P), data = data_PERF_Rate)
+summary(m1)
+m1 <- lme4::lmer(resid ~ 1 + (1|Date_P), data = data_PERF_Rate)
+summary(m1)
+
+
+
+##RATE
+#INTRA
+mean(tapply(data_PERF$Rate,
+            data_PERF$Date_P,var),na.rm=T)
+
+#INTER 
+var(tapply(data_PERF$Rate,
+           data_PERF$Date_P,mean),na.rm=T)
+
+#TOTALE
+var(data_PERF$Rate,na.rm=T)
+
+
+
+```
+
+
+## Stimulation
+```{r }
+#Extract residuals Rate~Treatment 
+m1 <- aov(log(Nb_eggs+1) ~ Test_environment, data = data_PERF_Rate)
+data_PERF_Rate$resid_eggs <- residuals(m1)
+
+
+wt3eggs<-ggplot(data = data_PERF_Rate,
+                aes(x = Date_P, y = resid_eggs)) + 
+  #geom_boxplot(outlier.shape = NA) +
+  geom_point(size = 2, alpha = 0.7) +
+  ylab("Oviposition stimulation\nstandardized")  +
+  xlab("Date")  +
+theme_LO_sober
+wt3eggs
+
+#Variance intra date
+m1 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + (1|Date_P), data = data_PERF_Rate)
+summary(m1)
+m1 <- lme4::lmer(resid_eggs ~ 1 + (1|Date_P), data = data_PERF_Rate)
+summary(m1)
+
+
+##Nb_eggs
+#INTRA
+mean(tapply(data_PERF$Nb_eggs,
+            data_PERF$Date_P,var),na.rm=T)
+
+#INTER 
+var(tapply(data_PERF$Nb_eggs,
+           data_PERF$Date_P,mean),na.rm=T)
+
+```
+
