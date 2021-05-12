@@ -40,7 +40,7 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
         lm_resid <- lm(y ~ Test_environment:Generation + Population:Generation, data=data)
     }else{ 
         if("BoxID" %in% colnames(dataset)){
-        lm_resid <- lme4::lmer(y ~ Test_environment:Generation + Population:Generation + (1|BoxID), data=data)
+        lm_resid <- lm(y ~ Test_environment:Generation + Population:Generation + BoxID, data=data)
         }else{
           print("Error: unknown trait")
         } 

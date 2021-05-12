@@ -45,18 +45,57 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
   ######### MODELS
   #Extract resid 
   if (gen == "G0" | gen == "G2") {
-    lm_resid <- lm(y ~ Test_environment + Population, data=data)
-    data$Resid <- residuals(lm_resid)
+    if(trait == "Rate"){
+      lm_resid <- lm(y ~ Test_environment + Population + log(Nb_eggs), data=data)
+    }else{
+      if(trait == "Nb_adults") {
+        lm_resid <- lm(y ~ Test_environment + Population + log(Nb_eggs+1), data=data)
+      }else{
+        if(trait == "Nb_eggs"){
+          if("Obs_A" %in% colnames(dataset)){
+            lm_resid <- lm(y ~ Test_environment + Population, data=data)
+          }else{ 
+            if("BoxID" %in% colnames(dataset)){
+              lm_resid <- lm(y ~ Test_environment + Population + BoxID, data=data)
+            }else{
+              print("Error: unknown trait")
+            } 
+          }
+        }else{
+          print("Error: unknown trait")
+        }
+      }
+    }
   }else{
     if (gen == "Both") {
-      lm_resid <- lm(y ~ hab_gen + pop_gen, data=data)
-      data$Resid <- residuals(lm_resid)
-    
+      if(trait == "Rate"){
+        lm_resid <- lm(y ~ Test_environment:Generation + Population:Generation + log(Nb_eggs), data=data)
+      }else{
+        if(trait == "Nb_adults") {
+          lm_resid <- lm(y ~ Test_environment:Generation + Population:Generation + log(Nb_eggs+1), data=data)
+        }else{
+          if(trait == "Nb_eggs"){
+            if("Obs_A" %in% colnames(dataset)){
+              lm_resid <- lm(y ~ Test_environment:Generation + Population:Generation, data=data)
+            }else{ 
+              if("BoxID" %in% colnames(dataset)){
+                lm_resid <- lm(y ~ Test_environment:Generation + Population:Generation + BoxID, data=data)
+              }else{
+                print("Error: unknown trait")
+              } 
+            }
+          }else{
+            print("Error: unknown trait")
+          }
+        }
+      }
+      
       }else {
       print("Error: unknown generation")
     }
   }
   
+  data$Resid <- residuals(lm_resid)
   
   ######### Dataset summary
   TEMP_SUM <- Rmisc::summarySE(data,

@@ -30,7 +30,27 @@ plot_RTP_residuals <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen
     }
 
   #Extract resid 
-  lm_resid <- lm(y ~ Test_environment + Population, data=data)
+  if(trait == "Rate"){
+    lm_resid <- lm(y ~ Test_environment + Population + log(Nb_eggs), data=data)
+  }else{
+    if(trait == "Nb_adults") {
+      lm_resid <- lm(y ~ Test_environment + Population + log(Nb_eggs+1), data=data)
+    }else{
+      if(trait == "Nb_eggs"){
+        if("Obs_A" %in% colnames(dataset)){
+          lm_resid <- lm(y ~ Test_environment + Population, data=data)
+        }else{ 
+          if("BoxID" %in% colnames(dataset)){
+            lm_resid <- lm(y ~ Test_environment + Population + BoxID, data=data)
+          }else{
+            print("Error: unknown trait")
+          } 
+        }
+      }else{
+        print("Error: unknown trait")
+      }
+    }
+  }
   data$Resid <- residuals(lm_resid)
   
   ##Dataset summary
@@ -130,9 +150,9 @@ plot_RTP_residuals <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen
                                group = Original_environment,
                                fill = "white")) + 
     geom_errorbar(aes(ymin=Resid-ci, ymax = Resid+ci),
-                  width=.1, position=pd, size = 1) +
+                  width=.1, position = pd, size = 1) +
     annotate('text', x = 3.5, y = max_plot, label = equation, parse = TRUE, hjust = 1, size = 4) + 
-    geom_point(size = 4, position=pd, fill="white", shape = 21, stroke = 1.5) + 
+    geom_point(size = 4, position = pd, fill="white", shape = 21, stroke = 1.5) + 
     scale_color_manual(name="Fly populations from:",   
                        breaks=c("Cherry", "Strawberry","Blackberry"),
                        labels=c("Cherry","Strawberry","Blackberry"),
