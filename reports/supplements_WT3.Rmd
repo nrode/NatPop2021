@@ -146,119 +146,6 @@ levels(data_PREF$Population)
 
 
 
-# OLD PLOT 
-```{r }
-##############    EGGS     ##############  
-wt3ploteggs<-ggplot(data=data_PERF, aes(x=Test_environment, y=Nb_eggs)) + 
-  geom_boxplot(alpha=0.5, size=1, outlier.shape=NA) +
-  geom_jitter(aes(color=Generation), size =2.5, alpha=0.5, position=position_jitter(0.2)) +
-  ylab("Number of eggs")  +
- # ggtitle("WT3") + 
-  scale_fill_manual(values=c("#f2f2f2", "#595858")) + 
-  theme_LO_sober
-wt3ploteggs
-
-
-
-
-##############    RATE     ##############    
-WT3_rate<-ggplot(data=data_PERF, aes(x=Test_environment, y=Rate)) + 
-  geom_boxplot(alpha=0.5, size=1, outlier.shape=NA) +
-  geom_jitter(aes(color=Generation), size =2.5, alpha=0.5, position=position_jitter(0.2))+
-  ylab("Egg-to-adult viability")  +
-  ylim (0,1) +
-  theme_LO_sober
-WT3_rate
-
-
-
-
-
-#PRENDRE GF EN REFENCE: 
-#Moyenne de variance par date (intra date)
-mean(tapply(data_PREF[data_PREF$Population=="WT3"&data_PREF$Test_environment=="Cherry",]$Nb_eggs,
-            data_PREF[data_PREF$Population=="WT3"&data_PREF$Test_environment=="Cherry",]$Date_P,var),na.rm=T)
-
-#Variance inter groupe 
-var(tapply(data_PREF[data_PREF$Population=="WT3"&data_PREF$Test_environment=="Cherry",]$Nb_eggs,
-           data_PREF[data_PREF$Population=="WT3"&data_PREF$Test_environment=="Cherry",]$Date_P,mean),na.rm=T)
-
-#Var totale
-var(data_PREF[data_PREF$Population=="WT3"&data_PREF$Test_environment=="Cherry",]$Nb_eggs,na.rm=T)
-
-
-
-
-
-
-
-
-##EGGS
-#INTRA
-mean(tapply(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Nb_eggs,
-            data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Date_P,var),na.rm=T)
-
-#INTER 
-var(tapply(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Nb_eggs,
-           data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Date_P,mean),na.rm=T)
-
-#TOTALE
-var(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Nb_eggs,na.rm=T)
-
-
-##RATE
-#INTRA
-mean(tapply(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Rate,
-            data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Date_P,var),na.rm=T)
-
-#INTER 
-var(tapply(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Rate,
-           data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Date_P,mean),na.rm=T)
-
-#TOTALE
-var(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Rate,na.rm=T)
-
-
-##ADULT
-#INTRA
-mean(tapply(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Nb_adults,
-            data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Date_P,var),na.rm=T)
-
-#INTER 
-var(tapply(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Nb_adults,
-           data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Date_P,mean),na.rm=T)
-
-#TOTALE
-var(data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",]$Nb_adults,na.rm=T)
-
-
-
-
-
-
-wt3adult<-ggplot(data=data_PERF,
-                aes(x=Date_P, y=Nb_adults)) + 
-#  facet_wrap( ~ Date_P) +
-  geom_boxplot(outlier.shape=NA) +
-  geom_jitter(size =1.2, alpha=0.7, position=position_jitter(0.20)) +
-  ylab("Number of adults")  +
-  xlab("Date")  +
-  ggtitle("WT3") + 
-theme_LO_sober
-wt3adult
-
-wt3adult<-ggplot(data=data_PERF[data_PERF$Population=="WT3"&data_PERF$Test_environment=="GF",],
-                aes(x=Date_P, y=Nb_adults)) + 
-#  facet_wrap( ~ Date_P) +
-  geom_boxplot(outlier.shape=NA) +
-  geom_jitter(size =1.2, alpha=0.7, position=position_jitter(0.20)) +
-  ylab("Number of adults")  +
-  xlab("Date")  +
-  ggtitle("WT3") + 
-theme_LO_sober
-wt3adult
-```
-
 
 
 
@@ -267,14 +154,14 @@ wt3adult
 ## Egg-to-adult viability
 ```{r }
 #Extract residuals Rate~Treatment 
-m1 <- aov(asin(sqrt(Rate)) ~ Test_environment, data = data_PERF_Rate)
+m1 <- aov(asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs), data = data_PERF_Rate)
 data_PERF_Rate$resid <- residuals(m1)
 
 
 wt3rate<-ggplot(data = data_PERF_Rate,
                 aes(x = Date_P, y = resid)) + 
   geom_point(size = 1.5, alpha = 0.7) +
-  ylab("Residuals(Egg-to-adult\nviability)")  +
+  ylab("Residuals(Egg-to-adult viability)")  +
   xlab("Date")  +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
@@ -284,9 +171,10 @@ wt3rate
 
 
 #Variance intra date
-m1 <- lme4::lmer(asin(sqrt(Rate)) ~ Test_environment + (1|Date_P), data = data_PERF_Rate)
+m1 <- lme4::lmer(asin(sqrt(Rate)) ~ Test_environment+ log(Nb_eggs) +
+                   (1|Date_P), data = data_PERF_Rate)
 summary(m1)
-m1 <- lme4::lmer(resid ~ 1 + (1|Date_P), data = data_PERF_Rate)
+m1 <- lme4::lmer(resid ~ 1 + log(Nb_eggs) + (1|Date_P), data = data_PERF_Rate)
 summary(m1)
 
 
@@ -318,7 +206,7 @@ data_PERF_Rate$resid_eggs <- residuals(m1)
 wt3eggs<-ggplot(data = data_PERF_Rate,
                 aes(x = Date_P, y = resid_eggs)) + 
   geom_point(size = 1.5, alpha = 0.7) +
-  ylab("Residuals(Oviposition\nstimulation)")  +
+  ylab("Residuals(Oviposition stimulation)")  +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
   xlab("Date")  +
@@ -358,7 +246,7 @@ wt3eggspref<-ggplot(data = data_PREF,
   geom_point(size = 1.5, alpha = 0.7) +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
-  ylab("Residuals(Oviposition\nstimulation)")  +
+  ylab("Residuals(Oviposition stimulation)")  +
   xlab("Date")  +
   ylim(-2.7,2.7) +
   theme_LO_sober
@@ -401,9 +289,9 @@ THREE_JOIN <- cowplot::ggdraw() +
 
 THREE_JOIN 
 
-
-cowplot::save_plot(file = here::here("figures", "Supplements_WT3.pdf"), 
-                   THREE_JOIN, base_height = 25/cm(1), base_width = 17/cm(1), dpi = 1200)
+# 
+# cowplot::save_plot(file = here::here("figures", "Supplements_WT3.pdf"),
+#                    THREE_JOIN, base_height = 28/cm(1), base_width = 17/cm(1), dpi = 1200)
 
 
 ```
