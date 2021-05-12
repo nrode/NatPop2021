@@ -1282,7 +1282,7 @@ HETEROGENEITY_PLOT <- cowplot::ggdraw() +
   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001)  + 
   cowplot::draw_plot_label(c("Oviposition preference", 
                              "Oviposition stimulation", 
-                             "Emergence rate"),  
+                             "Egg-to-adult viability"),  
                   x = c(0.48,0.48,0.48), 
                   y = c(0.96, 0.63, 0.29), 
                   hjust = c(0.5,0.5,0.5), 
