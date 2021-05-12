@@ -273,19 +273,14 @@ data_PERF_Rate$resid <- residuals(m1)
 
 wt3rate<-ggplot(data = data_PERF_Rate,
                 aes(x = Date_P, y = resid)) + 
-  #geom_boxplot(outlier.shape = NA) +
-  geom_point(size = 2, alpha = 0.7) +
+  geom_point(size = 1.5, alpha = 0.7) +
   ylab("Egg-to-adult viability\nstandardized")  +
   xlab("Date")  +
   scale_x_date(date_breaks = "1 month", 
-                 labels = date_format("%b-%Y"),
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
+  ylim(-0.8,0.8) +
 theme_LO_sober
 wt3rate
-
-
-
-range(data_PERF_Rate$Date_P)
 
 
 #Variance intra date
@@ -322,11 +317,13 @@ data_PERF_Rate$resid_eggs <- residuals(m1)
 
 wt3eggs<-ggplot(data = data_PERF_Rate,
                 aes(x = Date_P, y = resid_eggs)) + 
-  #geom_boxplot(outlier.shape = NA) +
-  geom_point(size = 2, alpha = 0.7) +
+  geom_point(size = 1.5, alpha = 0.7) +
   ylab("Oviposition stimulation\nstandardized")  +
-  xlab("Date")  + 
-theme_LO_sober
+  scale_x_date(date_breaks = "1 month", 
+                 limits = as.Date(c('2018-06-01','2018-12-01'))) + 
+  xlab("Date")  +
+  ylim(-2,2) +
+  theme_LO_sober
 wt3eggs
 
 #Variance intra date
@@ -358,11 +355,13 @@ data_PREF$resid_eggs <- residuals(m1)
 
 wt3eggspref<-ggplot(data = data_PREF,
                 aes(x = Date_P, y = resid_eggs)) + 
-  #geom_boxplot(outlier.shape = NA) +
-  geom_point(size = 2, alpha = 0.7) +
+  geom_point(size = 1.5, alpha = 0.7) +
+  scale_x_date(date_breaks = "1 month", 
+                 limits = as.Date(c('2018-06-01','2018-12-01'))) + 
   ylab("Oviposition stimulation\nstandardized")  +
   xlab("Date")  +
-theme_LO_sober
+  ylim(-2.7,2.7) +
+  theme_LO_sober
 wt3eggspref
 
 #Variance intra date
@@ -387,30 +386,24 @@ var(tapply(data_PREF$Nb_eggs,
 ## Allplots
 ```{r }
 THREE_JOIN <- cowplot::ggdraw() + 
-  cowplot::draw_plot(wt3eggspref + theme(axis.title.x = element_blank(),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank(),
-        axis.line.x = element_blank()), 
-            x = 0, y = 0.66, width = 1, height = 0.33) + 
-  cowplot::draw_plot(wt3eggs + theme(axis.title.x = element_blank(),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank(),
-        axis.line.x = element_blank()), 
-            x = 0, y = 0.33, width = 1, height = 0.33) + 
+  cowplot::draw_plot(wt3eggspref + theme(axis.title.x = element_blank()), 
+            x = 0, y = 0.66, width = 0.99, height = 0.33) + 
+  cowplot::draw_plot(wt3eggs + theme(axis.title.x = element_blank()), 
+            x = 0, y = 0.33, width = 0.99, height = 0.33) + 
   cowplot::draw_plot(wt3rate, 
-            x = 0, y = 00, width = 1, height = 0.33) + 
+            x = 0, y = 00, width = 0.99, height = 0.33) + 
   cowplot::draw_plot_label(c("A", "B", "C"),  
                   x = c(0, 0, 0), 
                   y = c(1, 0.66, 0.33), 
                   hjust = c(-0.5, -0.5, -0.5), 
                   vjust = c(1.5, 1.5, 1.5),
-                  size = 12) 
+                  size = 16) 
 
 THREE_JOIN 
 
 
 cowplot::save_plot(file = here::here("figures", "Supplements_WT3.pdf"), 
-                   THREE_JOIN, base_height = 17/cm(1), base_width = 11/cm(1), dpi = 1200)
+                   THREE_JOIN, base_height = 25/cm(1), base_width = 17/cm(1), dpi = 1200)
 
 
 ```
