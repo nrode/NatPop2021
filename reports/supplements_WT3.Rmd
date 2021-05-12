@@ -274,7 +274,7 @@ data_PERF_Rate$resid <- residuals(m1)
 wt3rate<-ggplot(data = data_PERF_Rate,
                 aes(x = Date_P, y = resid)) + 
   geom_point(size = 1.5, alpha = 0.7) +
-  ylab("Egg-to-adult viability\nstandardized")  +
+  ylab("Residuals(Egg-to-adult\nviability)")  +
   xlab("Date")  +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
@@ -318,7 +318,7 @@ data_PERF_Rate$resid_eggs <- residuals(m1)
 wt3eggs<-ggplot(data = data_PERF_Rate,
                 aes(x = Date_P, y = resid_eggs)) + 
   geom_point(size = 1.5, alpha = 0.7) +
-  ylab("Oviposition stimulation\nstandardized")  +
+  ylab("Residuals(Oviposition\nstimulation)")  +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
   xlab("Date")  +
@@ -358,7 +358,7 @@ wt3eggspref<-ggplot(data = data_PREF,
   geom_point(size = 1.5, alpha = 0.7) +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
-  ylab("Oviposition stimulation\nstandardized")  +
+  ylab("Residuals(Oviposition\nstimulation)")  +
   xlab("Date")  +
   ylim(-2.7,2.7) +
   theme_LO_sober
