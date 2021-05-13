@@ -100,39 +100,13 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
   }
   
   
-  #TEMPPP:
-  SUM_Genetic_NonGenetic$se_dif <-  ifelse(SUM_Genetic_NonGenetic$Effect=="Genetic",
-                                           SUM_Genetic_NonGenetic$sd_effect/sqrt(SUM_Genetic_NonGenetic$N),
-                                                                                 NA)
-  
-  for (i in levels(SUM_Genetic_NonGenetic$Original_environment)) {
-    for (j in levels(SUM_Genetic_NonGenetic$Test_environment)) {
-      SUM_Genetic_NonGenetic$se_dif[SUM_Genetic_NonGenetic$Original_environment==i&
-                                         SUM_Genetic_NonGenetic$Test_environment==j&
-                                         SUM_Genetic_NonGenetic$Generation=="G0"] <-
-        sqrt(((SUM_Genetic_NonGenetic$sd[SUM_Genetic_NonGenetic$Original_environment==i&
-                                          SUM_Genetic_NonGenetic$Test_environment==j&
-                                          SUM_Genetic_NonGenetic$Generation=="G0"])^2/
-               SUM_Genetic_NonGenetic$N[SUM_Genetic_NonGenetic$Original_environment==i&
-                                           SUM_Genetic_NonGenetic$Test_environment==j&
-                                           SUM_Genetic_NonGenetic$Generation=="G0"])
-               +
-               ((SUM_Genetic_NonGenetic$sd[SUM_Genetic_NonGenetic$Original_environment==i&
-                                            SUM_Genetic_NonGenetic$Test_environment==j&
-                                            SUM_Genetic_NonGenetic$Generation=="G2"])^2/
-        SUM_Genetic_NonGenetic$N[SUM_Genetic_NonGenetic$Original_environment==i&
-                                   SUM_Genetic_NonGenetic$Test_environment==j&
-                                   SUM_Genetic_NonGenetic$Generation=="G0"]))
-    }
-  }
-  
   
   #Perform se:
   SUM_Genetic_NonGenetic$se_effect <- SUM_Genetic_NonGenetic$sd_effect/sqrt(SUM_Genetic_NonGenetic$N)
       
   
   SUM_Genetic_NonGenetic <- SUM_Genetic_NonGenetic[,c("Effect","Original_environment","Test_environment",
-                                                      "SA","mean_effect","sd_effect","se_effect", "se_dif")]
+                                                      "SA","mean_effect","sd_effect","se_effect")]
 
   #TEST LOCAL ADAPTATION GENETIC vs NON-GENETIC
   if(trait == "Nb_eggs"){
@@ -304,10 +278,9 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
                                group = Original_environment,
                                fill = "white")) + 
     #geom_errorbar(aes(ymin=mean_effect-sd_effect, ymax = mean_effect+sd_effect),
-    #geom_errorbar(aes(ymin=mean_effect-1.96*se_effect, ymax = mean_effect+1.96*se_effect),
-    geom_errorbar(aes(ymin=mean_effect-1.96*se_dif, ymax = mean_effect+1.96*se_dif),
+    geom_errorbar(aes(ymin=mean_effect-1.96*se_effect, ymax = mean_effect+1.96*se_effect),
                       width=.1, position=pd, size = 1) +
-    #annotate('text', x = 3.5, y = max_plot, label = equation, parse = TRUE, hjust = 1, size = 4) + 
+    annotate('text', x = 3.5, y = max_plot, label = equation, parse = TRUE, hjust = 1, size = 4) + 
     geom_point(size = 4, position=pd, fill="white", shape = 21, stroke = 1.5) + 
     scale_color_manual(name="Fly populations from:",   
                        breaks=c("Cherry", "Strawberry","Blackberry"),
