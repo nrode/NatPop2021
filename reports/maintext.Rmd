@@ -1097,7 +1097,7 @@ LOCAL_ADAPTATION_PLOT_THIRD <- cowplot::ggdraw() +
 LOCAL_ADAPTATION_PLOT_THIRD
 # 
 # 
-# cowplot::save_plot(file =here::here("figures","Reciprocal_experiment_ThirdGeneration.pdf"),
+# cowplot::save_plot(file = here::here("figures","Reciprocal_experiment_ThirdGeneration.pdf"),
 #                   LOCAL_ADAPTATION_PLOT_THIRD, base_height = 20/cm(1),
 #                   base_width = 30/cm(1), dpi = 1200)
 # 
@@ -1135,10 +1135,10 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
  LOCAL_ADAPTATION_PLOT
 
  
- cowplot::save_plot(file =here::here("figures", "LOCAL_ADAPTATION_G0_G2.pdf"),
-                   LOCAL_ADAPTATION_PLOT,
-                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
-
+ # cowplot::save_plot(file =here::here("figures", "LOCAL_ADAPTATION_G0_G2.pdf"),
+ #                   LOCAL_ADAPTATION_PLOT,
+ #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+ # 
 
 
 ```
@@ -1180,10 +1180,10 @@ Genetic_NonGenetic_PLOT <- cowplot::ggdraw() +
  Genetic_NonGenetic_PLOT
 
  
- cowplot::save_plot(file =here::here("figures", "GENETIC_NONGENETIC_First_Third.pdf"),
-                   Genetic_NonGenetic_PLOT,
-                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
-
+ # cowplot::save_plot(file =here::here("figures", "GENETIC_NONGENETIC_First_Third.pdf"),
+ #                   Genetic_NonGenetic_PLOT,
+ #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+ # 
 
 
 ```

@@ -17,6 +17,10 @@ plot_RTP_residuals <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen
   data <- dataset[dataset$Generation == gen,]
   data <- data[complete.cases(data[,trait]), ]
   
+  #Remove 4 rows with Nb_eggs=NA (will not be used: neither to test local adpatation nor to extract residuals)
+  if(trait == "Nb_adults"){
+    data <- data[complete.cases(data[,"Nb_eggs"]), ] 
+  }
   
   # Transform variables
   if(trait == "Nb_eggs" | trait == "Nb_adults" ){
@@ -126,7 +130,7 @@ plot_RTP_residuals <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen
   
   
   # Plot title and y axis title
-  plot_title <- ifelse(gen == "G0", "First generation", "Third generation")
+  plot_title <- ifelse(gen == "G0", "G0", "G2")
   if("Obs_A" %in% colnames(dataset)  & trait == "Nb_eggs"){
     yaxis_labelprint <- paste0("Residuals(oviposition stimulation)")
   }else{
@@ -149,7 +153,7 @@ plot_RTP_residuals <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen
                                colour = Original_environment,
                                group = Original_environment,
                                fill = "white")) + 
-    geom_errorbar(aes(ymin=Resid-ci, ymax = Resid+ci),
+    geom_errorbar(aes(ymin=Resid-(1.96*se), ymax = Resid+(1.96*se)), #with se=sd/sqrt(n)
                   width=.1, position = pd, size = 1) +
     annotate('text', x = 3.5, y = max_plot, label = equation, parse = TRUE, hjust = 1, size = 4) + 
     geom_point(size = 4, position = pd, fill="white", shape = 21, stroke = 1.5) + 

@@ -28,7 +28,10 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
     }
   }
   data <- data[complete.cases(data[,trait]), ]
-  
+  #Remove 4 rows with Nb_eggs=NA (will not be used: neither to test local adpatation nor to extract residuals)
+  if(trait == "Nb_adults"){
+    data <- data[complete.cases(data[,"Nb_eggs"]), ] 
+  }
   
   # Transform variables
   if(trait == "Nb_eggs" | trait == "Nb_adults" ){
