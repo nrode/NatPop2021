@@ -118,10 +118,10 @@ mean(sim$IndicNonGen)
 ```
 
 
-# Egg-to-adult viability
+# POWER TEST
 ```{r }
 #### INCREASE SA NON GENETIC
-nb_simul = 100
+nb_simul = 1000
 val_SAng <- seq(from = 0, to = 1, by = 0.1)
 
 
@@ -231,9 +231,47 @@ name_plot<-paste0("Simul_powertest_nongeneticdetection_",
 
 
 
+```
+
+
+# Extract value of power
+```{r }
+#To calculate more precisely when we can detect SAnon genet
+data_prop[data_prop$duplication=="1",]
+power_test
+
+#In our simul we can detect with a value of SAnongent between 0.4 and 0.5
+##Simul with more precision between 0.4 and 0.5
+val_SAng <- seq(from = 0.44, to = 0.48, by = 0.01)
+val_simul<-c(1:nb_simul)
+value_param <- expand.grid("val_SAng" = val_SAng,
+                           "val_simul" = val_simul, 
+                           "val_duplication" = c(1))
+sim <- mapply(simul_powertest_nongenet, 
+              seed = value_param$val_simul, 
+              SAng = value_param$val_SAng, 
+              dup = value_param$val_duplication)
+sim <- as.data.frame(t(as.data.frame(sim)))
+TEMP <- as.data.frame(tapply(sim$IndicNonGen, list(sim$SAng,sim$dup), mean))
+TEMP$val_SAng <- rownames(TEMP)
+data_prop <- tidyr::gather(TEMP, "duplication", "prop_nongen_sign", 1:dim(TEMP)[2]-1)
+data_prop$val_SAng <- as.numeric(data_prop$val_SAng)
+data_prop <- data.frame(val_SAng = val_SAng, 
+                 prop_nongen_sign = tapply(sim$IndicNonGen[sim$dup==1], 
+                                        sim$SAng[sim$dup==1], mean), 
+                 rsqng = tapply(sim$rsqng[sim$dup==1], 
+                                         sim$SAng[sim$dup==1], mean))
+
+
+data_prop
+
+
+```
 
 
 
+# Check problem of SAgenetic with SA non genetic
+```{r }
 ################# 
 ################# PROBLEM GENETIC VS NON GENETIC
 ################# 
@@ -269,4 +307,5 @@ name_plot<-paste0("Simul_powertest_nongeneticdetection_vs_geneticdetection",
 # 
 
 ```
+
 
