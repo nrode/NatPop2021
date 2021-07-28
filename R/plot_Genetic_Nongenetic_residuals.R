@@ -253,7 +253,12 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
   # }
   
   #Ylim 
-  max_plot <- 1.1 * max(SUM_Genetic_NonGenetic$mean_effect+1.96*SUM_Genetic_NonGenetic$se_effect)
+  if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
+    max_plot <- 1.1 * max(SUM_Genetic_NonGenetic$mean_effect)
+    }else{
+      max_plot <- 1.1 * max(SUM_Genetic_NonGenetic$mean_effect+1.96*SUM_Genetic_NonGenetic$se_effect)
+      }
+
   
   
   # Plot title and y axis title
