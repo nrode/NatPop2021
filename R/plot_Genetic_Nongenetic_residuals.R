@@ -172,7 +172,7 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
       
       ## F test for SA
       Fratio_Gen <- (anova(lm_val)[3,2]/anova(lm_val)[6,2])/(1/anova(lm_val)[6, 1])
-      pvalue_Gen <- 1 - pf(Fratio_Gen, 1, anova(m2)[6, 1]) 
+      pvalue_Gen <- 1 - pf(Fratio_Gen, 1, anova(lm_val)[6, 1]) 
       df1_Gen = 1
       df2_Gen = anova(lm_val)[6, 1]
       
