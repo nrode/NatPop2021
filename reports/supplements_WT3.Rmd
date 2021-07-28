@@ -179,24 +179,12 @@ summary(m1)
 
 
 
-##RATE
-#INTRA
-mean(tapply(data_PERF$Rate,
-            data_PERF$Date_P,var),na.rm=T)
-
-#INTER 
-var(tapply(data_PERF$Rate,
-           data_PERF$Date_P,mean),na.rm=T)
-
-#TOTALE
-var(data_PERF$Rate,na.rm=T)
-
 
 
 ```
 
 
-## Stimulation
+## Oviposition stimulation
 ```{r }
 #Extract residuals Rate~Treatment 
 m1 <- aov(log(Nb_eggs+1) ~ Test_environment, data = data_PERF_Rate)
@@ -220,21 +208,26 @@ summary(m1)
 m1 <- lme4::lmer(resid_eggs ~ 1 + (1|Date_P), data = data_PERF_Rate)
 summary(m1)
 
+m0 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + 
+                   (1|Date_P) + (1|Date_P:Test_environment), 
+                 data = data_PERF_Rate,  REML=TRUE)
+m1 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + 
+                   (1|Date_P), 
+                 data = data_PERF_Rate,  REML=TRUE)
+m2 <- gls(log(Nb_eggs+1) ~ Test_environment, method = "REML", data = data_PERF_Rate)
 
-##Nb_eggs
-#INTRA
-mean(tapply(data_PERF$Nb_eggs,
-            data_PERF$Date_P,var),na.rm=T)
+AIC(m0,m1,m2)
 
-#INTER 
-var(tapply(data_PERF$Nb_eggs,
-           data_PERF$Date_P,mean),na.rm=T)
+summary(m0)
+
+anova(m0,m1)
+anova(m1,m2)
 
 ```
 
 
 
-## Preference
+## Oviposition Preference
 ```{r }
 #Extract residuals Rate~Treatment 
 m1 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + (1|BoxID), data = data_PREF)
@@ -246,25 +239,31 @@ wt3eggspref<-ggplot(data = data_PREF,
   geom_point(size = 1.5, alpha = 0.7) +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
-  ylab("Residuals(Oviposition stimulation)")  +
+  ylab("Residuals(Oviposition preference)")  +
   xlab("Date")  +
   ylim(-2.7,2.7) +
   theme_LO_sober
 wt3eggspref
 
 #Variance intra date
-m1 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + (1|Date_P) + (1|BoxID), data = data_PREF)
-summary(m1)
+m0 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + 
+                   (1|Date_P) + (1|BoxID) + (1|Date_P:Test_environment), 
+                 data = data_PREF,  REML=TRUE)
+m1 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + 
+                   (1|Date_P) + (1|BoxID), 
+                 data = data_PREF,  REML=TRUE)
+m2 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + (1|BoxID), 
+                 data = data_PREF,  REML=TRUE)
 
 
-##Nb_eggs
-#INTRA
-mean(tapply(data_PREF$Nb_eggs,
-            data_PREF$Date_P,var),na.rm=T)
+summary(m0)
 
-#INTER 
-var(tapply(data_PREF$Nb_eggs,
-           data_PREF$Date_P,mean),na.rm=T)
+#Test significant
+anova(m0,m1)
+anova(m1,m2)
+
+
+summary(m2)
 
 ```
 
@@ -292,7 +291,7 @@ THREE_JOIN
 # 
 # cowplot::save_plot(file = here::here("figures", "Supplements_WT3.pdf"),
 #                    THREE_JOIN, base_height = 28/cm(1), base_width = 17/cm(1), dpi = 1200)
-
+# 
 
 ```
 
