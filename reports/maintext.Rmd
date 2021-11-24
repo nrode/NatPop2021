@@ -1179,11 +1179,11 @@ Genetic_NonGenetic_PLOT <- cowplot::ggdraw() +
                   size = 16) 
  Genetic_NonGenetic_PLOT
 
- 
+
  # cowplot::save_plot(file =here::here("figures", "GENETIC_NONGENETIC_First_Third.pdf"),
  #                   Genetic_NonGenetic_PLOT,
  #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
- # 
+
 
 
 ```
