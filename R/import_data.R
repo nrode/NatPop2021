@@ -163,10 +163,11 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
   #tapply(data_rate_clean[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs,]$Nb_eggs,
   #       list(data_rate_clean[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs,]$Generation,
   #            data_rate_clean[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs,]$SA),length)
-  data_rate_clean <- data_rate_clean[data_rate_clean$Nb_adults<=data_rate_clean$Nb_eggs,]
+  data_rate_clean_all <- data_rate_clean[data_rate_clean$Nb_adults<=data_rate_clean$Nb_eggs,]
 
   
   if(is.na(remove_rate)){ 
+    data <- data_rate_clean
     data$Rate <- data$Nb_adults / data$Nb_eggs
     
     print(paste0("Data (" , temp_g0, " and ", temp_g2, 
@@ -184,7 +185,7 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
     if(remove_rate == TRUE){ 
       
       #Assign data_rate_clean to data
-      data <- data_rate_clean
+      data <- data_rate_clean_all
       
       #Emegence Rate
       data$Rate <- data$Nb_adults / data$Nb_eggs
