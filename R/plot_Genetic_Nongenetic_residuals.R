@@ -254,7 +254,7 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
   # }
   
   #Ylim 
-  if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
+  if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs" && effect == "Non-genetic"){
     max_plot <- 1.1 * max(SUM_Genetic_NonGenetic$mean_effect)
     }else{
       max_plot <- 1.1 * max(SUM_Genetic_NonGenetic$mean_effect+1.96*SUM_Genetic_NonGenetic$se_effect)
@@ -287,12 +287,14 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
   plot <- ggplot(SUM_Genetic_NonGenetic, aes(x = Test_environment, y = mean_effect,
                                colour = Original_environment,
                                group = Original_environment,
-                               fill = "white")) + 
+                               fill = "white")) +
     #geom_errorbar(aes(ymin=mean_effect-sd_effect, ymax = mean_effect+sd_effect),
     geom_errorbar(aes(ymin=mean_effect-1.96*se_effect, ymax = mean_effect+1.96*se_effect),
                       width=.1, position=pd, size = 1) +
-    annotate('text', x = 3.5, y = max_plot, label = equation, parse = TRUE, hjust = 1, size = 4) + 
     geom_point(size = 4, position=pd, fill="white", shape = 21, stroke = 1.5) + 
+    #annotate('text', x = 3.5, y = max_plot, label = equation, parse = TRUE, hjust = 1, size = 4) + 
+    annotate('text', x = 0.5,
+             y = max_plot, label = equation, parse = TRUE, hjust = 0, size = 4) + 
     scale_color_manual(name="Fly populations from:",   
                        breaks=c("Cherry", "Strawberry","Blackberry"),
                        labels=c("Cherry","Strawberry","Blackberry"),

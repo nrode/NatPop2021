@@ -1187,7 +1187,7 @@ Genetic_NonGenetic_PLOT <- cowplot::ggdraw() +
                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
                   size = 16) 
  Genetic_NonGenetic_PLOT
-# 
+
 # 
 # cowplot::save_plot(file =here::here("figures", "GENETIC_NONGENETIC_First_Third.pdf"),
 #                   Genetic_NonGenetic_PLOT,
