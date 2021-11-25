@@ -1155,7 +1155,7 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
 
 
 
-# PLOT GENETIC vs NON GENETIC
+# PLOT GENETIC vs PLASTIC
 ```{r }
 legend <- lemon::g_legend(PLOT_pref_G0)
 
@@ -1180,19 +1180,19 @@ Genetic_NonGenetic_PLOT <- cowplot::ggdraw() +
                                         plot.title = element_blank()), 
             x = 0.61, y = 0, width = 0.25, height = 0.45) + 
   cowplot::draw_plot_label(c("Genetic effects", "A", "B", "C", " ",
-                    "Non-genetic effects", "D", "E", "F", " "),  
+                    "Plastic effects", "D", "E", "F", " "),  
                   x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
                   y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
                   hjust = c(0,0,0,0,0,0,0,0,0,0), 
                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
                   size = 16) 
  Genetic_NonGenetic_PLOT
-
-
- # cowplot::save_plot(file =here::here("figures", "GENETIC_NONGENETIC_First_Third.pdf"),
- #                   Genetic_NonGenetic_PLOT,
- #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
-
+# 
+# 
+# cowplot::save_plot(file =here::here("figures", "GENETIC_NONGENETIC_First_Third.pdf"),
+#                   Genetic_NonGenetic_PLOT,
+#                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+# 
 
 
 ```
