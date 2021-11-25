@@ -212,12 +212,14 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
     Fratio = Fratio_Gen
     pvalue = pvalue_Gen
     df1 = df1_Gen
-    df2 = df2_Gen }else{
+    df2 = df2_Gen
+    effect_name_test == "Genetic"  }else{
     if(effect == "Non-genetic"){
       Fratio = Fratio_NonGen
       pvalue = pvalue_NonGen
       df1 = df1_NonGen
-      df2 = df2_NonGen  }else{
+      df2 = df2_NonGen  
+      effect_name_test == "Plastic"}else{
       print("Error: effect tested unknown")
     }
   }
@@ -226,10 +228,9 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
   
   
   
-  
   #Equation
   equation <- as.character(as.expression(substitute(italic(F)[effect_name~"-"~df1~","~df2]~"="~Fratio~";"~italic(P)~"="~pvalue,
-                                                    list(effect_name = effect,
+                                                    list(effect_name = effect_name_test,
                                                          Fratio = format(Fratio, digits = 2, nsmall=2),
                                                          df1 = format(df1, digits = 2), 
                                                          df2 = format(df2, digits = 2), 
