@@ -153,8 +153,8 @@ power_test_simple <- ggplot2::ggplot(data = data_prop,
   geom_point(size = 3) + 
   geom_line(size = 1) + 
   geom_vline(xintercept = 0.03152, linetype = "dashed", color = "red", size = 0.5) + 
-  ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-  xlab("Intensity of non-genetic local adaptation (SA)")  +
+  ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+  xlab("Intensity of SA plastic")  +
   ggtitle("Egg-to-adult viability")  +
   ylim(0,1) +
   theme_LO_sober  
@@ -208,8 +208,8 @@ power_test <- ggplot2::ggplot(data = data_prop,
   geom_point(size = 3) + 
   geom_line(size = 1) + 
   geom_hline(yintercept = 0.8, linetype = "dashed", color = "grey", size = 0.5) + 
-  ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-  xlab("Intensity of non-genetic local adaptation (SA)")  +
+  ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+  xlab("Intensity of SA plastic")  +
   ggtitle("Egg-to-adult viability")  +
   labs(color = "Size of the design\nrelative to our\noriginal design") +
   scale_color_manual(values=c("#D36582","#a1dab4","#41b6c4","#225ea8"),
@@ -290,8 +290,8 @@ power_test <- ggplot2::ggplot(data = data_prop, aes(x=val_SAng)) +
   geom_point(aes(y = prop_gen_sign, color="Genetic"), size = 3) + 
   geom_line(aes(y = prop_gen_sign, color="Genetic"), size = 1) + 
   geom_vline(xintercept = 0.03152, linetype = "dashed", color = "red", size = 0.5) + 
-  ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-  xlab("Intensity of non-genetic local adaptation (SA)")  +
+  ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+  xlab("Intensity of SA plastic")  +
   ggtitle("Egg-to-adult viability")  +
   labs(color = "Power test") +
   scale_color_manual(values = colors) +

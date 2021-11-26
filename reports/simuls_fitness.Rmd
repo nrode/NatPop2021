@@ -260,8 +260,8 @@ plot_nongenetic_normal<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongenet)
    geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Balanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
    geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Balanced"), size = 0.75) + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    theme_LO_sober + 
    ggtitle("Normal data") +
    labs(color = "Methods", linetype = "Design") +
@@ -370,8 +370,8 @@ plot_nongenetic_normal<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongenet)
    geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Unbalanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
    geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Unbalanced"), size = 0.75) + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    theme_LO_sober + 
    ggtitle("Normal data") +
    labs(color = "Methods", linetype = "Design") +
@@ -478,8 +478,8 @@ plot_nongenetic_normal<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongenet)
    geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Unbalanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
    geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Unbalanced"), size = 0.75) + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    theme_LO_sober + 
    ggtitle("Normal data") +
    labs(color = "Methods", linetype = "Design") +
@@ -528,8 +528,8 @@ plot_nongenetic_normal_balancedvsunbalanced<-ggplot2::ggplot(data = data_proport
    aes(x = val_SA_nongenet, y = proportion, color = method, linetype = design)) + 
    geom_point(size = 2) + 
    geom_line(size = 1) + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    ggtitle("Normal data") +
    ylim(0,1) +
    theme_LO_sober  + 
@@ -770,8 +770,8 @@ plot_nongenetic_poisson<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongenet
    geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Balanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
    geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Balanced"), size = 0.75) + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    theme_LO_sober + 
    ggtitle("Poisson data") +
    labs(color = "Methods", linetype = "Design") +
@@ -890,8 +890,8 @@ plot_nongenetic_poisson_unbalanced<-ggplot2::ggplot(data = data_prop, aes(x=val_
    geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Unbalanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
    geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Unbalanced"), size = 0.75) + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    theme_LO_sober + 
    ggtitle("Poisson data") +
    labs(color = "Methods", linetype = "Design") +
@@ -1003,8 +1003,8 @@ plot_nongenetic_poisson_unbalanced_high<-ggplot2::ggplot(data = data_prop, aes(x
    geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Unbalanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
    geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Unbalanced"), size = 0.75) + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    theme_LO_sober + 
    ggtitle("Poisson data") +
    labs(color = "Methods", linetype = "Design") +
@@ -1052,8 +1052,8 @@ plot_nongenetic_poisson_balancedvsunbalanced<-ggplot2::ggplot(data = data_propor
    geom_point(size = 2) + 
    geom_line(size = 1) + 
    ylim(0,1) +
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    ggtitle("Poisson data") +
    theme_LO_sober  + 
    ggtitle("Poisson data") + 
@@ -1276,8 +1276,8 @@ plot_nongenetic_binomial<-ggplot2::ggplot(data = data_prop, aes(x=val_SA_nongene
    geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Balanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
    geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Balanced"), size = 0.75) + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    theme_LO_sober + 
    ggtitle("Binomial data") +
    labs(color = "Methods", linetype = "Design") +
@@ -1391,8 +1391,8 @@ plot_nongenetic_binomial_unbalanced<-ggplot2::ggplot(data = data_prop, aes(x=val
    geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Unbalanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
    geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Unbalanced"), size = 0.75) + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    theme_LO_sober + 
    ggtitle("Binomial data") +
    labs(color = "Methods", linetype = "Design") +
@@ -1505,8 +1505,8 @@ plot_nongenetic_binomial_unbalanced_high<-ggplot2::ggplot(data = data_prop, aes(
    geom_line(aes(y=prop_val_sign, color="LMER", linetype = "Unbalanced"), size = 1.5) + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
    geom_line(aes(y=prop_val_sign_aov, color="Anova", linetype = "Unbalanced"), size = 0.75) + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    theme_LO_sober + 
    ggtitle("Binomial data") +
    labs(color = "Methods", linetype = "Design") +
@@ -1554,8 +1554,8 @@ plot_nongenetic_binomial_balancedvsunbalanced<-ggplot2::ggplot(data = data_propo
    geom_point(size = 2) + 
    ylim(0,1) +
    geom_line(size = 1) + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    ggtitle("Binomial data") +
    theme_LO_sober  + 
    labs(color = "Methods", linetype = "Design") +
@@ -1965,8 +1965,8 @@ plot_nongenetic_poisson_ALL_box<-ggplot2::ggplot(data = data_proportion_nongen,
    geom_point(size = 2) + 
    ylim(0,1) +
    geom_line(size = 1) + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    ggtitle("Poisson data") +
    theme_LO_sober  + 
    labs(color = "Methods", linetype = "Box effect\n(sd box)") +
@@ -2097,8 +2097,8 @@ plot_nongenetic_normal_unbalanced_real<-ggplot2::ggplot(data = data_prop,
    geom_line(aes(y=prop_val_sign, color="LMER"), size = 1, linetype = "dotted") + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
    geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1, linetype = "dotted") + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    theme_LO_sober + 
    ggtitle("Normal data (unbalanced experimental design)") +
    labs(color = "Methods") +
@@ -2197,8 +2197,8 @@ plot_nongenetic_poisson_unbalanced_real<-ggplot2::ggplot(data = data_prop,
    geom_line(aes(y=prop_val_sign, color="LMER"), size = 1, linetype = "dotted") + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
    geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1, linetype = "dotted") + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    theme_LO_sober + 
    ggtitle("Poisson data (unbalanced experimental design)") +
    labs(color = "Methods") +
@@ -2297,8 +2297,8 @@ plot_nongenetic_Binomial_unbalanced_real<-ggplot2::ggplot(data = data_prop,
    geom_line(aes(y=prop_val_sign, color="LMER"), size = 1, linetype = "dotted") + 
    geom_point(aes(y=prop_val_sign_aov, color="Anova"), size = 2.5) + 
    geom_line(aes(y=prop_val_sign_aov, color="Anova"), size = 1, linetype = "dotted") + 
-   ylab("Proportion of simulations with\nsignificant non-genetic local adaption")  +
-   xlab("Intensity of non-genetic local adaptation (SA)")  +
+   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
+   xlab("Intensity of SA plastic")  +
    theme_LO_sober + 
    ggtitle("Binomial data (unbalanced experimental design)") +
    labs(color = "Methods") +

@@ -473,7 +473,7 @@ m2 <- aov(log(Nb_adults+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 
 
 
-# EGG-TO-ADULT VIABILITY
+# EGG-TO-ADULT SURVIVAL
 ## Exploration data
 ```{r }
 
@@ -1006,18 +1006,18 @@ rsqng <- 1-anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+a
 
 
 
-###PLOT 
-(PAIR_BLACK_CHERRY_G2_PREF <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
-                                                           trait = "Nb_eggs", gen = "G2", 
-                                                           fruit1 = "Cherry", fruit2 = "Blackberry"))
-
-(PAIR_CHERRY_STRAW_G2_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
-                                                            trait = "Nb_eggs", gen = "G2",
-                                                            fruit1 = "Strawberry", fruit2 = "Cherry"))
-
-(PAIR_STRW_BLACK_G2_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
-                                                          trait = "Nb_eggs", gen = "G2",
-                                                          fruit1 = "Blackberry", fruit2 = "Strawberry"))
+# ###PLOT 
+# (PAIR_BLACK_CHERRY_G2_PREF <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
+#                                                            trait = "Nb_eggs", gen = "G2", 
+#                                                            fruit1 = "Cherry", fruit2 = "Blackberry"))
+# 
+# (PAIR_CHERRY_STRAW_G2_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
+#                                                             trait = "Nb_eggs", gen = "G2",
+#                                                             fruit1 = "Strawberry", fruit2 = "Cherry"))
+# 
+# (PAIR_STRW_BLACK_G2_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
+#                                                           trait = "Nb_eggs", gen = "G2",
+#                                                           fruit1 = "Blackberry", fruit2 = "Strawberry"))
 
 
 
@@ -1205,47 +1205,47 @@ Genetic_NonGenetic_PLOT <- cowplot::ggdraw() +
 
 legend <- lemon::g_legend(PAIR_CHERRY_STRAW_G2_PREF)
 
-############## THIRD GENERATION 
-HETEROGENEITY_PLOT_THIRD <- cowplot::ggdraw() +
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_EGGS+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0, y = 0.75, width = 0.25, height = 0.25) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_EGGS+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.30, y = 0.75, width = 0.25, height = 0.25) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_G2_EGGS+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0.60, y = 0.75, width = 0.25, height = 0.25) +    
-  #cowplot::draw_plot(legend, x = 0.85, y = 0.8, width = 0.0001, height = 0.0001) +
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_RATE+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0, y = 0.5, width = 0.25, height = 0.25) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_RATE+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.30, y = 0.5, width = 0.25, height = 0.25) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_G2_RATE+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0.60, y = 0.5, width = 0.25, height = 0.25) +    
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_ADULTS+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0, y = 0.25, width = 0.25, height = 0.25) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_ADULTS+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.30, y = 0.25, width = 0.25, height = 0.25) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_G2_ADULTS+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0.60, y = 0.25, width = 0.25, height = 0.25) +    
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_PREF+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0, y = 0, width = 0.25, height = 0.25) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_PREF+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.30, y = 0, width = 0.25, height = 0.25) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_G2_PREF+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0.60, y = 0, width = 0.25, height = 0.25) +    
-  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) 
-  HETEROGENEITY_PLOT_THIRD
+# ############## THIRD GENERATION 
+# HETEROGENEITY_PLOT_THIRD <- cowplot::ggdraw() +
+#   cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_EGGS+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0, y = 0.75, width = 0.25, height = 0.25) +
+#   cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_EGGS+theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.30, y = 0.75, width = 0.25, height = 0.25) +
+#   cowplot::draw_plot(PAIR_STRW_BLACK_G2_EGGS+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0.60, y = 0.75, width = 0.25, height = 0.25) +    
+#   #cowplot::draw_plot(legend, x = 0.85, y = 0.8, width = 0.0001, height = 0.0001) +
+#   cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_RATE+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0, y = 0.5, width = 0.25, height = 0.25) +
+#   cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_RATE+theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.30, y = 0.5, width = 0.25, height = 0.25) +
+#   cowplot::draw_plot(PAIR_STRW_BLACK_G2_RATE+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0.60, y = 0.5, width = 0.25, height = 0.25) +    
+#   cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_ADULTS+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0, y = 0.25, width = 0.25, height = 0.25) +
+#   cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_ADULTS+theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.30, y = 0.25, width = 0.25, height = 0.25) +
+#   cowplot::draw_plot(PAIR_STRW_BLACK_G2_ADULTS+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0.60, y = 0.25, width = 0.25, height = 0.25) +    
+#   cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_PREF+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0, y = 0, width = 0.25, height = 0.25) +
+#   cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_PREF+theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.30, y = 0, width = 0.25, height = 0.25) +
+#   cowplot::draw_plot(PAIR_STRW_BLACK_G2_PREF+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0.60, y = 0, width = 0.25, height = 0.25) +    
+#   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) 
+#   HETEROGENEITY_PLOT_THIRD
 
 
 # cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop_ThirdGeneration.pdf"),
@@ -1291,7 +1291,7 @@ HETEROGENEITY_PLOT <- cowplot::ggdraw() +
   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001)  + 
   cowplot::draw_plot_label(c("Oviposition preference", 
                              "Oviposition stimulation", 
-                             "Egg-to-adult viability"),  
+                             "Egg-to-adult survival"),  
                   x = c(0.48,0.48,0.48), 
                   y = c(0.96, 0.63, 0.29), 
                   hjust = c(0.5,0.5,0.5), 
@@ -1299,11 +1299,11 @@ HETEROGENEITY_PLOT <- cowplot::ggdraw() +
                   size = 16) 
 #HETEROGENEITY_PLOT
 
-
-cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop.pdf"),
-                  HETEROGENEITY_PLOT, base_height = 30/cm(1),
-                  base_width = 30/cm(1), dpi = 1200)
-
+# 
+# cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop.pdf"),
+#                   HETEROGENEITY_PLOT, base_height = 30/cm(1),
+#                   base_width = 30/cm(1), dpi = 1200)
+# 
 
 ```
 
