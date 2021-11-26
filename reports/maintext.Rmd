@@ -1147,7 +1147,7 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
  # cowplot::save_plot(file =here::here("figures", "LOCAL_ADAPTATION_G0_G2.pdf"),
  #                   LOCAL_ADAPTATION_PLOT,
  #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
- # 
+
 
 
 ```
@@ -1336,18 +1336,56 @@ PLOT_Strawberry_Stim <- plot_RelationTraits_residuals(gen = "G2",
                                                 fruit = "Strawberry", 
                                                 trait2 = "Stimulation")
 
-
+PLOT_Blackberry_G0 <- plot_RelationTraits_residuals(gen = "G0", 
+                                                fruit = "Blackberry", 
+                                                trait2 = "Preference")
+PLOT_Cherry_G0 <- plot_RelationTraits_residuals(gen = "G0", 
+                                                fruit = "Cherry", 
+                                                trait2 = "Preference")
+PLOT_Strawberry_G0 <- plot_RelationTraits_residuals(gen = "G0", 
+                                                fruit = "Strawberry", 
+                                                trait2 = "Preference")
 
 legend <- lemon::g_legend(PLOT_Strawberry_Stim)
 
-RELATION_TRAITS <- cowplot::ggdraw() + 
-  cowplot::draw_plot(PLOT_Blackberry_Stim + theme(legend.position = "none", 
+# RELATION_TRAITS <- cowplot::ggdraw() + 
+#   cowplot::draw_plot(PLOT_Blackberry_Stim + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PLOT_Cherry_Stim + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PLOT_Strawberry_Stim + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
+#   cowplot::draw_plot(PLOT_Blackberry + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.01, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PLOT_Cherry + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.31, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PLOT_Strawberry + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.61, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot_label(c(" ", "A", "B", "C", " ",
+#                     " ", "D", "E", "F", " "),  
+#                   x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
+#                   y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
+#                   hjust = c(0,0,0,0,0,0,0,0,0,0), 
+#                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+#                   size = 16) 
+#  RELATION_TRAITS
+
+## ALL GENERATIONS 
+ RELATION_TRAITS_G0G2 <- cowplot::ggdraw() + 
+  cowplot::draw_plot(PLOT_Blackberry_G0 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_Cherry_Stim + theme(legend.position = "none", 
+  cowplot::draw_plot(PLOT_Cherry_G0 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_Strawberry_Stim + theme(legend.position = "none", 
+  cowplot::draw_plot(PLOT_Strawberry_G0 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
@@ -1360,18 +1398,18 @@ RELATION_TRAITS <- cowplot::ggdraw() +
   cowplot::draw_plot(PLOT_Strawberry + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.61, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot_label(c(" ", "A", "B", "C", " ",
-                    " ", "D", "E", "F", " "),  
+  cowplot::draw_plot_label(c("Generation: G0", "A", "B", "C", " ",
+                    "Generation: G2", "D", "E", "F", " "),  
                   x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
                   y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
                   hjust = c(0,0,0,0,0,0,0,0,0,0), 
                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
                   size = 16) 
- RELATION_TRAITS
+ RELATION_TRAITS_G0G2
 
-
-cowplot::save_plot(file =here::here("figures", "RELATION_TRAITS_G2.pdf"),
-                  RELATION_TRAITS,
+ 
+cowplot::save_plot(file =here::here("figures", "RELATION_TRAITS_G0G2.pdf"),
+                  RELATION_TRAITS_G0G2,
                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
 
 
