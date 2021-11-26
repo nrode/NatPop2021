@@ -160,7 +160,7 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
       xaxis_labelprint <- paste0("Residuals(number of adults)\n in ", fruit1)
     }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        xaxis_labelprint <- paste0("Residuals(egg-to-adult viability)\n in ", fruit1)
+        xaxis_labelprint <- paste0("Residuals(egg-to-adult survival)\n in ", fruit1)
       }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
           xaxis_labelprint <- paste0("Residuals(oviposition preference)\n in ", fruit1)
