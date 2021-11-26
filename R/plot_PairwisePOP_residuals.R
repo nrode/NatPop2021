@@ -141,7 +141,7 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
       yaxis_labelprint <- paste0("Residuals(number of adults)\n in ", fruit2)
     }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        yaxis_labelprint <- paste0("Residuals(egg-to-adult viability)\n in ", fruit2)
+        yaxis_labelprint <- paste0("Residuals(egg-to-adult survival)\n in ", fruit2)
       }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
           yaxis_labelprint <- paste0("Residuals(oviposition preference)\n in ", fruit2)
@@ -263,18 +263,17 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
   
   #coordinates of equation 
   if("Obs_A" %in% colnames(dataset)  & trait == "Nb_eggs"){
-    # dif<-0.05*(max(c(data_fruit1_fruit2$fruit2,
-    #                  data_fruit1_fruit2$fruit1), na.rm = TRUE)-min(c(data_fruit1_fruit2$fruit2,
-    #                                                                  data_fruit1_fruit2$fruit1), na.rm = TRUE))
-    # y_lim <- dif+min(data_fruit1_fruit2$fruit2, na.rm = TRUE)
-    # y_lim2 <- min(data_fruit1_fruit2$fruit2, na.rm = TRUE)
-    # x_lim <- 0.5+min(data_fruit1_fruit2$fruit1, na.rm = TRUE)
-    if(fruit1=="Cherry") {x_lim = -0.1}else{if(fruit1=="Strawberry") {x_lim = -0.4}else{if(fruit1=="Blackberry"){x_lim = -1}}}
-    if(fruit1=="Cherry") {y_lim = -1.65
-    y_lim2 = -1.85}else{if(fruit1=="Strawberry") {y_lim = -0.72
-    y_lim2 = -0.9}else{if(fruit1=="Blackberry") {y_lim =  -0.75
-    y_lim2 =-0.87}}}
+    if(fruit1=="Cherry") {x_lim = 0}else{
+      if(fruit1=="Strawberry") {x_lim = -0.4}else{
+        if(fruit1=="Blackberry"){x_lim = -0.45}}}
     
+    if(fruit1=="Cherry") {y_lim = 0.68
+    y_lim2 = 0.8}else{
+      if(fruit1=="Strawberry") {y_lim = 1.12
+    y_lim2 = 1}else{
+      if(fruit1=="Blackberry") {y_lim =  0.6
+    y_lim2 = 0.72}}}
+
     
       }else{
     if("Obs_A" %in% colnames(dataset)  & trait == "Nb_adults"){
@@ -288,17 +287,16 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
       
           }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        # dif<-0.1*(max(c(data_fruit1_fruit2$fruit2,
-        #                  data_fruit1_fruit2$fruit1), na.rm = TRUE)-min(c(data_fruit1_fruit2$fruit2,
-        #                                                                  data_fruit1_fruit2$fruit1), na.rm = TRUE))
-        # y_lim <- 1*max(data_fruit1_fruit2$fruit2, na.rm = TRUE)
-        # y_lim2 <- (1-dif)*max(data_fruit1_fruit2$fruit2, na.rm = TRUE)
-        # x_lim <- 0.3*max(data_fruit1_fruit2$fruit1, na.rm = TRUE)
-        if(fruit1=="Cherry") {x_lim = -0.05}else{if(fruit1=="Strawberry") {x_lim = 0.4}else{if(fruit1=="Blackberry"){x_lim = 0.25}}}
+        if(fruit1=="Cherry") {x_lim = -0.3}else{
+          if(fruit1=="Strawberry") {x_lim = 0}else{
+            if(fruit1=="Blackberry"){x_lim = -0.22}}}
+        
+        
         if(fruit1=="Cherry") {y_lim = 0.555
           y_lim2 = 0.48}else{if(fruit1=="Strawberry") {y_lim = 0.31
-            y_lim2 = 0.25}else{if(fruit1=="Blackberry") {y_lim = 0.5
-            y_lim2 = 0.4}}}
+            y_lim2 = 0.25}else{if(fruit1=="Blackberry") {y_lim = 0.85
+            y_lim2 = 0.75}}}
+ 
         
         
             }else{
@@ -308,10 +306,16 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
                                                                            data_fruit1_fruit2$fruit1), na.rm = TRUE))
           
     
-          if(fruit1=="Cherry") {x_lim = 0.5*max(data_fruit1_fruit2$fruit1, na.rm = TRUE)}else{if(fruit1=="Strawberry") {x_lim = 0.5*max(data_fruit1_fruit2$fruit1, na.rm = TRUE)}else{if(fruit1=="Blackberry"){x_lim = 0}}}
+          if(fruit1=="Cherry") {x_lim = 0}else{
+            if(fruit1=="Strawberry") {x_lim = -0.12}else{
+              if(fruit1=="Blackberry"){x_lim = -1.2}}}
+   
+          
           if(fruit1=="Cherry") {y_lim = 0.78
-          y_lim2 = 0.6}else{if(fruit1=="Strawberry") {y_lim = max(data_fruit1_fruit2$fruit2, na.rm = TRUE)
-          y_lim2 =  (1-dif)*max(data_fruit1_fruit2$fruit2, na.rm = TRUE)}else{if(fruit1=="Blackberry") {y_lim =  1.45
+          y_lim2 = 0.6}else{
+            if(fruit1=="Strawberry") {y_lim = 1.35
+          y_lim2 =  1.2}else{
+            if(fruit1=="Blackberry") {y_lim =  1.45
           y_lim2 = 1.3}}}
           
           
@@ -366,11 +370,11 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
         geom_text(x = x_lim, y = y_lim, 
                   label = eq_rho_G0,
                   parse = TRUE, 
-                  color="black", size = 3.5) +
+                  color="black", size = 3.5, hjust = 0) +
         geom_text(x = x_lim, y = y_lim2, 
                   label = eq_rho_G2,
                   parse = TRUE, 
-                  color="black", size = 3.5) +
+                  color="black", size = 3.5, hjust = 0) +
         xlab(xaxis_labelprint)  +
         ylab(yaxis_labelprint)  +
         ggtitle(plot_title) +
