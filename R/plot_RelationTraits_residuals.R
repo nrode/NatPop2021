@@ -28,29 +28,53 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
     }
   }
   
-
+  
+  
   ######### MODELS
   #Extract resid 
   if (gen == "G0" | gen == "G2") {
-    lm_resid <- lm(asin(sqrt(data$Rate)) ~ Test_environment + Population, data = data)
+    lm_resid <- lm(asin(sqrt(data$Rate)) ~ Test_environment + Population + log(Nb_eggs), data = data)
     data$Resid_rate <- residuals(lm_resid)
     lm_resid <- lm(log(Nb_eggs+1) ~ Test_environment + Population, data = data)
     data$Resid_eggs <- residuals(lm_resid)
-    lm_resid <- lm(log(Nb_eggs+1) ~ Test_environment + Population, data = data2)
+    lm_resid <- lm(log(Nb_eggs+1) ~ Test_environment + Population + BoxID, data = data2)
     data2$Resid_eggs <- residuals(lm_resid)
   }else{
     if (gen == "Both") {
-      lm_resid <- lm(asin(sqrt(data$Rate)) ~ hab_gen + pop_gen, data = data)
+      lm_resid <- lm(asin(sqrt(data$Rate)) ~ Test_environment:Generation + Population:Generation + log(Nb_eggs), data = data)
       data$Resid_rate <- residuals(lm_resid)
-      lm_resid <- lm(log(Nb_eggs+1) ~ hab_gen + pop_gen, data = data)
+      lm_resid <- lm(log(Nb_eggs+1) ~ Test_environment:Generation + Population:Generation, data = data)
       data$Resid_eggs <- residuals(lm_resid)
-      lm_resid <- lm(log(Nb_eggs+1) ~ hab_gen + pop_gen, data = data2)
+      lm_resid <- lm(log(Nb_eggs+1) ~ Test_environment:Generation + Population:Generation + BoxID, data = data2)
       data2$Resid_eggs <- residuals(lm_resid)
     }else {
       print("Error: unknown generation")
     }
   }
   
+  
+  
+  # ######### MODELS
+  # #Extract resid 
+  # if (gen == "G0" | gen == "G2") {
+  #   lm_resid <- lm(asin(sqrt(data$Rate)) ~ Test_environment + Population, data = data)
+  #   data$Resid_rate <- residuals(lm_resid)
+  #   lm_resid <- lm(log(Nb_eggs+1) ~ Test_environment + Population, data = data)
+  #   data$Resid_eggs <- residuals(lm_resid)
+  #   lm_resid <- lm(log(Nb_eggs+1) ~ Test_environment + Population, data = data2)
+  #   data2$Resid_eggs <- residuals(lm_resid)
+  # }else{
+  #   if (gen == "Both") {
+  #     lm_resid <- lm(asin(sqrt(data$Rate)) ~ hab_gen + pop_gen, data = data)
+  #     data$Resid_rate <- residuals(lm_resid)
+  #     lm_resid <- lm(log(Nb_eggs+1) ~ hab_gen + pop_gen, data = data)
+  #     data$Resid_eggs <- residuals(lm_resid)
+  #     lm_resid <- lm(log(Nb_eggs+1) ~ hab_gen + pop_gen, data = data2)
+  #     data2$Resid_eggs <- residuals(lm_resid)
+  #   }else {
+  #     print("Error: unknown generation")
+  #   }
+  # }  
   
   ######### Dataset summary
   TEMP_SUM_Rate <- Rmisc::summarySE(data,
@@ -87,12 +111,12 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
   ######### PLOT
   # Plot title and x/y axis title
   plot_title <- ifelse(gen == "G0", "First generation", ifelse(gen == "G2","Third generation", " "))
-  yaxis_labelprint <- paste0("Residuals(egg-to-adult survival)\n in ", fruit)
+  xaxis_labelprint <- paste0("Residuals(egg-to-adult survival)\n in ", fruit)
   if (trait2 == "Stimulation") {
-    xaxis_labelprint <- paste0("Residuals(oviposition stimulation)\n in ", fruit)
+    yaxis_labelprint <- paste0("Residuals(oviposition stimulation)\n in ", fruit)
   }else{
     if (trait2 == "Preference") {
-      xaxis_labelprint <- paste0("Residuals(oviposition preference)\n in ", fruit)
+      yaxis_labelprint <- paste0("Residuals(oviposition preference)\n in ", fruit)
     }else {
       print("Error: unknown trait")
     }
@@ -211,8 +235,8 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
   }else{
     if (gen == "Both") {
       plot_pair <- ggplot(data = TEMP_SUM_FRUIT,
-                          aes(x = Resid_eggs, 
-                              y = Resid_rate, 
+                          aes(y = Resid_eggs, 
+                              x = Resid_rate, 
                               color = Original_environment, 
                               shape = Generation)) +
         geom_vline(xintercept = 0, linetype = "dashed", color = "grey")+
