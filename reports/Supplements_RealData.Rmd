@@ -1,0 +1,309 @@
+---
+title: "Pop nat analysis"
+author: "Laure Olazcuaga, Nicolas Rode"
+date: "`r format(Sys.Date(), '%d-%B-%Y')`"
+output: 
+  html_document:
+    theme: "journal"
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include =FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+devtools::load_all()
+```
+
+
+
+# DATA 
+```{r }
+#############################
+#PERFORMANCE 
+#############################
+
+data_PERF <- import_data(dataset = "DATACOMPLET_PERF.csv", 
+                         trait = "performance",
+                         remove_testenvt = c("Grape","GF"), 
+                         remove_pop = c("WT3"), 
+                         remove_rate = NA)
+
+head(data_PERF)
+tapply(data_PERF$Nb_adults,list(data_PERF$Original_environment,data_PERF$Generation),length)
+
+#############################
+#EMERGENCE RATE
+#############################
+
+data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv", 
+                         trait = "performance",
+                         remove_testenvt = c("Grape","GF"), 
+                         remove_pop = c("WT3"), 
+                         remove_rate = TRUE)
+head(data_PERF_Rate)
+tapply(data_PERF_Rate$Nb_adults,list(data_PERF_Rate$Original_environment,
+                                     data_PERF_Rate$Generation),length)
+
+tapply(data_PERF_Rate$Rate,data_PERF_Rate$Generation,mean)
+
+## To test Rate higher than 1
+# data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv", 
+#                          trait = "performance",
+#                          remove_testenvt = c("Grape","GF"), 
+#                          remove_pop = c("WT3"), 
+#                          remove_rate = NA)
+# #Replace Rate>1 by 1
+# data_PERF_Rate$Rate[data_PERF_Rate$Nb_adults>=data_PERF_Rate$Nb_eggs] <- 1
+
+###########################
+#PREFERENCE 
+###########################
+data_PREF <- import_data(dataset = "DATACOMPLET_PREF.csv", 
+                         trait = "preference",
+                         remove_testenvt = NA, 
+                         remove_pop = c("WT3"), 
+                         remove_rate = NA)
+
+head(data_PREF)
+tapply(data_PREF$Nb_eggs,list(data_PREF$Original_environment,data_PREF$Generation),length)
+
+
+
+###########################
+#PREFERENCE 3 fruits
+###########################
+levels_test<-levels(data_PREF$Test_environment)
+levels_original<-levels(data_PREF$Original_environment)
+
+
+data_PREF_three <- import_data(dataset = "DATACOMPLET_PREF.csv", 
+                         trait = "preference",
+                         remove_testenvt = usefun::outersect(levels_test, 
+                                                             levels_original), 
+                         remove_pop = c("WT3"), 
+                         remove_rate = NA)
+
+head(data_PREF_three)
+tapply(data_PREF_three$Nb_eggs,list(data_PREF_three$Original_environment,
+                                    data_PREF_three$Generation),length)
+
+resume_design<-tapply(as.factor(data_PREF_three$BoxID),list(data_PREF_three$Population,
+                                  data_PREF_three$Generation),length)
+mean(resume_design[,1], na.rm = TRUE)/3
+mean(resume_design[,2], na.rm = TRUE)/3
+
+resume_design<-tapply(data_PERF$Nb_eggs,list(data_PERF$Population,
+                                  data_PERF$Generation),length)
+mean(resume_design[,1], na.rm = TRUE)/3
+mean(resume_design[,2], na.rm = TRUE)/3
+
+dim(data_PREF_three)
+dim(data_PREF)
+head(data_PREF)
+
+
+levels(data_PREF$Population)
+```
+
+
+
+
+# Oviposition stimualtion
+```{r }
+
+(PLOT_eggs_G0 <- plot_RTP_realdata(dataset = data_PERF, trait = "Nb_eggs", gen = "G0"))
+(PLOT_eggs_G2 <- plot_RTP_realdata(dataset = data_PERF, trait = "Nb_eggs", gen = "G2"))
+
+
+
+###PLOT 
+(PAIR_BLACK_CHERRY_EGGS <- plot_PairwisePOP_realdata(dataset = data_PERF, 
+                                                           trait = "Nb_eggs", gen = "Both", 
+                                                           fruit1 = "Cherry", fruit2 = "Blackberry"))
+
+(PAIR_CHERRY_STRAW_EGGS  <- plot_PairwisePOP_realdata(dataset = data_PERF, 
+                                                            trait = "Nb_eggs", gen = "Both",
+                                                            fruit1 = "Strawberry", fruit2 = "Cherry"))
+
+(PAIR_STRW_BLACK_EGGS  <- plot_PairwisePOP_realdata(dataset = data_PERF, 
+                                                          trait = "Nb_eggs", gen = "Both",
+                                                          fruit1 = "Blackberry", 
+                                                     fruit2 = "Strawberry"))
+```
+
+
+
+# Egg-to-adult survival
+```{r }
+
+(PLOT_rate_G0 <- plot_RTP_realdata(dataset = data_PERF_Rate, trait = "Rate", gen = "G0"))
+(PLOT_rate_G2 <- plot_RTP_realdata(dataset = data_PERF_Rate, trait = "Rate", gen = "G2"))
+
+
+
+## Heterogeneity across populations
+(PAIR_BLACK_CHERRY_RATE <- plot_PairwisePOP_realdata(dataset = data_PERF_Rate, 
+                                                      trait = "Rate", 
+                                                      gen = "Both", 
+                                                      fruit1 = "Cherry", 
+                                                      fruit2 = "Blackberry"))
+
+(PAIR_CHERRY_STRAW_RATE <- plot_PairwisePOP_realdata(dataset = data_PERF_Rate, 
+                                                      trait = "Rate", 
+                                                      gen = "Both", 
+                                                      fruit1 = "Strawberry", 
+                                                      fruit2 = "Cherry"))
+
+(PAIR_STRW_BLACK_RATE <- plot_PairwisePOP_realdata(dataset = data_PERF_Rate, 
+                                                    trait = "Rate", 
+                                                    gen = "Both",
+                                                    fruit1 = "Blackberry", 
+                                                    fruit2 = "Strawberry"))
+```
+
+# Preference
+```{r }
+
+(PLOT_pref_G0 <- plot_RTP_realdata(dataset = data_PREF_three, 
+                                    trait = "Nb_eggs", gen = "G0"))
+(PLOT_pref_G2 <- plot_RTP_realdata(dataset = data_PREF_three, 
+                                    trait = "Nb_eggs", gen = "G2"))
+
+
+
+
+
+
+###PLOT 
+(PAIR_BLACK_CHERRY_PREF <- plot_PairwisePOP_realdata(dataset = data_PREF_three,
+                                                      trait = "Nb_eggs", 
+                                                      gen = "Both", 
+                                                      fruit1 = "Cherry", 
+                                                      fruit2 = "Blackberry"))
+
+(PAIR_CHERRY_STRAW_PREF  <- plot_PairwisePOP_realdata(dataset = data_PREF_three, 
+                                                       trait = "Nb_eggs", 
+                                                       gen = "Both",
+                                                       fruit1 = "Strawberry", 
+                                                       fruit2 = "Cherry"))
+
+(PAIR_STRW_BLACK_PREF  <- plot_PairwisePOP_realdata(dataset = data_PREF_three, 
+                                                     trait = "Nb_eggs", 
+                                                     gen = "Both",
+                                                     fruit1 = "Blackberry", 
+                                                     fruit2 = "Strawberry"))
+```
+
+
+
+# PLOT LOCAL ADAPTATION
+```{r }
+legend <- lemon::g_legend(PLOT_pref_G0)
+
+
+
+## ALL GENERATIONS 
+LOCAL_ADAPTATION_PLOT_REALDATA <- cowplot::ggdraw() + 
+  cowplot::draw_plot(PLOT_pref_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
+  cowplot::draw_plot(PLOT_eggs_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
+  cowplot::draw_plot(PLOT_rate_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
+  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
+  cowplot::draw_plot(PLOT_pref_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.01, y = 0, width = 0.25, height = 0.45) + 
+  cowplot::draw_plot(PLOT_eggs_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.31, y = 0, width = 0.25, height = 0.45) + 
+  cowplot::draw_plot(PLOT_rate_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.61, y = 0, width = 0.25, height = 0.45) + 
+  cowplot::draw_plot_label(c("Generation: G0", "A", "B", "C", " ",
+                    "Generation: G2", "D", "E", "F", " "),  
+                  x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
+                  y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
+                  hjust = c(0,0,0,0,0,0,0,0,0,0), 
+                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+                  size = 16) 
+ LOCAL_ADAPTATION_PLOT_REALDATA
+
+ 
+ # cowplot::save_plot(file =here::here("figures", "Supplements_Local_Adaptation_Data.pdf"),
+ #                   LOCAL_ADAPTATION_PLOT_REALDATA,
+ #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+ # 
+
+
+```
+
+
+
+
+# PLOT HETEROGENEITY
+```{r }
+
+legend <- lemon::g_legend(PAIR_CHERRY_STRAW_PREF)
+
+  
+############## ALL GENERATION 
+HETEROGENEITY_PLOT_REALDATA <- cowplot::ggdraw() +
+  cowplot::draw_plot(PAIR_BLACK_CHERRY_PREF+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0, y = 0.66, width = 0.28, height = 0.28) +
+  cowplot::draw_plot(PAIR_CHERRY_STRAW_PREF+theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.30, y = 0.66, width = 0.28, height = 0.28) +
+  cowplot::draw_plot(PAIR_STRW_BLACK_PREF+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0.60, y = 0.66, width = 0.28, height = 0.28) +    
+  #cowplot::draw_plot(legend, x = 0.85, y = 0.8, width = 0.0001, height = 0.0001) +
+  cowplot::draw_plot(PAIR_BLACK_CHERRY_EGGS+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0, y = 0.33, width = 0.28, height = 0.28) +
+  cowplot::draw_plot(PAIR_CHERRY_STRAW_EGGS+theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.30, y = 0.33, width = 0.28, height = 0.28) +
+  cowplot::draw_plot(PAIR_STRW_BLACK_EGGS+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0.60, y = 0.33, width = 0.28, height = 0.28) +    
+  cowplot::draw_plot(PAIR_BLACK_CHERRY_RATE+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0, y = 0, width = 0.28, height = 0.28) +
+  cowplot::draw_plot(PAIR_CHERRY_STRAW_RATE+theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.30, y = 0, width = 0.28, height = 0.28) +
+  cowplot::draw_plot(PAIR_STRW_BLACK_RATE+theme(legend.position = "none", 
+                                        plot.title = element_blank()),
+            x = 0.60, y = 0, width = 0.28, height = 0.28) +    
+  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001)  + 
+  cowplot::draw_plot_label(c("Oviposition preference", 
+                             "Oviposition stimulation", 
+                             "Egg-to-adult survival"),  
+                  x = c(0.48,0.48,0.48), 
+                  y = c(0.96, 0.63, 0.29), 
+                  hjust = c(0.5,0.5,0.5), 
+                  vjust = c(0.5,0.5,0.5),
+                  size = 16) 
+HETEROGENEITY_PLOT_REALDATA
+# 
+cowplot::save_plot(file =here::here("figures","Supplement_Heterogeneity_Data.pdf"),
+                  HETEROGENEITY_PLOT_REALDATA, base_height = 30/cm(1),
+                  base_width = 30/cm(1), dpi = 1200)
+
+
+```
+
+
+
