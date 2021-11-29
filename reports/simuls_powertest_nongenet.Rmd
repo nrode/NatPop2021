@@ -292,7 +292,7 @@ power_test <- ggplot2::ggplot(data = data_prop, aes(x=val_SAng)) +
   geom_vline(xintercept = 0.03152, linetype = "dashed", color = "red", size = 0.5) + 
   ylab("Proportion of simulations with\nsignificant adaptive phenotypic plasticity")  +
   xlab("Intensity of SA plastic")  +
-  ggtitle("Egg-to-adult viability")  +
+  ggtitle("Egg-to-adult survival")  +
   labs(color = "Power test") +
   scale_color_manual(values = colors) +
   ylim(0,1) +
