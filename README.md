@@ -11,7 +11,8 @@ output:
 # Description
 
 
-This research compendium describes how to analyze fitness data from an experimental evolution experiment conducted in D. suzukii from 2017 to 2019 [here](https://https://github.com/nrode/AnalysisEvolExp2020).
+This research compendium describes how to analyze data from experiment conducted in D. suzukii [here](https://github.com/nrode/NatPop2021).
+
 
 ## Contents
 
