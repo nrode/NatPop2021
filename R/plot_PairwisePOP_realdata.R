@@ -366,15 +366,6 @@ plot_PairwisePOP_realdata <- function(dataset = data_PERF_Rate, trait = "Rate", 
         geom_vline(xintercept = 0, linetype = "dashed", color = "grey")+
         geom_hline(yintercept = 0, linetype = "dashed", color = "grey") +
         geom_point(size=3, stroke=1.3) + 
-        #guides(fill = FALSE) +
-        # geom_text(x = x_lim, y = y_lim, 
-        #           label = eq_rho_G0,
-        #           parse = TRUE, 
-        #           color="black", size = 3.5, hjust = 0) +
-        # geom_text(x = x_lim, y = y_lim2, 
-        #           label = eq_rho_G2,
-        #           parse = TRUE, 
-        #           color="black", size = 3.5, hjust = 0) +
         xlab(xaxis_labelprint)  +
         ylab(yaxis_labelprint)  +
         ggtitle(plot_title) +
@@ -382,7 +373,7 @@ plot_PairwisePOP_realdata <- function(dataset = data_PERF_Rate, trait = "Rate", 
                            breaks=c("Cherry", "Strawberry","Blackberry"),
                            labels=c("Cherry","Strawberry","Blackberry"),
                            values=c("#BC3C6D","#3FAA96", "#301934")) +
-        scale_shape_manual(values = c(21,16)) +
+        scale_shape_manual(labels = c("G0/G1", "G2/G3"), values = c(21,16)) +
         theme_LO_sober + 
         theme(panel.grid.major.y = element_blank(),
               panel.grid.minor.y = element_blank(),

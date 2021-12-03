@@ -1048,63 +1048,63 @@ rsqng <- 1-anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+a
 # PLOT LOCAL ADAPTATION
 ```{r }
 legend <- lemon::g_legend(PLOT_pref_G0)
-
-############## FIRST GENERATION 
-LOCAL_ADAPTATION_PLOT_FRST <- cowplot::ggdraw() +
-  cowplot::draw_plot(PLOT_eggs_G0+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x =0, y = 0.5, width = 0.36, height = 0.46) +
-  cowplot::draw_plot(PLOT_adult_G0+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.4, y = 0.5, width =0.36, height = 0.46) +
-  cowplot::draw_plot(PLOT_rate_G0+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x =0, y = 0, width = 0.36, height = 0.46) +
-  cowplot::draw_plot(PLOT_pref_G0+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.4, y = 0, width = 0.36, height = 0.46) +
-  cowplot::draw_plot(legend, x = 0.85, y = 0.5, width = 0.0001, height = 0.0001) +
-  cowplot::draw_plot_label(c("A", "B", "C", "D"), 
-                           c(0.01, 0.4,0.01, 0.4), 
-                  c(1, 1,0.5,0.5), size = 19)
-# + cowplot::draw_plot_label("First generation", x = 0.2, y = 1 , size = 14) 
-LOCAL_ADAPTATION_PLOT_FRST
-
-
-# cowplot::save_plot(file =here::here("figures","Reciprocal_experiment_FirstGeneration.pdf"),
-#                   LOCAL_ADAPTATION_PLOT_FRST, base_height = 20/cm(1),
-#                   base_width = 30/cm(1), dpi = 1200)
-
-
-############## THIRD GENERATION 
-LOCAL_ADAPTATION_PLOT_THIRD <- cowplot::ggdraw() +
-    cowplot::draw_plot(PLOT_eggs_G0+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x =0, y = 0.5, width = 0.36, height = 0.46) +
-  cowplot::draw_plot(PLOT_rate_G0+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.4, y = 0.5, width =0.36, height = 0.46) +
-  cowplot::draw_plot(PLOT_rate_G0+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x =0, y = 0, width = 0.36, height = 0.46) +
-  cowplot::draw_plot(PLOT_pref_G0+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x =0, y = 0.5, width = 0.36, height = 0.46) +
-  cowplot::draw_plot(PLOT_adult_G2+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.4, y = 0.5, width =0.36, height = 0.46) +
-  cowplot::draw_plot(PLOT_rate_G2+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x =0, y = 0, width = 0.36, height = 0.46) +
-  cowplot::draw_plot(PLOT_pref_G2+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.4, y = 0, width = 0.36, height = 0.46) +
-  cowplot::draw_plot(legend, x = 0.85, y = 0.5, width = 0.0001, height = 0.0001) +
-  cowplot::draw_plot_label(c("A", "B", "C", "D"), 
-                           c(0.01, 0.4,0.01, 0.4), 
-                  c(1, 1,0.5,0.5), size = 19)
-LOCAL_ADAPTATION_PLOT_THIRD
 # 
+# ############## FIRST GENERATION 
+# LOCAL_ADAPTATION_PLOT_FRST <- cowplot::ggdraw() +
+#   cowplot::draw_plot(PLOT_eggs_G0+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x =0, y = 0.5, width = 0.36, height = 0.46) +
+#   cowplot::draw_plot(PLOT_adult_G0+theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.4, y = 0.5, width =0.36, height = 0.46) +
+#   cowplot::draw_plot(PLOT_rate_G0+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x =0, y = 0, width = 0.36, height = 0.46) +
+#   cowplot::draw_plot(PLOT_pref_G0+theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.4, y = 0, width = 0.36, height = 0.46) +
+#   cowplot::draw_plot(legend, x = 0.85, y = 0.5, width = 0.0001, height = 0.0001) +
+#   cowplot::draw_plot_label(c("A", "B", "C", "D"), 
+#                            c(0.01, 0.4,0.01, 0.4), 
+#                   c(1, 1,0.5,0.5), size = 19)
+# # + cowplot::draw_plot_label("First generation", x = 0.2, y = 1 , size = 14) 
+# LOCAL_ADAPTATION_PLOT_FRST
+# 
+# 
+# # cowplot::save_plot(file =here::here("figures","Reciprocal_experiment_FirstGeneration.pdf"),
+# #                   LOCAL_ADAPTATION_PLOT_FRST, base_height = 20/cm(1),
+# #                   base_width = 30/cm(1), dpi = 1200)
+# 
+# 
+# ############## THIRD GENERATION 
+# LOCAL_ADAPTATION_PLOT_THIRD <- cowplot::ggdraw() +
+#     cowplot::draw_plot(PLOT_eggs_G0+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x =0, y = 0.5, width = 0.36, height = 0.46) +
+#   cowplot::draw_plot(PLOT_rate_G0+theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.4, y = 0.5, width =0.36, height = 0.46) +
+#   cowplot::draw_plot(PLOT_rate_G0+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x =0, y = 0, width = 0.36, height = 0.46) +
+#   cowplot::draw_plot(PLOT_pref_G0+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x =0, y = 0.5, width = 0.36, height = 0.46) +
+#   cowplot::draw_plot(PLOT_adult_G2+theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.4, y = 0.5, width =0.36, height = 0.46) +
+#   cowplot::draw_plot(PLOT_rate_G2+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x =0, y = 0, width = 0.36, height = 0.46) +
+#   cowplot::draw_plot(PLOT_pref_G2+theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.4, y = 0, width = 0.36, height = 0.46) +
+#   cowplot::draw_plot(legend, x = 0.85, y = 0.5, width = 0.0001, height = 0.0001) +
+#   cowplot::draw_plot_label(c("A", "B", "C", "D"), 
+#                            c(0.01, 0.4,0.01, 0.4), 
+#                   c(1, 1,0.5,0.5), size = 19)
+# LOCAL_ADAPTATION_PLOT_THIRD
+# # 
 # 
 # cowplot::save_plot(file = here::here("figures","Reciprocal_experiment_ThirdGeneration.pdf"),
 #                   LOCAL_ADAPTATION_PLOT_THIRD, base_height = 20/cm(1),
@@ -1134,21 +1134,30 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
   cowplot::draw_plot(PLOT_rate_G2 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.61, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot_label(c("Generation: G0", "A", "B", "C", " ",
-                    "Generation: G2", "D", "E", "F", " "),  
-                  x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
-                  y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
-                  hjust = c(0,0,0,0,0,0,0,0,0,0), 
-                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+  cowplot::draw_plot_label(c("Generation: G0","Generation: G0","Generation: G1", "A", "B", "C", " ",
+                    "Generation: G2","Generation: G2","Generation: G3", "D", "E", "F", " "),  
+                  x = c(0.1,0.4,0.7, 0.01, 0.30, 0.61, 0.92, 0.10,0.4,0.7, 0.01, 0.3, 0.61, 0.92), 
+                  y = c(1,1,1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.5, 0.5, 0.48, 0.48, 0.48, 0.48), 
+                  hjust = c(0,0,0,0,0,0,0,0,0,0,0,0,0,0), 
+                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
                   size = 16) 
  LOCAL_ADAPTATION_PLOT
 
  
- # cowplot::save_plot(file =here::here("figures", "LOCAL_ADAPTATION_G0_G2.pdf"),
- #                   LOCAL_ADAPTATION_PLOT,
- #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+ cowplot::save_plot(file =here::here("figures", "LOCAL_ADAPTATION_G0_G2.pdf"),
+                   LOCAL_ADAPTATION_PLOT,
+                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
 
 
+ 
+ #A tej: 
+   # cowplot::draw_plot_label(c("Generation: G0", "A", "B", "C", " ",
+   #                  "Generation: G2", "D", "E", "F", " "),  
+   #                x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
+   #                y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
+   #                hjust = c(0,0,0,0,0,0,0,0,0,0), 
+   #                vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+   #                size = 16) 
 
 ```
 

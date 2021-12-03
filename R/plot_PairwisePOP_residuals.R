@@ -243,7 +243,19 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
                                                        weights = N, 
                                                        ci.lvl = 0.95)
       rho_g2 <- as.numeric(weightedcor_G2$estimate[1])
-      
+      if("Rate" %in% colnames(dataset) && trait == "Rate"){
+        eq_rho_G0 <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcorG0~"["~infg0~";"~supg0~"]",
+                                                           list(generation = "G1",
+                                                                weightedcorG0 = format(rho_g0, digits = 2), 
+                                                                infg0 = format(weightedcor_G0$ci[1], digits = 1),
+                                                                supg0 = format(weightedcor_G0$ci[2], digits = 1)))))
+        eq_rho_G2 <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcorG2~"["~infg2~";"~supg2~"]",
+                                                           list(generation = "G3",
+                                                                weightedcorG2 = format(rho_g2, digits = 2), 
+                                                                infg2 = format(weightedcor_G2$ci[1], digits = 1),
+                                                                supg2 = format(weightedcor_G2$ci[2], digits = 1)))))
+        
+      }else{
       eq_rho_G0 <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcorG0~"["~infg0~";"~supg0~"]",
                                                       list(generation = "G0",
                                                            weightedcorG0 = format(rho_g0, digits = 2), 
@@ -254,7 +266,7 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
                                                               weightedcorG2 = format(rho_g2, digits = 2), 
                                                               infg2 = format(weightedcor_G2$ci[1], digits = 1),
                                                               supg2 = format(weightedcor_G2$ci[2], digits = 1)))))
-      
+      }
       
     }else {
       print("Error: unknown generation")
@@ -382,7 +394,7 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
                            breaks=c("Cherry", "Strawberry","Blackberry"),
                            labels=c("Cherry","Strawberry","Blackberry"),
                            values=c("#BC3C6D","#3FAA96", "#301934")) +
-        scale_shape_manual(values = c(21,16)) +
+        scale_shape_manual(labels = c("G0/G1", "G2/G3"), values = c(21,16)) +
         theme_LO_sober + 
         theme(panel.grid.major.y = element_blank(),
               panel.grid.minor.y = element_blank(),
