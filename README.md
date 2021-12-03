@@ -11,8 +11,7 @@ output:
 # Description
 
 
-This research compendium describes how to analyze fecundity, egg-to-adult viability and oviposition preference data
-    from an experiment conducted in D. suzukii in 2019. [here](https://github.com/nrode/NatPop2021).
+This research compendium describes how to analyze fecundity, egg-to-adult viability and oviposition preference data from an experiment conducted in D. suzukii in 2018. [here](https://github.com/nrode/NatPop2021).
 
 
 ## Contents
