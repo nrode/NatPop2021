@@ -1414,23 +1414,23 @@ PLOT_Strawberry_Stim_G0 <- plot_RelationTraits_residuals(gen = "G0",
  RELATION_TRAITS_Stimulation_G0G2 <- cowplot::ggdraw() + 
   cowplot::draw_plot(PLOT_Blackberry_Stim_G0 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
-            x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
+            x = 0.01, y = 0.5, width = 0.24, height = 0.43) + 
   cowplot::draw_plot(PLOT_Cherry_Stim_G0 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
-            x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
+            x = 0.31, y = 0.5, width = 0.24, height = 0.43) + 
   cowplot::draw_plot(PLOT_Strawberry_Stim_G0 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
-            x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
+            x = 0.61, y = 0.5, width = 0.24, height = 0.43) + 
   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
   cowplot::draw_plot(PLOT_Blackberry_Stim + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
-            x = 0.01, y = 0, width = 0.25, height = 0.45) + 
+            x = 0.01, y = 0, width = 0.24, height = 0.43) + 
   cowplot::draw_plot(PLOT_Cherry_Stim + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
-            x = 0.31, y = 0, width = 0.25, height = 0.45) + 
+            x = 0.31, y = 0, width = 0.24, height = 0.43) + 
   cowplot::draw_plot(PLOT_Strawberry_Stim + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
-            x = 0.61, y = 0, width = 0.25, height = 0.45) + 
+            x = 0.61, y = 0, width = 0.24, height = 0.43) + 
   cowplot::draw_plot_label(c("Generation: G0/G1", "A", "B", "C", " ",
                     "Generation: G2/G3", "D", "E", "F", " "),  
                   x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 

@@ -164,21 +164,59 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
   }
   
   #coordinates of equation 
-  if (gen == "G0" | gen == "G2") {
-    ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.99
-    xmax <- max(TEMP_SUM_FRUIT$Resid_eggs)*0.3    
+  if (gen == "G0") {
+    if (trait2 == "Preference"){
+      if(fruit=="Cherry") {
+        ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.83
+        }else{
+        if(fruit=="Strawberry") {        
+        ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.83
+        }else{
+          if(fruit=="Blackberry"){
+            ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.83}}}
+    }else{
+      if(fruit=="Cherry") {
+        ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.83
+      }else{
+        if(fruit=="Strawberry") {        
+          ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.83
+        }else{
+          if(fruit=="Blackberry"){
+            ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.83}}}
+    }
   }else{
-    
+    if (gen == "G2") {
+      if (trait2 == "Preference"){      
+        if(fruit=="Cherry") {
+          ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.88
+        }else{
+          if(fruit=="Strawberry") {        
+            ymax <- -0.08
+          }else{
+            if(fruit=="Blackberry"){
+              ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.88}}}
+      }else{
+        if(fruit=="Cherry") {
+          ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.88
+          }else{
+          if(fruit=="Strawberry") {        
+            ymax <- -0.08
+          }else{
+            if(fruit=="Blackberry"){
+              ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.88}}}
+      }
+  }else{
     if (gen == "Both") {
-      ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.99
-      xmax <- max(TEMP_SUM_FRUIT$Resid_eggs)*0.3
+      ymax <- max(TEMP_SUM_FRUIT$Resid_rate)*0.9
       ymax2 <- max(TEMP_SUM_FRUIT$Resid_rate)*0.9
-      xmax2 <- max(TEMP_SUM_FRUIT$Resid_eggs)*0.3
+      xmax2 <- min(TEMP_SUM_FRUIT$Resid_eggs)*1.1
     }else{
       print("Error: unknown generation")
     }
   }
-
+  }
+  
+  xmax <- min(TEMP_SUM_FRUIT$Resid_eggs)*0.8
   
   #Plot
   if (gen == "G0") {
@@ -195,7 +233,7 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
       geom_text(x = xmax, y = ymax,
                 label = eq_rho,
                 parse = TRUE,
-                color="black", size = 3.5) +
+                color="black", size = 3.5, hjust = 0) +
       ggtitle(plot_title) +
       scale_color_manual(name="Fly populations from:",   
                          breaks=c("Cherry", "Strawberry","Blackberry"),
@@ -223,7 +261,7 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
         geom_text(x = xmax, y = ymax,
                   label = eq_rho,
                   parse = TRUE,
-                  color="black", size = 3.5) +
+                  color="black", size = 3.5, hjust = 0) +
         ggtitle(plot_title) +
         scale_color_manual(name="Fly populations from:",   
                            breaks=c("Cherry", "Strawberry","Blackberry"),
