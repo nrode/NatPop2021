@@ -279,12 +279,12 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
       if(fruit1=="Strawberry") {x_lim = -0.4}else{
         if(fruit1=="Blackberry"){x_lim = -0.45}}}
     
-    if(fruit1=="Cherry") {y_lim = 0.68
-    y_lim2 = 0.8}else{
+    if(fruit1=="Cherry") {y_lim = 0.82
+    y_lim2 = 0.67}else{
       if(fruit1=="Strawberry") {y_lim = 1.12
     y_lim2 = 1}else{
-      if(fruit1=="Blackberry") {y_lim =  0.6
-    y_lim2 = 0.72}}}
+      if(fruit1=="Blackberry") {y_lim =  0.79
+    y_lim2 = 0.6}}}
 
     
       }else{
@@ -304,9 +304,12 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
             if(fruit1=="Blackberry"){x_lim = -0.22}}}
         
         
-        if(fruit1=="Cherry") {y_lim = 0.555
-          y_lim2 = 0.48}else{if(fruit1=="Strawberry") {y_lim = 0.31
-            y_lim2 = 0.25}else{if(fruit1=="Blackberry") {y_lim = 0.85
+        if(fruit1=="Cherry") {y_lim = 0.60
+          y_lim2 = 0.47}else{
+            if(fruit1=="Strawberry") {y_lim = 0.4
+            y_lim2 = 0.28
+            }else{
+              if(fruit1=="Blackberry") {y_lim = 0.85
             y_lim2 = 0.75}}}
  
         
@@ -323,11 +326,11 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
               if(fruit1=="Blackberry"){x_lim = -1.2}}}
    
           
-          if(fruit1=="Cherry") {y_lim = 0.78
-          y_lim2 = 0.6}else{
-            if(fruit1=="Strawberry") {y_lim = 1.35
-          y_lim2 =  1.2}else{
-            if(fruit1=="Blackberry") {y_lim =  1.45
+          if(fruit1=="Cherry") {y_lim = 0.8
+          y_lim2 = 0.58}else{
+            if(fruit1=="Strawberry") {y_lim = 1.4
+          y_lim2 =  1.45}else{
+            if(fruit1=="Blackberry") {y_lim =  1.5
           y_lim2 = 1.3}}}
           
           
@@ -377,16 +380,15 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
                               shape = Generation)) +
         geom_vline(xintercept = 0, linetype = "dashed", color = "grey")+
         geom_hline(yintercept = 0, linetype = "dashed", color = "grey") +
+        geom_label(x = x_lim, y = y_lim, 
+                  label = eq_rho_G0, fill="white",label.size = NA,
+                  parse = TRUE, 
+                  color="black", size = 3.5, hjust = 0) +
+        geom_label(x = x_lim, y = y_lim2, 
+                  label = eq_rho_G2,fill="white", label.size = NA,
+                  parse = TRUE, 
+                  color="black", size = 3.5, hjust = 0) +
         geom_point(size=3, stroke=1.3) + 
-        #guides(fill = FALSE) +
-        geom_text(x = x_lim, y = y_lim, 
-                  label = eq_rho_G0,
-                  parse = TRUE, 
-                  color="black", size = 3.5, hjust = 0) +
-        geom_text(x = x_lim, y = y_lim2, 
-                  label = eq_rho_G2,
-                  parse = TRUE, 
-                  color="black", size = 3.5, hjust = 0) +
         xlab(xaxis_labelprint)  +
         ylab(yaxis_labelprint)  +
         ggtitle(plot_title) +

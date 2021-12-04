@@ -1007,9 +1007,9 @@ rsqng <- 1-anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+a
 
 
 # ###PLOT 
-# (PAIR_BLACK_CHERRY_G2_PREF <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
-#                                                            trait = "Nb_eggs", gen = "G2", 
-#                                                            fruit1 = "Cherry", fruit2 = "Blackberry"))
+(PAIR_BLACK_CHERRY_G2_PREF <- plot_PairwisePOP_residuals(dataset = data_PREF_three,
+                                  trait = "Nb_eggs", gen = "G2",
+                                  fruit1 = "Cherry", fruit2 = "Blackberry"))
 # 
 # (PAIR_CHERRY_STRAW_G2_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
 #                                                             trait = "Nb_eggs", gen = "G2",
@@ -1144,10 +1144,10 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
  LOCAL_ADAPTATION_PLOT
 
  
- cowplot::save_plot(file =here::here("figures", "LOCAL_ADAPTATION_G0_G2.pdf"),
-                   LOCAL_ADAPTATION_PLOT,
-                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
-
+ # cowplot::save_plot(file =here::here("figures", "LOCAL_ADAPTATION_G0_G2.pdf"),
+ #                   LOCAL_ADAPTATION_PLOT,
+ #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+ # 
 
  
  #A tej: 
@@ -1212,7 +1212,7 @@ Genetic_NonGenetic_PLOT <- cowplot::ggdraw() +
 # PLOT HETEROGENEITY
 ```{r }
 
-legend <- lemon::g_legend(PAIR_CHERRY_STRAW_G2_PREF)
+legend <- lemon::g_legend(PAIR_BLACK_CHERRY_G2_PREF)
 
 # ############## THIRD GENERATION 
 # HETEROGENEITY_PLOT_THIRD <- cowplot::ggdraw() +
@@ -1307,7 +1307,7 @@ HETEROGENEITY_PLOT <- cowplot::ggdraw() +
                   vjust = c(0.5,0.5,0.5),
                   size = 16) 
 #HETEROGENEITY_PLOT
-
+# 
 # 
 # cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop.pdf"),
 #                   HETEROGENEITY_PLOT, base_height = 30/cm(1),
@@ -1346,7 +1346,7 @@ PLOT_Strawberry_G0 <- plot_RelationTraits_residuals(gen = "G0",
                                                 fruit = "Strawberry", 
                                                 trait2 = "Preference")
 
-legend <- lemon::g_legend(PLOT_Strawberry_Stim)
+legend <- lemon::g_legend(PLOT_Strawberry_G0)
 
 
 
@@ -1381,12 +1381,12 @@ legend <- lemon::g_legend(PLOT_Strawberry_Stim)
  RELATION_TRAITS_G0G2
  
  
- 
-cowplot::save_plot(file =here::here("figures", "RELATION_TRAITS_G0G2.pdf"),
-                  RELATION_TRAITS_G0G2,
-                  base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
- 
- 
+#  
+# cowplot::save_plot(file =here::here("figures", "RELATION_TRAITS_G0G2.pdf"),
+#                   RELATION_TRAITS_G0G2,
+#                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+#  
+#  
 
 
 ##### With stimulation 
@@ -1441,9 +1441,9 @@ PLOT_Strawberry_Stim_G0 <- plot_RelationTraits_residuals(gen = "G0",
  RELATION_TRAITS_Stimulation_G0G2
 
 
-cowplot::save_plot(file =here::here("figures", "RELATION_TRAITS_Stimulation_G0G2.pdf"),
-                  RELATION_TRAITS_Stimulation_G0G2,
-                  base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+# cowplot::save_plot(file =here::here("figures", "RELATION_TRAITS_Stimulation_G0G2.pdf"),
+#                   RELATION_TRAITS_Stimulation_G0G2,
+#                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
 
 ```
 
