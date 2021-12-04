@@ -54,28 +54,6 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
   
   
   
-  # ######### MODELS
-  # #Extract resid 
-  # if (gen == "G0" | gen == "G2") {
-  #   lm_resid <- lm(asin(sqrt(data$Rate)) ~ Test_environment + Population, data = data)
-  #   data$Resid_rate <- residuals(lm_resid)
-  #   lm_resid <- lm(log(Nb_eggs+1) ~ Test_environment + Population, data = data)
-  #   data$Resid_eggs <- residuals(lm_resid)
-  #   lm_resid <- lm(log(Nb_eggs+1) ~ Test_environment + Population, data = data2)
-  #   data2$Resid_eggs <- residuals(lm_resid)
-  # }else{
-  #   if (gen == "Both") {
-  #     lm_resid <- lm(asin(sqrt(data$Rate)) ~ hab_gen + pop_gen, data = data)
-  #     data$Resid_rate <- residuals(lm_resid)
-  #     lm_resid <- lm(log(Nb_eggs+1) ~ hab_gen + pop_gen, data = data)
-  #     data$Resid_eggs <- residuals(lm_resid)
-  #     lm_resid <- lm(log(Nb_eggs+1) ~ hab_gen + pop_gen, data = data2)
-  #     data2$Resid_eggs <- residuals(lm_resid)
-  #   }else {
-  #     print("Error: unknown generation")
-  #   }
-  # }  
-  
   ######### Dataset summary
   TEMP_SUM_Rate <- Rmisc::summarySE(data,
                                measurevar="Resid_rate",
@@ -147,7 +125,7 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
                                                   ci.lvl = 0.95)
     rho <- as.numeric(weightedcor$estimate[1])
     eq_rho <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcor~"["~inf~";"~sup~"]",
-                                                    list(generation = ifelse(gen=="G0", "G0","G2"),
+                                                    list(generation = ifelse(gen=="G0", "G0/G1","G2/G3"),
                                                          weightedcor = format(rho, digits = 2, nsmall=2), 
                                                          inf = format(weightedcor$ci[1], digits = 2),
                                                          sup = format(weightedcor$ci[2], digits = 2)))))
@@ -169,19 +147,17 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
                                                        weights = N, 
                                                        ci.lvl = 0.95)
       rho_g2 <- as.numeric(weightedcor_G2$estimate[1])
-      
-      eq_rho_G0 <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcorG0~"["~infg0~";"~supg0~"]",
-                                                         list(generation = "G0",
+     eq_rho_G0 <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcorG0~"["~infg0~";"~supg0~"]",
+                                                         list(generation = "G0/G1",
                                                               weightedcorG0 = format(rho_g0, digits = 2), 
                                                               infg0 = format(weightedcor_G0$ci[1], digits = 1),
                                                               supg0 = format(weightedcor_G0$ci[2], digits = 1)))))
       eq_rho_G2 <- as.character(as.expression(substitute(~~italic(rho)[generation]~"="~weightedcorG2~"["~infg2~";"~supg2~"]",
-                                                         list(generation = "G2",
+                                                         list(generation = "G2/G3",
                                                               weightedcorG2 = format(rho_g2, digits = 2), 
                                                               infg2 = format(weightedcor_G2$ci[1], digits = 1),
                                                               supg2 = format(weightedcor_G2$ci[2], digits = 1)))))
-      
-      
+  
     }else {
       print("Error: unknown generation")
     }
@@ -205,14 +181,14 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
 
   
   #Plot
-  if (gen == "G0" | gen == "G2") {
+  if (gen == "G0") {
     plot_pair <- ggplot(data = TEMP_SUM_FRUIT,
                         aes(x = Resid_eggs, 
                             y = Resid_rate, 
                             color = Original_environment)) +
       geom_vline(xintercept = 0, linetype ="dashed", color = "grey")+
       geom_hline(yintercept = 0, linetype ="dashed", color = "grey") +
-      geom_point(size=3, stroke=1.3) + 
+      geom_point(size=2.8, stroke=1.3, shape = 21) + 
       #guides(fill = FALSE) +
       xlab(xaxis_labelprint)  +
       ylab(yaxis_labelprint)  +
@@ -233,6 +209,34 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
     #plot_pair
     
   }else{
+    if (gen == "G2") {
+      plot_pair <- ggplot(data = TEMP_SUM_FRUIT,
+                          aes(x = Resid_eggs, 
+                              y = Resid_rate, 
+                              color = Original_environment)) +
+        geom_vline(xintercept = 0, linetype ="dashed", color = "grey")+
+        geom_hline(yintercept = 0, linetype ="dashed", color = "grey") +
+        geom_point(size=2.8, stroke=1.3, shape = 16) + 
+        #guides(fill = FALSE) +
+        xlab(xaxis_labelprint)  +
+        ylab(yaxis_labelprint)  +
+        geom_text(x = xmax, y = ymax,
+                  label = eq_rho,
+                  parse = TRUE,
+                  color="black", size = 3.5) +
+        ggtitle(plot_title) +
+        scale_color_manual(name="Fly populations from:",   
+                           breaks=c("Cherry", "Strawberry","Blackberry"),
+                           labels=c("Cherry","Strawberry","Blackberry"),
+                           values=c("#BC3C6D","#3FAA96", "#301934")) +
+        theme_LO_sober + 
+        theme(panel.grid.major.y = element_blank(),
+              panel.grid.minor.y = element_blank(),
+              axis.title.x = element_text(colour = col),
+              axis.title.y = element_text(colour = col))
+      #plot_pair
+      
+    }else{
     if (gen == "Both") {
       plot_pair <- ggplot(data = TEMP_SUM_FRUIT,
                           aes(y = Resid_eggs, 
@@ -241,7 +245,7 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
                               shape = Generation)) +
         geom_vline(xintercept = 0, linetype = "dashed", color = "grey")+
         geom_hline(yintercept = 0, linetype = "dashed", color = "grey") +
-        geom_point(size=3, stroke=1.3) + 
+        geom_point(size=2.5, stroke=1.3) + 
         #guides(fill = FALSE) +
         geom_text(x = xmax, y = ymax,
                   label = eq_rho_G0,
@@ -269,7 +273,9 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
     }else {
       print("Error: unknown generation")
     }
+    }
   }
+  
   
   return(plot_pair) 
 }
