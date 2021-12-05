@@ -52,6 +52,19 @@ data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv",
                          remove_pop = c("WT3"), 
                          remove_rate = TRUE)
 
+## Model to extract value of our dataset
+m <- lme4::lmer(asin(sqrt(Rate)) ~ SA + SA*IndicG0 + Test_environment:Generation  +
+                    (1|Population:Test_environment) +
+                    (0 + lme4::dummy(Generation, "G0")|Population:Test_environment),
+                  data = data_PERF_Rate)
+#summary(m)
+
+
+#Extract SA value for later
+indic <- grep("SA",names(lme4::fixef(m)))
+SAcoef <- lme4::fixef(m)[indic]
+names(SAcoef) <- c("SAGen", "SANonGen")
+SAcoef
 
 ###########################
 #PREFERENCE 

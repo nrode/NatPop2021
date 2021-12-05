@@ -1020,20 +1020,16 @@ rsqng <- 1-anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+a
 #                                                           fruit1 = "Blackberry", fruit2 = "Strawberry"))
 
 
-
-###PLOT 
 (PAIR_BLACK_CHERRY_PREF <- plot_PairwisePOP_residuals(dataset = data_PREF_three,
                                                       trait = "Nb_eggs", 
                                                       gen = "Both", 
                                                       fruit1 = "Cherry", 
                                                       fruit2 = "Blackberry"))
-
 (PAIR_CHERRY_STRAW_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
                                                        trait = "Nb_eggs", 
                                                        gen = "Both",
                                                        fruit1 = "Strawberry", 
                                                        fruit2 = "Cherry"))
-
 (PAIR_STRW_BLACK_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
                                                      trait = "Nb_eggs", 
                                                      gen = "Both",
@@ -1306,13 +1302,13 @@ HETEROGENEITY_PLOT <- cowplot::ggdraw() +
                   hjust = c(0.5,0.5,0.5), 
                   vjust = c(0.5,0.5,0.5),
                   size = 16) 
-#HETEROGENEITY_PLOT
-# 
-# 
+# HETEROGENEITY_PLOT
+# # 
+# # 
 # cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop.pdf"),
 #                   HETEROGENEITY_PLOT, base_height = 30/cm(1),
 #                   base_width = 30/cm(1), dpi = 1200)
-# 
+
 
 ```
 
