@@ -282,9 +282,9 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
     if(fruit1=="Cherry") {y_lim = 0.82
     y_lim2 = 0.67}else{
       if(fruit1=="Strawberry") {y_lim = 1.12
-    y_lim2 = 1}else{
-      if(fruit1=="Blackberry") {y_lim =  0.79
-    y_lim2 = 0.6}}}
+    y_lim2 = 0.99}else{
+      if(fruit1=="Blackberry") {y_lim =  0.78
+    y_lim2 = 0.62}}}
 
     
       }else{
@@ -300,38 +300,39 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
           }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
         if(fruit1=="Cherry") {x_lim = -0.3}else{
-          if(fruit1=="Strawberry") {x_lim = 0}else{
+          if(fruit1=="Strawberry") {x_lim = -0.09}else{
             if(fruit1=="Blackberry"){x_lim = -0.22}}}
         
         
-        if(fruit1=="Cherry") {y_lim = 0.60
-          y_lim2 = 0.47}else{
-            if(fruit1=="Strawberry") {y_lim = 0.4
-            y_lim2 = 0.28
+        if(fruit1=="Cherry") {y_lim = 0.58
+          y_lim2 = 0.49}else{
+            if(fruit1=="Strawberry") {y_lim = 0.30
+            y_lim2 = 0.24
             }else{
               if(fruit1=="Blackberry") {y_lim = 0.85
-            y_lim2 = 0.75}}}
+            y_lim2 = 0.74}}}
  
         
         
             }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
           dif<-0.05*(max(c(data_fruit1_fruit2$fruit2,
-                           data_fruit1_fruit2$fruit1), na.rm = TRUE)-min(c(data_fruit1_fruit2$fruit2,
-                                                                           data_fruit1_fruit2$fruit1), na.rm = TRUE))
+                           data_fruit1_fruit2$fruit1), na.rm = TRUE)-
+                       min(c(data_fruit1_fruit2$fruit2,
+                             data_fruit1_fruit2$fruit1), na.rm = TRUE))
           
     
           if(fruit1=="Cherry") {x_lim = 0}else{
-            if(fruit1=="Strawberry") {x_lim = -0.12}else{
+            if(fruit1=="Strawberry") {x_lim = -0.16}else{
               if(fruit1=="Blackberry"){x_lim = -1.2}}}
    
           
           if(fruit1=="Cherry") {y_lim = 0.8
-          y_lim2 = 0.58}else{
-            if(fruit1=="Strawberry") {y_lim = 1.4
-          y_lim2 =  1.45}else{
-            if(fruit1=="Blackberry") {y_lim =  1.5
-          y_lim2 = 1.3}}}
+          y_lim2 = 0.56}else{
+            if(fruit1=="Strawberry") {y_lim = 1.29
+          y_lim2 =  1.13}else{
+            if(fruit1=="Blackberry") {y_lim =  1.4
+          y_lim2 = 1.23}}}
           
           
             }else{
@@ -349,9 +350,9 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
                       aes(x = fruit1, 
                           y = fruit2, 
                           color = Original_environment)) +
+    geom_point(size=3, stroke=1.3) + 
     geom_vline(xintercept = 0, linetype ="dashed", color = "grey")+
     geom_hline(yintercept = 0, linetype ="dashed", color = "grey") +
-    geom_point(size=3, stroke=1.3) + 
     #guides(fill = FALSE) +
     xlab(xaxis_labelprint)  +
     ylab(yaxis_labelprint)  +
@@ -359,6 +360,7 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
               label = eq_rho,
               parse = TRUE, 
               color="black", size = 3.5) +
+    geom_point(size=3, stroke=1.3) + 
     ggtitle(plot_title) +
     scale_color_manual(name="Fly populations from:",   
                        breaks=c("Cherry", "Strawberry","Blackberry"),
