@@ -68,7 +68,7 @@ This research compendium has been developed using the statistical programming la
 installed on your computer the [R software](https://cloud.r-project.org/)
 itself and optionally [RStudio Desktop](https://rstudio.com/products/rstudio/download/).
 
-You can download the compendium by cloning this [repository](https://https://github.com/nrode/AnalysisEvolExp2020):
+You can download the compendium by cloning this [repository](https://github.com/nrode/NatPop2021.git):
   
   - open the `.Rproj` file in RStudio
 
