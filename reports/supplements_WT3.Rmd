@@ -161,7 +161,7 @@ data_PERF_Rate$resid <- residuals(m1)
 wt3rate<-ggplot(data = data_PERF_Rate,
                 aes(x = Date_P, y = resid)) + 
   geom_point(size = 1.5, alpha = 0.7) +
-  ylab("Residuals(Egg-to-adult survival)")  +
+  ylab("Residuals(offspring performance)")  +
   xlab("Date")  +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
@@ -197,7 +197,7 @@ data_PERF_Rate$resid_eggs <- residuals(m1)
 wt3eggs<-ggplot(data = data_PERF_Rate,
                 aes(x = Date_P, y = resid_eggs)) + 
   geom_point(size = 1.5, alpha = 0.7) +
-  ylab("Residuals(Oviposition stimulation)")  +
+  ylab("Residuals(oviposition stimulation)")  +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
   xlab("Date")  +
@@ -237,7 +237,7 @@ wt3eggspref<-ggplot(data = data_PREF,
   geom_point(size = 1.5, alpha = 0.7) +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
-  ylab("Residuals(Oviposition preference)")  +
+  ylab("Residuals(oviposition preference)")  +
   xlab("Date")  +
   ylim(-2.7,2.7) +
   theme_LO_sober
@@ -277,7 +277,7 @@ THREE_JOIN <- cowplot::ggdraw() +
 
 THREE_JOIN 
 
-
+# 
 # cowplot::save_plot(file = here::here("figures", "Supplements_WT3.pdf"),
 #                    THREE_JOIN, base_height = 28/cm(1), base_width = 17/cm(1), dpi = 1200)
 # #

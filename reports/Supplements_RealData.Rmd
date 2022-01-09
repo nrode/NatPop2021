@@ -239,12 +239,12 @@ LOCAL_ADAPTATION_PLOT_REALDATA <- cowplot::ggdraw() +
                   size = 16) 
  LOCAL_ADAPTATION_PLOT_REALDATA
 
- 
+ # 
  # cowplot::save_plot(file =here::here("figures", "Supplements_Local_Adaptation_Data.pdf"),
  #                   LOCAL_ADAPTATION_PLOT_REALDATA,
  #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
- # 
- # 
+
+
 
 ```
 
@@ -290,7 +290,7 @@ HETEROGENEITY_PLOT_REALDATA <- cowplot::ggdraw() +
   cowplot::draw_plot(legend, x = 0.938, y = 0.5, width = 0.0001, height = 0.0001)  + 
   cowplot::draw_plot_label(c("Oviposition preference", 
                              "Oviposition stimulation", 
-                             "Egg-to-adult survival"),  
+                             "Offspring performance"),  
                   x = c(0.48,0.48,0.48), 
                   y = c(0.96, 0.63, 0.29), 
                   hjust = c(0.5,0.5,0.5), 
