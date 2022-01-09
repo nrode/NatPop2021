@@ -1139,21 +1139,13 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
                   size = 16) 
  LOCAL_ADAPTATION_PLOT
 
- 
- # cowplot::save_plot(file =here::here("figures", "LOCAL_ADAPTATION_G0_G2.pdf"),
- #                   LOCAL_ADAPTATION_PLOT,
- #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
- # 
+# 
+#  cowplot::save_plot(file =here::here("figures", "LOCAL_ADAPTATION_G0_G2.pdf"),
+#                    LOCAL_ADAPTATION_PLOT,
+#                    base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+# 
 
  
- #A tej: 
-   # cowplot::draw_plot_label(c("Generation: G0", "A", "B", "C", " ",
-   #                  "Generation: G2", "D", "E", "F", " "),  
-   #                x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
-   #                y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
-   #                hjust = c(0,0,0,0,0,0,0,0,0,0), 
-   #                vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
-   #                size = 16) 
 
 ```
 
@@ -1308,7 +1300,7 @@ HETEROGENEITY_PLOT <- cowplot::ggdraw() +
 # cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop.pdf"),
 #                   HETEROGENEITY_PLOT, base_height = 30/cm(1),
 #                   base_width = 30/cm(1), dpi = 1200)
-
+# 
 
 ```
 
@@ -1381,7 +1373,7 @@ legend <- lemon::g_legend(PLOT_Strawberry_G0)
 # cowplot::save_plot(file =here::here("figures", "RELATION_TRAITS_G0G2.pdf"),
 #                   RELATION_TRAITS_G0G2,
 #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
-#  
+
 #  
 
 
@@ -1436,7 +1428,7 @@ PLOT_Strawberry_Stim_G0 <- plot_RelationTraits_residuals(gen = "G0",
                   size = 16) 
  RELATION_TRAITS_Stimulation_G0G2
 
-
+# 
 # cowplot::save_plot(file =here::here("figures", "RELATION_TRAITS_Stimulation_G0G2.pdf"),
 #                   RELATION_TRAITS_Stimulation_G0G2,
 #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)

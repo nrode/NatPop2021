@@ -35,7 +35,7 @@ plot_RTP_realdata <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen 
       yaxis_labelprint <- paste0("Number of adults")
     }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        yaxis_labelprint <- paste0("Egg-to-adult survival")
+        yaxis_labelprint <- paste0("Offspring performance")
       }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
           yaxis_labelprint <- paste0("Oviposition preference")

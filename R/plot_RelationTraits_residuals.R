@@ -89,7 +89,7 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
   ######### PLOT
   # Plot title and x/y axis title
   plot_title <- ifelse(gen == "G0", "First generation", ifelse(gen == "G2","Third generation", " "))
-  xaxis_labelprint <- paste0("Residuals(egg-to-adult survival)\n in ", fruit)
+  xaxis_labelprint <- paste0("Residuals(offspring performance)\n in ", fruit)
   if (trait2 == "Stimulation") {
     yaxis_labelprint <- paste0("Residuals(oviposition stimulation)\n in ", fruit)
   }else{

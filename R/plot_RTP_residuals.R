@@ -138,7 +138,7 @@ plot_RTP_residuals <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen
       yaxis_labelprint <- paste0("Residuals(number of adults)")
     }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        yaxis_labelprint <- paste0("Residuals(egg-to-adult survival)")
+        yaxis_labelprint <- paste0("Residuals(offspring performance)")
       }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
           yaxis_labelprint <- paste0("Residuals(oviposition preference)")

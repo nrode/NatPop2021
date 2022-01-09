@@ -141,7 +141,7 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
       yaxis_labelprint <- paste0("Residuals(number of adults)\n in ", fruit2)
     }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        yaxis_labelprint <- paste0("Residuals(egg-to-adult survival)\n in ", fruit2)
+        yaxis_labelprint <- paste0("Residuals(offspring performance)\n in ", fruit2)
       }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
           yaxis_labelprint <- paste0("Residuals(oviposition preference)\n in ", fruit2)
@@ -160,7 +160,7 @@ plot_PairwisePOP_residuals <- function(dataset = data_PERF_Rate, trait = "Rate",
       xaxis_labelprint <- paste0("Residuals(number of adults)\n in ", fruit1)
     }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        xaxis_labelprint <- paste0("Residuals(egg-to-adult survival)\n in ", fruit1)
+        xaxis_labelprint <- paste0("Residuals(offspring performance)\n in ", fruit1)
       }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
           xaxis_labelprint <- paste0("Residuals(oviposition preference)\n in ", fruit1)
