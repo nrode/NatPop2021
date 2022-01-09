@@ -1939,7 +1939,7 @@ plot_genetic_poisson_ALL_box<-ggplot2::ggplot(data = data_proportion_gen,
    geom_point(size = 2) + 
    ylim(0,1) +
    geom_line(size = 1, alpha = 0.7) + 
-   ylab("Proportion of simulations with\nsignificant genetic local adaption")  +
+   ylab("Proportion of simulations with\nsignificant local adaption")  +
    labs(x=expression(SAgenetic["G0G2"]))  +
    ggtitle("Poisson data") +
    theme_LO_sober  + 
