@@ -1144,8 +1144,8 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
 #                    LOCAL_ADAPTATION_PLOT,
 #                    base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
 # 
+# 
 
- 
 
 ```
 
@@ -1184,13 +1184,13 @@ Genetic_NonGenetic_PLOT <- cowplot::ggdraw() +
                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
                   size = 16) 
  Genetic_NonGenetic_PLOT
-
 # 
+#
 # cowplot::save_plot(file =here::here("figures", "GENETIC_NONGENETIC_First_Third.pdf"),
 #                   Genetic_NonGenetic_PLOT,
 #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
-# 
 
+#
 
 ```
 
@@ -1300,7 +1300,7 @@ HETEROGENEITY_PLOT <- cowplot::ggdraw() +
 # cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop.pdf"),
 #                   HETEROGENEITY_PLOT, base_height = 30/cm(1),
 #                   base_width = 30/cm(1), dpi = 1200)
-# 
+
 
 ```
 
@@ -1369,7 +1369,7 @@ legend <- lemon::g_legend(PLOT_Strawberry_G0)
  RELATION_TRAITS_G0G2
  
  
-#  
+# 
 # cowplot::save_plot(file =here::here("figures", "RELATION_TRAITS_G0G2.pdf"),
 #                   RELATION_TRAITS_G0G2,
 #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)

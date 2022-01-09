@@ -272,7 +272,7 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
       yaxis_labelprint <- paste0("Residuals(number of adults)")
     }else{
       if("Rate" %in% colnames(dataset) && trait == "Rate"){
-        yaxis_labelprint <- paste0("Residuals(egg-to-adult survival)")
+        yaxis_labelprint <- paste0("Residuals(offspring performance)")
       }else{
         if("BoxID" %in% colnames(dataset) && trait == "Nb_eggs"){
           yaxis_labelprint <- paste0("Residuals(oviposition preference)")
