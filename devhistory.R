@@ -31,7 +31,7 @@ usethis::use_package("Rmisc")
 usethis::use_package("cowplot")
 usethis::use_package("lemon")
 usethis::use_package("data.table")
-
+usethis::use_package("dplyr")
 
 ## Create a R directory and a file for functions
 usethis::use_r("simul_fitnessdata")
@@ -49,6 +49,8 @@ usethis::use_r("plot_Genetic_Nongenetic_residuals")
 usethis::use_r("plot_RelationTraits_residuals")
 usethis::use_r("plot_RTP_realdata")
 usethis::use_r("plot_PairwisePOP_realdata")
+usethis::use_r("plot_Pairwise_meanresiduals")
+usethis::use_r("utils-pipe")
 
 ## Update NAMESPACE file
 devtools::document()

@@ -28,4 +28,5 @@ Imports:
     ggplot2,
     cowplot,
     MuMIn,
-    data.table
+    data.table,
+    dplyr
