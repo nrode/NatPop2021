@@ -1587,36 +1587,36 @@ cowplot::save_plot(file =here::here("figures", "POP_effect_Oviposition_Strimulat
 PPMR_ALL_Pref_Stim_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
                                         formula="log(Nb_eggs+1) ~ Test_environment " ,
                                         gen = "G0" , 
-                                        xaxis_labelprint = "Oviposition stimulation\nin sympatry",
-                                        yaxis_labelprint = "Oviposition stimulation\nin allopatry")
+                                        xaxis_labelprint = "Oviposition stimulation in sympatry",
+                                        yaxis_labelprint = "Oviposition stimulation in allopatry")
 PPMR_ALL_Pref_Stim_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
                                         formula="log(Nb_eggs+1) ~ Test_environment " ,
                                         gen = "G2" , 
-                                        xaxis_labelprint = "Oviposition stimulation\nin sympatry",
-                                        yaxis_labelprint = "Oviposition stimulation\nin allopatry")
+                                        xaxis_labelprint = "Oviposition stimulation in sympatry",
+                                        yaxis_labelprint = "Oviposition stimulation in allopatry")
 
 
 PPMR_ALL_Pref_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
                                         formula="log(Nb_eggs+1) ~ Test_environment + BoxID" ,
                                         gen = "G0" , 
-                                        xaxis_labelprint = "Oviposition preference\nin sympatry",
-                                        yaxis_labelprint = "Oviposition preference\nin allopatry")
+                                        xaxis_labelprint = "Oviposition preference in sympatry",
+                                        yaxis_labelprint = "Oviposition preference in allopatry")
 PPMR_ALL_Pref_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
                                         formula="log(Nb_eggs+1) ~ Test_environment + BoxID" ,
                                         gen = "G2" , 
-                                        xaxis_labelprint = "Oviposition preference\nin sympatry",
-                                        yaxis_labelprint = "Oviposition preference\nin allopatry")
+                                        xaxis_labelprint = "Oviposition preference in sympatry",
+                                        yaxis_labelprint = "Oviposition preference in allopatry")
 
 PPMR_ALL_Perf_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
                                         gen = "G0" , 
-                                        xaxis_labelprint = "Offspring performance\nin sympatry",
-                                        yaxis_labelprint = "Offspring performance\nin allopatry")
+                                        xaxis_labelprint = "Offspring performance in sympatry",
+                                        yaxis_labelprint = "Offspring performance in allopatry")
 PPMR_ALL_Perf_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
                                         gen = "G2" , 
-                                        xaxis_labelprint = "Offspring performance\nin sympatry",
-                                        yaxis_labelprint = "Offspring performance\nin allopatry")
+                                        xaxis_labelprint = "Offspring performance in sympatry",
+                                        yaxis_labelprint = "Offspring performance in allopatry")
 
 
 legend <- lemon::g_legend(PPMR_ALL_Perf_G2)
@@ -1654,7 +1654,7 @@ PPMR_ALL <- cowplot::ggdraw() +
 
 cowplot::save_plot(file =here::here("figures", "POP_effect_ALL.pdf"),
                   PPMR_ALL,
-                   base_height = 24/cm(1), base_width = 42/cm(1), dpi = 610)
+                   base_height = 20/cm(1), base_width = 36/cm(1), dpi = 610)
 
 
 
