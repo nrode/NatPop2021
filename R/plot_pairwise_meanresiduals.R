@@ -1,6 +1,6 @@
 #' Plot pairwise residuals
 #'
-#' @description Create a bivariate plot with residuals from common garden experiment
+#' @description Create a bivariate plot with residuals from common garden experiment 
 #' @param dataset name of the dataset (tibble format)
 #' @param formula formula of the model to use to compute the residuals
 #' @param test_environment name of the column including the test environment
@@ -26,35 +26,62 @@
 #' @export 
 #'
 #' @examples
-#'plot_pairwise_meanresiduals(dataset = data_PERF_Rate, formula=modelformula, fruit1 = "Cherry", fruit2 = "Blackberry", grp_cols=c("City", "Generation", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", additional_factor="Generation", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE)
+#'plot_pairwise_meanresiduals(dataset = data_PERF_Rate, formula=modelformula, fruit1 = "Cherry", fruit2 = "Blackberry", 
+#'grp_cols=c("City", "Generation", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", additional_factor="Generation", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE)
 
 plot_pairwise_meanresiduals <- function(dataset = data_PERF_Rate,
                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
                                         #formula="log(Nb_adults+1) ~ Test_environment + City + Nb_eggs + I(Nb_eggs^2) + I(Nb_eggs^3)",
                                         test_environment="Test_environment",
                                         original_environment="Original_environment",
+                                        gen="G0",
+                                        subscript = NA,
                                         additional_factor=NULL,
                                         grp_cols=c("Population", "Original_environment", "Test_environment"), 
                                         fruit1 = "Cherry",
                                         fruit2 = "Blackberry",
                                         onlyfocalpop=TRUE,
                                         coltest_envlevels = NULL, 
-                                        #colenvlevels = c("#301934","#BC3C6D", "#3FAA96"),
+                                        #coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"),
                                         shape_additional_factor=NULL,
                                         xaxis_labelprint = "Offspring performance\nin sympatry",
                                         yaxis_labelprint = "Offspring performance\nin allopatry",
                                         xlim=NULL, ylim=NULL, fixedxylim=FALSE, bisector=TRUE, 
-                                        errorbars=TRUE, printcor=TRUE, subscript = NA){
+                                        errorbars=TRUE, printcor=TRUE){
+  
+  
+  # Subset dataset
+  if (gen == "G0" | gen == "G2") {
+    dataset <- dataset[dataset$Generation == gen,]
+    if (gen == "G0") {
+      scale_label = c("G0/G1")
+      scale_values = c(21)
+    }else{
+      scale_label = c("G2/G3")
+      scale_values = c(16)
+    }
+  }else{
+    if (gen == "Both") {
+      dataset <- dataset
+      scale_label = c("G0/G1", "G2/G3")
+      scale_values = c(21,16)
+    }else {
+      print("Error: unknown generation")
+    }
+  }
+  
+  
   
   if(test_environment!=grp_cols[length(grp_cols)]){
     print("Error the last element of grp_cols should be equal to test_environment")
   }
   
-  if(!is.null(additional_factor)){
-    if(!additional_factor%in%grp_cols){
-      print(paste0("Error grp_cols does not include the additional factor:", "additional_factor"))
-    }
-  }
+  #Need to be removed if no additional_factor
+  # if(!is.null(additional_factor)){
+  #   if(!additional_factor%in%grp_cols){
+  #     print(paste0("Error grp_cols does not include the additional factor:", "additional_factor"))
+  #   }
+  # }
   
   ## Transform test_environment into factor
   print("Converting test_environment column into a factor")
@@ -71,18 +98,21 @@ plot_pairwise_meanresiduals <- function(dataset = data_PERF_Rate,
       print("The number of levels of test_environment and original_environment are different")
     }
   }
-  ## Transform additional_factor into factor
-  if(!is.null(additional_factor)){
-    print("Converting additional_factor column into a factor")
-    dataset[[additional_factor]] <- as.factor(dataset[[additional_factor]])
-    additional_factorlevels <- levels( dataset[, additional_factor])
-    ## Modify the default shape parameter in ggplot
-    colo <- c(16, 17, 15, 18:25, 0:14)
-    shape_additional_factor <- c(shape_additional_factor, colo[!colo%in%shape_additional_factor])
-  }else{
-    shape_additional_factor <- c(16, 17, 15, 18:25, 0:14)
-  }
   
+  
+  # Need to be removed if no addition factor
+  # ## Transform additional_factor into factor
+  # if(!is.null(additional_factor)){
+  #   print("Converting additional_factor column into a factor")
+  #   dataset[[additional_factor]] <- as.factor(dataset[[additional_factor]])
+  #   additional_factorlevels <- levels( dataset[, additional_factor])
+  #   ## Modify the default shape parameter in ggplot
+  #   colo <- c(16, 17, 15, 18:25, 0:14)
+  #   shape_additional_factor <- c(shape_additional_factor, colo[!colo%in%shape_additional_factor])
+  # }else{
+  #   shape_additional_factor <- c(16, 17, 15, 18:25, 0:14)
+  # }
+  # 
   
   if(!is.null(coltest_envlevels)&length(coltest_envlevels)!=length(envlevels)){
     print("The length of coltest_envlevels and the number of levels of test_environment are different")
@@ -138,12 +168,7 @@ plot_pairwise_meanresiduals <- function(dataset = data_PERF_Rate,
   datameanreswide <- datameanres %>% 
     tidyr::pivot_wider(names_from = all_of(test_environment), values_from = c("MeanResiduals","SeResiduals", "SampSize"))
   
-  ## Keep two columns with fruit 1 and fruit 2
-  #data_fruit1_fruit2 <- datameanres[,c(grp_cols[-length(grp_cols)], paste0("MeanResiduals_", c(fruit1, fruit2)))]
-  #data_fruit1_fruit2$N <- rowMeans(datameanres[,paste0("SampSize_", c(fruit1, fruit2))])
-  #names(data_fruit1_fruit2)[length(grp_cols):(length(grp_cols)+1)] <- c("fruit1", "fruit2")
-  #xaxis_labelprint <- paste0("Residuals(number of adults emerged)\n from ", fruit1)
-  #yaxis_labelprint <- paste0("Residuals(number of adults emerged)\n from ", fruit2)
+
   
   ## Keep two columns with allopatry and sympatry
   data_fruit1_fruit2 <- datameanreswide[, c(grp_cols[-length(grp_cols)], paste0("MeanResiduals_", c(fruit1, fruit2)), paste0("SeResiduals_", c(fruit1, fruit2)))]
@@ -207,34 +232,37 @@ plot_pairwise_meanresiduals <- function(dataset = data_PERF_Rate,
                            breaks=originalenvlevels,
                            labels=originalenvlevels,
                            values=coltest_envlevels,
-                           drop=FALSE)
+                           drop=FALSE) + 
+        scale_shape_manual(labels = scale_label, values=scale_values)
       
-    }else{
-      plot_pair <- ggplot(data = data_fruit1_fruit2,
-                          aes_q(x = as.name(names(data_fruit1_fruit2)[length(grp_cols)]), 
-                                y = as.name(names(data_fruit1_fruit2)[length(grp_cols)+2]), 
-                                color = as.name(names(data_fruit1_fruit2)[length(grp_cols)-1]), 
-                                shape = as.name(names(data_fruit1_fruit2)[length(grp_cols)-2]))) +
-        scale_color_manual(name="Fly population from:",   
-                           breaks=originalenvlevels,
-                           labels=originalenvlevels,
-                           values=coltest_envlevels,
-                           drop=FALSE) +
-        scale_shape_manual(labels = additional_factorlevels, values=shape_additional_factor)
-    }
-    
   }else{
-    
+    plot_pair <- ggplot(data = data_fruit1_fruit2,
+                        aes_q(x = as.name(names(data_fruit1_fruit2)[length(grp_cols)]),
+                              y = as.name(names(data_fruit1_fruit2)[length(grp_cols)+2]),
+                              color = as.name(names(data_fruit1_fruit2)[length(grp_cols)-1]),
+                              shape = as.name(names(data_fruit1_fruit2)[length(grp_cols)-2]))) +
+      scale_color_manual(name="Fly population from:",
+                         breaks=originalenvlevels,
+                         labels=originalenvlevels,
+                         values=coltest_envlevels,
+                         drop=FALSE) +
+      scale_shape_manual(labels = additional_factorlevels, values=shape_additional_factor)
+  }
+
+  }else{
+
     if(is.null(additional_factor)){
       plot_pair <- ggplot(data = data_fruit1_fruit2,
-                          aes_q(x = as.name(names(data_fruit1_fruit2)[length(grp_cols)]), 
-                                y = as.name(names(data_fruit1_fruit2)[length(grp_cols)+2])))
+                          aes_q(x = as.name(names(data_fruit1_fruit2)[length(grp_cols)]),
+                                y = as.name(names(data_fruit1_fruit2)[length(grp_cols)+2]))) +
+        scale_shape_manual(labels = scale_values, values = scale_label)
     }else{
       plot_pair <- ggplot(data = data_fruit1_fruit2,
-                          aes_q(x = as.name(names(data_fruit1_fruit2)[length(grp_cols)]), 
-                                y = as.name(names(data_fruit1_fruit2)[length(grp_cols)+2])), 
+                          aes_q(x = as.name(names(data_fruit1_fruit2)[length(grp_cols)]),
+                                y = as.name(names(data_fruit1_fruit2)[length(grp_cols)+2])),
                           shape = as.name(names(data_fruit1_fruit2)[length(grp_cols)-1])) +
-        scale_shape_manual(labels = additional_factorlevels)
+        scale_shape_manual(labels = additional_factorlevels) +
+        scale_shape_manual(labels = scale_values, values = scale_label)
     }
   }
   if(bisector){
@@ -344,3 +372,5 @@ plot_pairwise_meanresiduals <- function(dataset = data_PERF_Rate,
   }
   return(plot_pair)
 }
+
+  

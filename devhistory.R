@@ -50,6 +50,8 @@ usethis::use_r("plot_RelationTraits_residuals")
 usethis::use_r("plot_RTP_realdata")
 usethis::use_r("plot_PairwisePOP_realdata")
 usethis::use_r("plot_Pairwise_meanresiduals")
+usethis::use_r("plot_Pairwise_meanresiduals_popeffect")
+usethis::use_r("plot_Pairwise_meanresiduals_popeffect_Alltogether")
 usethis::use_r("utils-pipe")
 
 ## Update NAMESPACE file
