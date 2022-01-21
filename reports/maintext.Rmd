@@ -201,35 +201,7 @@ m2 <- aov(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
                                                        trait = "Nb_eggs", 
                                                    effect = "Genetic"))
 
-###PLOT 
-(PAIR_BLACK_CHERRY_G2_EGGS <- plot_PairwisePOP_residuals(dataset = data_PERF, 
-                                                           trait = "Nb_eggs", gen = "G2", 
-                                                           fruit1 = "Cherry", fruit2 = "Blackberry"))
 
-(PAIR_CHERRY_STRAW_G2_EGGS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
-                                                            trait = "Nb_eggs", gen = "G2",
-                                                            fruit1 = "Strawberry", fruit2 = "Cherry"))
-
-(PAIR_STRW_BLACK_G2_EGGS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
-                                                          trait = "Nb_eggs", gen = "G2",
-                                                          fruit1 = "Blackberry", fruit2 = "Strawberry"))
-
-
-
-
-###PLOT 
-(PAIR_BLACK_CHERRY_EGGS <- plot_PairwisePOP_residuals(dataset = data_PERF, 
-                                                           trait = "Nb_eggs", gen = "Both", 
-                                                           fruit1 = "Cherry", fruit2 = "Blackberry"))
-
-(PAIR_CHERRY_STRAW_EGGS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
-                                                            trait = "Nb_eggs", gen = "Both",
-                                                            fruit1 = "Strawberry", fruit2 = "Cherry"))
-
-(PAIR_STRW_BLACK_EGGS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
-                                                          trait = "Nb_eggs", gen = "Both",
-                                                          fruit1 = "Blackberry", 
-                                                     fruit2 = "Strawberry"))
 ```
 
 
@@ -433,39 +405,7 @@ m2 <- aov(log(Nb_adults+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
                                                     effect = "Genetic"))
 
 
-###PLOT 
-(PAIR_BLACK_CHERRY_G2_ADULTS <- plot_PairwisePOP_residuals(dataset = data_PERF, 
-                                                           trait = "Nb_adults", gen = "G2", 
-                                                           fruit1 = "Cherry", fruit2 = "Blackberry"))
 
-(PAIR_CHERRY_STRAW_G2_ADULTS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
-                                                            trait = "Nb_adults", gen = "G2",
-                                                            fruit1 = "Strawberry", fruit2 = "Cherry"))
-
-(PAIR_STRW_BLACK_G2_ADULTS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
-                                                          trait = "Nb_adults", gen = "G2",
-                                                          fruit1 = "Blackberry", fruit2 = "Strawberry"))
-
-
-
-###PLOT 
-(PAIR_BLACK_CHERRY_ADULTS <- plot_PairwisePOP_residuals(dataset = data_PERF, 
-                                                        trait = "Nb_adults", 
-                                                        gen = "Both", 
-                                                        fruit1 = "Cherry", 
-                                                        fruit2 = "Blackberry"))
-
-(PAIR_CHERRY_STRAW_ADULTS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
-                                                         trait = "Nb_adults", 
-                                                         gen = "Both",
-                                                         fruit1 = "Strawberry", 
-                                                         fruit2 = "Cherry"))
-
-(PAIR_STRW_BLACK_ADULTS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
-                                                       trait = "Nb_adults", 
-                                                       gen = "Both",
-                                                       fruit1 = "Blackberry", 
-                                                       fruit2 = "Strawberry"))
 ```
 
 
@@ -725,22 +665,6 @@ rsqng <- 1-anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+a
 ```
 
 
-
-##Plot
-```{r }
-
-(PLOT_rate_G0 <- plot_RTP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G0"))
-(PLOT_rate_G2 <- plot_RTP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G2"))
-
-(PLOT_GEN_rate_G0 <- plot_Genetic_Nongenetic_residuals(dataset = data_PERF_Rate, 
-                                                    trait = "Rate", 
-                                                    effect = "Non-genetic"))
-(PLOT_GEN_rate_G2 <- plot_Genetic_Nongenetic_residuals(dataset = data_PERF_Rate, 
-                                                    trait = "Rate", 
-                                                    effect = "Genetic"))
-
-```
-
 ## Heterogeneity across populations
 ```{r }
 data_Rate_G2 <- data_PERF_Rate[data_PERF_Rate$Generation=="G2",]
@@ -798,35 +722,28 @@ plot(meanbypopbytestenv$Blackberry, meanbypopbytestenv$Strawberry, col=as.numeri
 legend("topright", levels(data_Rate_G2$Original_environment), col=as.numeric(as.factor(levels(data_Rate_G2$Original_environment))), pch=16)
 
 
-###PLOT 
-(PAIR_BLACK_CHERRY_G2_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G2", 
-                                       fruit1 = "Cherry", fruit2 = "Blackberry"))
 
-(PAIR_CHERRY_STRAW_G2_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G2", 
-                                       fruit1 = "Strawberry", fruit2 = "Cherry"))
-
-(PAIR_STRW_BLACK_G2_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G2", 
-                                       fruit1 = "Blackberry", fruit2 = "Strawberry"))
-
-
-(PAIR_BLACK_CHERRY_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, 
-                                                      trait = "Rate", 
-                                                      gen = "Both", 
-                                                      fruit1 = "Cherry", 
-                                                      fruit2 = "Blackberry"))
-
-(PAIR_CHERRY_STRAW_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, 
-                                                      trait = "Rate", 
-                                                      gen = "Both", 
-                                                      fruit1 = "Strawberry", 
-                                                      fruit2 = "Cherry"))
-
-(PAIR_STRW_BLACK_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, 
-                                                    trait = "Rate", 
-                                                    gen = "Both",
-                                                    fruit1 = "Blackberry", 
-                                                    fruit2 = "Strawberry"))
 ```
+
+
+
+##Plot
+```{r }
+
+(PLOT_rate_G0 <- plot_RTP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G0"))
+(PLOT_rate_G2 <- plot_RTP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G2"))
+
+(PLOT_GEN_rate_G0 <- plot_Genetic_Nongenetic_residuals(dataset = data_PERF_Rate, 
+                                                    trait = "Rate", 
+                                                    effect = "Non-genetic"))
+(PLOT_GEN_rate_G2 <- plot_Genetic_Nongenetic_residuals(dataset = data_PERF_Rate, 
+                                                    trait = "Rate", 
+                                                    effect = "Genetic"))
+
+```
+
+
+
 
 
 # OVIOSITION PREFERENCE 
@@ -1029,35 +946,6 @@ rsqng <- 1-anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+a
 
 
 
-# ###PLOT 
-(PAIR_BLACK_CHERRY_G2_PREF <- plot_PairwisePOP_residuals(dataset = data_PREF_three,
-                                  trait = "Nb_eggs", gen = "G2",
-                                  fruit1 = "Cherry", fruit2 = "Blackberry"))
-# 
-# (PAIR_CHERRY_STRAW_G2_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
-#                                                             trait = "Nb_eggs", gen = "G2",
-#                                                             fruit1 = "Strawberry", fruit2 = "Cherry"))
-# 
-# (PAIR_STRW_BLACK_G2_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
-#                                                           trait = "Nb_eggs", gen = "G2",
-#                                                           fruit1 = "Blackberry", fruit2 = "Strawberry"))
-
-
-(PAIR_BLACK_CHERRY_PREF <- plot_PairwisePOP_residuals(dataset = data_PREF_three,
-                                                      trait = "Nb_eggs", 
-                                                      gen = "Both", 
-                                                      fruit1 = "Cherry", 
-                                                      fruit2 = "Blackberry"))
-(PAIR_CHERRY_STRAW_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
-                                                       trait = "Nb_eggs", 
-                                                       gen = "Both",
-                                                       fruit1 = "Strawberry", 
-                                                       fruit2 = "Cherry"))
-(PAIR_STRW_BLACK_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
-                                                     trait = "Nb_eggs", 
-                                                     gen = "Both",
-                                                     fruit1 = "Blackberry", 
-                                                     fruit2 = "Strawberry"))
 ```
 
 
@@ -1220,389 +1108,495 @@ Genetic_NonGenetic_PLOT <- cowplot::ggdraw() +
 
 
 
-# PLOT OLD HETEROGENEITY
+# Plot old heterogeneity
 ```{r }
-
-legend <- lemon::g_legend(PAIR_BLACK_CHERRY_G2_PREF)
-
-# ############## THIRD GENERATION 
-# HETEROGENEITY_PLOT_THIRD <- cowplot::ggdraw() +
-#   cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_EGGS+theme(legend.position = "none", 
-#                                         plot.title = element_blank()),
-#             x = 0, y = 0.75, width = 0.25, height = 0.25) +
-#   cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_EGGS+theme(legend.position = "none", 
-#                                         plot.title = element_blank()), 
-#             x = 0.30, y = 0.75, width = 0.25, height = 0.25) +
-#   cowplot::draw_plot(PAIR_STRW_BLACK_G2_EGGS+theme(legend.position = "none", 
-#                                         plot.title = element_blank()),
-#             x = 0.60, y = 0.75, width = 0.25, height = 0.25) +    
-#   #cowplot::draw_plot(legend, x = 0.85, y = 0.8, width = 0.0001, height = 0.0001) +
-#   cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_RATE+theme(legend.position = "none", 
-#                                         plot.title = element_blank()),
-#             x = 0, y = 0.5, width = 0.25, height = 0.25) +
-#   cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_RATE+theme(legend.position = "none", 
-#                                         plot.title = element_blank()), 
-#             x = 0.30, y = 0.5, width = 0.25, height = 0.25) +
-#   cowplot::draw_plot(PAIR_STRW_BLACK_G2_RATE+theme(legend.position = "none", 
-#                                         plot.title = element_blank()),
-#             x = 0.60, y = 0.5, width = 0.25, height = 0.25) +    
-#   cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_ADULTS+theme(legend.position = "none", 
-#                                         plot.title = element_blank()),
-#             x = 0, y = 0.25, width = 0.25, height = 0.25) +
-#   cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_ADULTS+theme(legend.position = "none", 
-#                                         plot.title = element_blank()), 
-#             x = 0.30, y = 0.25, width = 0.25, height = 0.25) +
-#   cowplot::draw_plot(PAIR_STRW_BLACK_G2_ADULTS+theme(legend.position = "none", 
-#                                         plot.title = element_blank()),
-#             x = 0.60, y = 0.25, width = 0.25, height = 0.25) +    
-#   cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_PREF+theme(legend.position = "none", 
-#                                         plot.title = element_blank()),
-#             x = 0, y = 0, width = 0.25, height = 0.25) +
-#   cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_PREF+theme(legend.position = "none", 
-#                                         plot.title = element_blank()), 
-#             x = 0.30, y = 0, width = 0.25, height = 0.25) +
-#   cowplot::draw_plot(PAIR_STRW_BLACK_G2_PREF+theme(legend.position = "none", 
-#                                         plot.title = element_blank()),
-#             x = 0.60, y = 0, width = 0.25, height = 0.25) +    
-#   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) 
-#   HETEROGENEITY_PLOT_THIRD
-
-
-# cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop_ThirdGeneration.pdf"),
-#                   HETEROGENEITY_PLOT_THIRD, base_height = 35/cm(1),
-#                   base_width = 35/cm(1), dpi = 1200)
+################# STIMULATION 
+###PLOT 
+# (PAIR_BLACK_CHERRY_G2_EGGS <- plot_PairwisePOP_residuals(dataset = data_PERF, 
+#                                                            trait = "Nb_eggs", gen = "G2", 
+#                                                            fruit1 = "Cherry", fruit2 = "Blackberry"))
 # 
-
-
-  
-legend <- lemon::g_legend(PAIR_CHERRY_STRAW_PREF)
-
-  
-############## ALL GENERATION 
-HETEROGENEITY_PLOT <- cowplot::ggdraw() +
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_PREF+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0, y = 0.66, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_PREF+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.30, y = 0.66, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_PREF+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0.60, y = 0.66, width = 0.28, height = 0.28) +    
-  #cowplot::draw_plot(legend, x = 0.85, y = 0.8, width = 0.0001, height = 0.0001) +
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_EGGS+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0, y = 0.33, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_EGGS+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.30, y = 0.33, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_EGGS+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0.60, y = 0.33, width = 0.28, height = 0.28) +    
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_RATE+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0, y = 0, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_RATE+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.30, y = 0, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_RATE+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0.60, y = 0, width = 0.28, height = 0.28) +    
-  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001)  + 
-  cowplot::draw_plot_label(c("Oviposition preference", 
-                             "Oviposition stimulation", 
-                             "Offpsring performance"),  
-                  x = c(0.48,0.48,0.48), 
-                  y = c(0.96, 0.63, 0.29), 
-                  hjust = c(0.5,0.5,0.5), 
-                  vjust = c(0.5,0.5,0.5),
-                  size = 16) 
-
-
-
-
-
-
+# (PAIR_CHERRY_STRAW_G2_EGGS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
+#                                                             trait = "Nb_eggs", gen = "G2",
+#                                                             fruit1 = "Strawberry", fruit2 = "Cherry"))
+# 
+# (PAIR_STRW_BLACK_G2_EGGS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
+#                                                           trait = "Nb_eggs", gen = "G2",
+#                                                           fruit1 = "Blackberry", fruit2 = "Strawberry"))
+# 
+# 
+# 
+# 
+# ###PLOT 
+# (PAIR_BLACK_CHERRY_EGGS <- plot_PairwisePOP_residuals(dataset = data_PERF, 
+#                                                            trait = "Nb_eggs", gen = "Both", 
+#                                                            fruit1 = "Cherry", fruit2 = "Blackberry"))
+# 
+# (PAIR_CHERRY_STRAW_EGGS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
+#                                                             trait = "Nb_eggs", gen = "Both",
+#                                                             fruit1 = "Strawberry", fruit2 = "Cherry"))
+# 
+# (PAIR_STRW_BLACK_EGGS  <- plot_PairwisePOP_residuals(dataset = data_PERF, 
+#                                                           trait = "Nb_eggs", gen = "Both",
+#                                                           fruit1 = "Blackberry", 
+#                                                      fruit2 = "Strawberry"))
+# 
+# 
+# ################# PERFORMANCE 
+# ###PLOT 
+# (PAIR_BLACK_CHERRY_G2_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G2", 
+#                                        fruit1 = "Cherry", fruit2 = "Blackberry"))
+# 
+# (PAIR_CHERRY_STRAW_G2_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G2", 
+#                                        fruit1 = "Strawberry", fruit2 = "Cherry"))
+# 
+# (PAIR_STRW_BLACK_G2_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, trait = "Rate", gen = "G2", 
+#                                        fruit1 = "Blackberry", fruit2 = "Strawberry"))
+# 
+# 
+# (PAIR_BLACK_CHERRY_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, 
+#                                                       trait = "Rate", 
+#                                                       gen = "Both", 
+#                                                       fruit1 = "Cherry", 
+#                                                       fruit2 = "Blackberry"))
+# 
+# (PAIR_CHERRY_STRAW_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, 
+#                                                       trait = "Rate", 
+#                                                       gen = "Both", 
+#                                                       fruit1 = "Strawberry", 
+#                                                       fruit2 = "Cherry"))
+# 
+# (PAIR_STRW_BLACK_RATE <- plot_PairwisePOP_residuals(dataset = data_PERF_Rate, 
+#                                                     trait = "Rate", 
+#                                                     gen = "Both",
+#                                                     fruit1 = "Blackberry", 
+#                                                     fruit2 = "Strawberry"))
+# 
+# ################# PREFERENCE
+# 
+# # ###PLOT 
+# (PAIR_BLACK_CHERRY_G2_PREF <- plot_PairwisePOP_residuals(dataset = data_PREF_three,
+#                                   trait = "Nb_eggs", gen = "G2",
+#                                   fruit1 = "Cherry", fruit2 = "Blackberry"))
 # # 
-# cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop.pdf"),
-#                   HETEROGENEITY_PLOT, base_height = 30/cm(1),
-#                   base_width = 30/cm(1), dpi = 1200)
+# # (PAIR_CHERRY_STRAW_G2_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
+# #                                                             trait = "Nb_eggs", gen = "G2",
+# #                                                             fruit1 = "Strawberry", fruit2 = "Cherry"))
+# # 
+# # (PAIR_STRW_BLACK_G2_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
+# #                                                           trait = "Nb_eggs", gen = "G2",
+# #                                                           fruit1 = "Blackberry", fruit2 = "Strawberry"))
+# 
+# 
+# (PAIR_BLACK_CHERRY_PREF <- plot_PairwisePOP_residuals(dataset = data_PREF_three,
+#                                                       trait = "Nb_eggs", 
+#                                                       gen = "Both", 
+#                                                       fruit1 = "Cherry", 
+#                                                       fruit2 = "Blackberry"))
+# (PAIR_CHERRY_STRAW_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
+#                                                        trait = "Nb_eggs", 
+#                                                        gen = "Both",
+#                                                        fruit1 = "Strawberry", 
+#                                                        fruit2 = "Cherry"))
+# (PAIR_STRW_BLACK_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
+#                                                      trait = "Nb_eggs", 
+#                                                      gen = "Both",
+#                                                      fruit1 = "Blackberry", 
+#                                                      fruit2 = "Strawberry"))
 
 
-```
 
 
 
-# PLOT HETEROGENEITY POP EFFECT
-```{r }
-plot_Legend <- PAIR_CHERRY_STRAW_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
-                                                       trait = "Nb_eggs", 
-                                                       gen = "Both",
-                                                       fruit1 = "Strawberry", 
-                                                       fruit2 = "Cherry")
-legend <- lemon::g_legend(plot_Legend)
 
 
-###################################################### 
-########################### PERFORMANCE
-###################################################### 
-PPMR_G0_Rate_BlackChe <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
-                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
-                                        gen = "G0" , subscript = "G1",
-                                        fruit1 = "Blackberry", fruit2 = "Cherry",
-                                        xaxis_labelprint = "Offspring performance\nin sympatry",
-                                        yaxis_labelprint = "Offspring performance\nin allopatry")
-PPMR_G0_Rate_CheStraw <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
-                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
-                                        gen = "G0" , subscript = "G1",
-                                        fruit1 = "Cherry", fruit2 = "Strawberry",
-                                        xaxis_labelprint = "Offspring performance\nin sympatry",
-                                        yaxis_labelprint = "Offspring performance\nin allopatry")
-PPMR_G0_Rate_StrawBlack <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
-                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
-                                        gen = "G0" , subscript = "G1",
-                                        fruit1 = "Strawberry", fruit2 = "Blackberry",
-                                        xaxis_labelprint = "Offspring performance\nin sympatry",
-                                        yaxis_labelprint = "Offspring performance\nin allopatry")
-PPMR_G2_Rate_BlackChe <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
-                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
-                                        gen = "G2" , subscript = "G3",
-                                        fruit1 = "Blackberry", fruit2 = "Cherry",
-                                        xaxis_labelprint = "Offspring performance\nin sympatry",
-                                        yaxis_labelprint = "Offspring performance\nin allopatry")
-PPMR_G2_Rate_CheStraw <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
-                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
-                                        gen = "G2" , subscript = "G3",
-                                        fruit1 = "Cherry", fruit2 = "Strawberry",
-                                        xaxis_labelprint = "Offspring performance\nin sympatry",
-                                        yaxis_labelprint = "Offspring performance\nin allopatry")
-PPMR_G2_Rate_StrawBlack <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
-                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
-                                        gen = "G2" , subscript = "G3",
-                                        fruit1 = "Strawberry", fruit2 = "Blackberry",
-                                        xaxis_labelprint = "Offspring performance\nin sympatry",
-                                        yaxis_labelprint = "Offspring performance\nin allopatry")
-
-
-PPMR_Rate <- cowplot::ggdraw() + 
-  cowplot::draw_plot(PPMR_G0_Rate_BlackChe + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PPMR_G0_Rate_CheStraw + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PPMR_G0_Rate_StrawBlack + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
-  cowplot::draw_plot(PPMR_G2_Rate_BlackChe + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.01, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PPMR_G2_Rate_CheStraw + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.31, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PPMR_G2_Rate_StrawBlack + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.61, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot_label(c("Generation G1", "A", "B", "C", " ",
-                    "Generation G3", "D", "E", "F", " "),  
-                  x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
-                  y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
-                  hjust = c(0,0,0,0,0,0,0,0,0,0), 
-                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
-                  size = 16) 
- PPMR_Rate
+# legend <- lemon::g_legend(PAIR_BLACK_CHERRY_G2_PREF)
+# 
+# # ############## THIRD GENERATION 
+# # HETEROGENEITY_PLOT_THIRD <- cowplot::ggdraw() +
+# #   cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_EGGS+theme(legend.position = "none", 
+# #                                         plot.title = element_blank()),
+# #             x = 0, y = 0.75, width = 0.25, height = 0.25) +
+# #   cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_EGGS+theme(legend.position = "none", 
+# #                                         plot.title = element_blank()), 
+# #             x = 0.30, y = 0.75, width = 0.25, height = 0.25) +
+# #   cowplot::draw_plot(PAIR_STRW_BLACK_G2_EGGS+theme(legend.position = "none", 
+# #                                         plot.title = element_blank()),
+# #             x = 0.60, y = 0.75, width = 0.25, height = 0.25) +    
+# #   #cowplot::draw_plot(legend, x = 0.85, y = 0.8, width = 0.0001, height = 0.0001) +
+# #   cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_RATE+theme(legend.position = "none", 
+# #                                         plot.title = element_blank()),
+# #             x = 0, y = 0.5, width = 0.25, height = 0.25) +
+# #   cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_RATE+theme(legend.position = "none", 
+# #                                         plot.title = element_blank()), 
+# #             x = 0.30, y = 0.5, width = 0.25, height = 0.25) +
+# #   cowplot::draw_plot(PAIR_STRW_BLACK_G2_RATE+theme(legend.position = "none", 
+# #                                         plot.title = element_blank()),
+# #             x = 0.60, y = 0.5, width = 0.25, height = 0.25) +    
+# #   cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_ADULTS+theme(legend.position = "none", 
+# #                                         plot.title = element_blank()),
+# #             x = 0, y = 0.25, width = 0.25, height = 0.25) +
+# #   cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_ADULTS+theme(legend.position = "none", 
+# #                                         plot.title = element_blank()), 
+# #             x = 0.30, y = 0.25, width = 0.25, height = 0.25) +
+# #   cowplot::draw_plot(PAIR_STRW_BLACK_G2_ADULTS+theme(legend.position = "none", 
+# #                                         plot.title = element_blank()),
+# #             x = 0.60, y = 0.25, width = 0.25, height = 0.25) +    
+# #   cowplot::draw_plot(PAIR_BLACK_CHERRY_G2_PREF+theme(legend.position = "none", 
+# #                                         plot.title = element_blank()),
+# #             x = 0, y = 0, width = 0.25, height = 0.25) +
+# #   cowplot::draw_plot(PAIR_CHERRY_STRAW_G2_PREF+theme(legend.position = "none", 
+# #                                         plot.title = element_blank()), 
+# #             x = 0.30, y = 0, width = 0.25, height = 0.25) +
+# #   cowplot::draw_plot(PAIR_STRW_BLACK_G2_PREF+theme(legend.position = "none", 
+# #                                         plot.title = element_blank()),
+# #             x = 0.60, y = 0, width = 0.25, height = 0.25) +    
+# #   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) 
+# #   HETEROGENEITY_PLOT_THIRD
+# 
+# 
+# # cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop_ThirdGeneration.pdf"),
+# #                   HETEROGENEITY_PLOT_THIRD, base_height = 35/cm(1),
+# #                   base_width = 35/cm(1), dpi = 1200)
+# # 
+# 
+# 
+#   
+# legend <- lemon::g_legend(PAIR_CHERRY_STRAW_PREF)
+# 
+#   
+# ############## ALL GENERATION 
+# HETEROGENEITY_PLOT <- cowplot::ggdraw() +
+#   cowplot::draw_plot(PAIR_BLACK_CHERRY_PREF+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0, y = 0.66, width = 0.28, height = 0.28) +
+#   cowplot::draw_plot(PAIR_CHERRY_STRAW_PREF+theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.30, y = 0.66, width = 0.28, height = 0.28) +
+#   cowplot::draw_plot(PAIR_STRW_BLACK_PREF+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0.60, y = 0.66, width = 0.28, height = 0.28) +    
+#   #cowplot::draw_plot(legend, x = 0.85, y = 0.8, width = 0.0001, height = 0.0001) +
+#   cowplot::draw_plot(PAIR_BLACK_CHERRY_EGGS+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0, y = 0.33, width = 0.28, height = 0.28) +
+#   cowplot::draw_plot(PAIR_CHERRY_STRAW_EGGS+theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.30, y = 0.33, width = 0.28, height = 0.28) +
+#   cowplot::draw_plot(PAIR_STRW_BLACK_EGGS+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0.60, y = 0.33, width = 0.28, height = 0.28) +    
+#   cowplot::draw_plot(PAIR_BLACK_CHERRY_RATE+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0, y = 0, width = 0.28, height = 0.28) +
+#   cowplot::draw_plot(PAIR_CHERRY_STRAW_RATE+theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.30, y = 0, width = 0.28, height = 0.28) +
+#   cowplot::draw_plot(PAIR_STRW_BLACK_RATE+theme(legend.position = "none", 
+#                                         plot.title = element_blank()),
+#             x = 0.60, y = 0, width = 0.28, height = 0.28) +    
+#   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001)  + 
+#   cowplot::draw_plot_label(c("Oviposition preference", 
+#                              "Oviposition stimulation", 
+#                              "Offpsring performance"),  
+#                   x = c(0.48,0.48,0.48), 
+#                   y = c(0.96, 0.63, 0.29), 
+#                   hjust = c(0.5,0.5,0.5), 
+#                   vjust = c(0.5,0.5,0.5),
+#                   size = 16) 
+# 
+# 
+# 
+# 
+# 
+# 
+# # # 
+# # cowplot::save_plot(file =here::here("figures","Heterogeneity_Across_Pop.pdf"),
+# #                   HETEROGENEITY_PLOT, base_height = 30/cm(1),
+# #                   base_width = 30/cm(1), dpi = 1200)
 # 
 
-###################################################### 
-########################### Preference
-###################################################### 
-PPMR_G0_Pref_BlackChe <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment  + BoxID",
-                                        gen = "G0" , subscript = "G0",
-                                        fruit1 = "Blackberry", fruit2 = "Cherry",
-                                        xaxis_labelprint = "Oviposition preference\nin sympatry",
-                                        yaxis_labelprint = "Oviposition preference\nin allopatry")
-PPMR_G0_Pref_CheStraw <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment + BoxID",
-                                        gen = "G0" , subscript = "G0",
-                                        fruit1 = "Cherry", fruit2 = "Strawberry",
-                                        xaxis_labelprint = "Oviposition preference\nin sympatry",
-                                        yaxis_labelprint = "Oviposition preference\nin allopatry")
-PPMR_G0_Pref_StrawBlack <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment + BoxID",
-                                        gen = "G0" , subscript = "G0",
-                                        fruit1 = "Strawberry", fruit2 = "Blackberry",
-                                        xaxis_labelprint = "Oviposition preference\nin sympatry",
-                                        yaxis_labelprint = "Oviposition preference\nin allopatry")
-PPMR_G2_Pref_BlackChe <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment  + BoxID",
-                                        gen = "G2" , subscript = "G2",
-                                        fruit1 = "Blackberry", fruit2 = "Cherry",
-                                        xaxis_labelprint = "Oviposition preference\nin sympatry",
-                                        yaxis_labelprint = "Oviposition preference\nin allopatry")
-PPMR_G2_Pref_CheStraw <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment + BoxID",
-                                        gen = "G2" , subscript = "G2",
-                                        fruit1 = "Cherry", fruit2 = "Strawberry",
-                                        xaxis_labelprint = "Oviposition preference\nin sympatry",
-                                        yaxis_labelprint = "Oviposition preference\nin allopatry")
-PPMR_G2_Pref_StrawBlack <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment  + BoxID",
-                                        gen = "G2" , subscript = "G2",
-                                        fruit1 = "Strawberry", fruit2 = "Blackberry",
-                                        xaxis_labelprint = "Oviposition preference\nin sympatry",
-                                        yaxis_labelprint = "Oviposition preference\nin allopatry")
-
-
-PPMR_Pref <- cowplot::ggdraw() + 
-  cowplot::draw_plot(PPMR_G0_Pref_BlackChe + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PPMR_G0_Pref_CheStraw + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PPMR_G0_Pref_StrawBlack + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
-  cowplot::draw_plot(PPMR_G2_Pref_BlackChe + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.01, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PPMR_G2_Pref_CheStraw + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.31, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PPMR_G2_Pref_StrawBlack + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.61, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot_label(c("Generation G1", "A", "B", "C", " ",
-                    "Generation G3", "D", "E", "F", " "),  
-                  x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
-                  y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
-                  hjust = c(0,0,0,0,0,0,0,0,0,0), 
-                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
-                  size = 16) 
- PPMR_Pref
- 
- 
- ###################################################### 
-########################### Preference stimulation
-###################################################### 
-PPMR_G0_Pref_Stim_BlackChe <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment  ",
-                                        gen = "G0" , subscript = "G0",
-                                        fruit1 = "Blackberry", fruit2 = "Cherry",
-                                        xaxis_labelprint = "Oviposition stimulation\nin sympatry",
-                                        yaxis_labelprint = "Oviposition stimulation\nin allopatry")
-PPMR_G0_Pref_Stim_CheStraw <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment",
-                                        gen = "G0" , subscript = "G0",
-                                        fruit1 = "Cherry", fruit2 = "Strawberry",
-                                        xaxis_labelprint = "Oviposition stimulation\nin sympatry",
-                                        yaxis_labelprint = "Oviposition stimulation\nin allopatry")
-PPMR_G0_Pref_Stim_StrawBlack <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment ",
-                                        gen = "G0" , subscript = "G0",
-                                        fruit1 = "Strawberry", fruit2 = "Blackberry",
-                                        xaxis_labelprint = "Oviposition stimulation\nin sympatry",
-                                        yaxis_labelprint = "Oviposition stimulation\nin allopatry")
-PPMR_G2_Pref_Stim_BlackChe <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment  ",
-                                        gen = "G2" , subscript = "G2",
-                                        fruit1 = "Blackberry", fruit2 = "Cherry",
-                                        xaxis_labelprint = "Oviposition stimulation\nin sympatry",
-                                        yaxis_labelprint = "Oviposition stimulation\nin allopatry")
-PPMR_G2_Pref_Stim_CheStraw <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment ",
-                                        gen = "G2" , subscript = "G2",
-                                        fruit1 = "Cherry", fruit2 = "Strawberry",
-                                        xaxis_labelprint = "Oviposition stimulation\nin sympatry",
-                                        yaxis_labelprint = "Oviposition stimulation\nin allopatry")
-PPMR_G2_Pref_Stim_StrawBlack <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
-                                        gen = "G2" , subscript = "G2",
-                                        fruit1 = "Strawberry", fruit2 = "Blackberry",
-                                        xaxis_labelprint = "Oviposition stimulation\nin sympatry",
-                                        yaxis_labelprint = "Oviposition stimulation\nin allopatry")
-
-
-PPMR_Pref_Stim <- cowplot::ggdraw() + 
-  cowplot::draw_plot(PPMR_G0_Pref_Stim_BlackChe + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PPMR_G0_Pref_Stim_CheStraw + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PPMR_G0_Pref_Stim_StrawBlack + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
-  cowplot::draw_plot(PPMR_G2_Pref_Stim_BlackChe + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.01, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PPMR_G2_Pref_Stim_CheStraw + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.31, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PPMR_G2_Pref_Stim_StrawBlack + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.61, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot_label(c("Generation G1", "A", "B", "C", " ",
-                    "Generation G3", "D", "E", "F", " "),  
-                  x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
-                  y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
-                  hjust = c(0,0,0,0,0,0,0,0,0,0), 
-                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
-                  size = 16) 
- PPMR_Pref_Stim
- 
- 
- 
- 
-###################################################### 
-########################### Save plot
-###################################################### 
-
-
- cowplot::save_plot(file =here::here("figures", "POP_effect_Offspring_performance.pdf"),
-                    PPMR_Rate ,
-                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
- 
-cowplot::save_plot(file =here::here("figures", "POP_effect_Oviposition_Preference.pdf"),
-                  PPMR_Pref,
-                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
- 
-
-cowplot::save_plot(file =here::here("figures", "POP_effect_Oviposition_Strimulation.pdf"),
-                  PPMR_Pref_Stim,
-                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
-
-
- 
 ```
 
 
-# PLOT All hetero POP EFFECT
-```{r }
 
+# Plot heterogeneity only one fruit
+```{r }
+# plot_Legend <- PAIR_CHERRY_STRAW_PREF  <- plot_PairwisePOP_residuals(dataset = data_PREF_three, 
+#                                                        trait = "Nb_eggs", 
+#                                                        gen = "Both",
+#                                                        fruit1 = "Strawberry", 
+#                                                        fruit2 = "Cherry")
+# legend <- lemon::g_legend(plot_Legend)
+# 
+# 
+# ###################################################### 
+# ########################### PERFORMANCE
+# ###################################################### 
+# PPMR_G0_Rate_BlackChe <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
+#                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
+#                                         gen = "G0" , subscript = "G1",
+#                                         fruit1 = "Blackberry", fruit2 = "Cherry",
+#                                         xaxis_labelprint = "Offspring performance\nin sympatry",
+#                                         yaxis_labelprint = "Offspring performance\nin allopatry")
+# PPMR_G0_Rate_CheStraw <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
+#                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
+#                                         gen = "G0" , subscript = "G1",
+#                                         fruit1 = "Cherry", fruit2 = "Strawberry",
+#                                         xaxis_labelprint = "Offspring performance\nin sympatry",
+#                                         yaxis_labelprint = "Offspring performance\nin allopatry")
+# PPMR_G0_Rate_StrawBlack <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
+#                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
+#                                         gen = "G0" , subscript = "G1",
+#                                         fruit1 = "Strawberry", fruit2 = "Blackberry",
+#                                         xaxis_labelprint = "Offspring performance\nin sympatry",
+#                                         yaxis_labelprint = "Offspring performance\nin allopatry")
+# PPMR_G2_Rate_BlackChe <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
+#                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
+#                                         gen = "G2" , subscript = "G3",
+#                                         fruit1 = "Blackberry", fruit2 = "Cherry",
+#                                         xaxis_labelprint = "Offspring performance\nin sympatry",
+#                                         yaxis_labelprint = "Offspring performance\nin allopatry")
+# PPMR_G2_Rate_CheStraw <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
+#                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
+#                                         gen = "G2" , subscript = "G3",
+#                                         fruit1 = "Cherry", fruit2 = "Strawberry",
+#                                         xaxis_labelprint = "Offspring performance\nin sympatry",
+#                                         yaxis_labelprint = "Offspring performance\nin allopatry")
+# PPMR_G2_Rate_StrawBlack <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
+#                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
+#                                         gen = "G2" , subscript = "G3",
+#                                         fruit1 = "Strawberry", fruit2 = "Blackberry",
+#                                         xaxis_labelprint = "Offspring performance\nin sympatry",
+#                                         yaxis_labelprint = "Offspring performance\nin allopatry")
+# 
+# 
+# PPMR_Rate <- cowplot::ggdraw() + 
+#   cowplot::draw_plot(PPMR_G0_Rate_BlackChe + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PPMR_G0_Rate_CheStraw + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PPMR_G0_Rate_StrawBlack + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
+#   cowplot::draw_plot(PPMR_G2_Rate_BlackChe + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.01, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PPMR_G2_Rate_CheStraw + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.31, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PPMR_G2_Rate_StrawBlack + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.61, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot_label(c("Generation G1", "A", "B", "C", " ",
+#                     "Generation G3", "D", "E", "F", " "),  
+#                   x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
+#                   y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
+#                   hjust = c(0,0,0,0,0,0,0,0,0,0), 
+#                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+#                   size = 16) 
+#  PPMR_Rate
+# # 
+# 
+# ###################################################### 
+# ########################### Preference
+# ###################################################### 
+# PPMR_G0_Pref_BlackChe <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
+#                                         formula="log(Nb_eggs+1) ~ Test_environment  + BoxID",
+#                                         gen = "G0" , subscript = "G0",
+#                                         fruit1 = "Blackberry", fruit2 = "Cherry",
+#                                         xaxis_labelprint = "Oviposition preference\nin sympatry",
+#                                         yaxis_labelprint = "Oviposition preference\nin allopatry")
+# PPMR_G0_Pref_CheStraw <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
+#                                         formula="log(Nb_eggs+1) ~ Test_environment + BoxID",
+#                                         gen = "G0" , subscript = "G0",
+#                                         fruit1 = "Cherry", fruit2 = "Strawberry",
+#                                         xaxis_labelprint = "Oviposition preference\nin sympatry",
+#                                         yaxis_labelprint = "Oviposition preference\nin allopatry")
+# PPMR_G0_Pref_StrawBlack <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
+#                                         formula="log(Nb_eggs+1) ~ Test_environment + BoxID",
+#                                         gen = "G0" , subscript = "G0",
+#                                         fruit1 = "Strawberry", fruit2 = "Blackberry",
+#                                         xaxis_labelprint = "Oviposition preference\nin sympatry",
+#                                         yaxis_labelprint = "Oviposition preference\nin allopatry")
+# PPMR_G2_Pref_BlackChe <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
+#                                         formula="log(Nb_eggs+1) ~ Test_environment  + BoxID",
+#                                         gen = "G2" , subscript = "G2",
+#                                         fruit1 = "Blackberry", fruit2 = "Cherry",
+#                                         xaxis_labelprint = "Oviposition preference\nin sympatry",
+#                                         yaxis_labelprint = "Oviposition preference\nin allopatry")
+# PPMR_G2_Pref_CheStraw <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
+#                                         formula="log(Nb_eggs+1) ~ Test_environment + BoxID",
+#                                         gen = "G2" , subscript = "G2",
+#                                         fruit1 = "Cherry", fruit2 = "Strawberry",
+#                                         xaxis_labelprint = "Oviposition preference\nin sympatry",
+#                                         yaxis_labelprint = "Oviposition preference\nin allopatry")
+# PPMR_G2_Pref_StrawBlack <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
+#                                         formula="log(Nb_eggs+1) ~ Test_environment  + BoxID",
+#                                         gen = "G2" , subscript = "G2",
+#                                         fruit1 = "Strawberry", fruit2 = "Blackberry",
+#                                         xaxis_labelprint = "Oviposition preference\nin sympatry",
+#                                         yaxis_labelprint = "Oviposition preference\nin allopatry")
+# 
+# 
+# PPMR_Pref <- cowplot::ggdraw() + 
+#   cowplot::draw_plot(PPMR_G0_Pref_BlackChe + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PPMR_G0_Pref_CheStraw + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PPMR_G0_Pref_StrawBlack + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
+#   cowplot::draw_plot(PPMR_G2_Pref_BlackChe + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.01, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PPMR_G2_Pref_CheStraw + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.31, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PPMR_G2_Pref_StrawBlack + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.61, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot_label(c("Generation G1", "A", "B", "C", " ",
+#                     "Generation G3", "D", "E", "F", " "),  
+#                   x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
+#                   y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
+#                   hjust = c(0,0,0,0,0,0,0,0,0,0), 
+#                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+#                   size = 16) 
+#  PPMR_Pref
+#  
+#  
+#  ###################################################### 
+# ########################### Preference stimulation
+# ###################################################### 
+# PPMR_G0_Pref_Stim_BlackChe <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
+#                                         formula="log(Nb_eggs+1) ~ Test_environment  ",
+#                                         gen = "G0" , subscript = "G0",
+#                                         fruit1 = "Blackberry", fruit2 = "Cherry",
+#                                         xaxis_labelprint = "Oviposition stimulation\nin sympatry",
+#                                         yaxis_labelprint = "Oviposition stimulation\nin allopatry")
+# PPMR_G0_Pref_Stim_CheStraw <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
+#                                         formula="log(Nb_eggs+1) ~ Test_environment",
+#                                         gen = "G0" , subscript = "G0",
+#                                         fruit1 = "Cherry", fruit2 = "Strawberry",
+#                                         xaxis_labelprint = "Oviposition stimulation\nin sympatry",
+#                                         yaxis_labelprint = "Oviposition stimulation\nin allopatry")
+# PPMR_G0_Pref_Stim_StrawBlack <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
+#                                         formula="log(Nb_eggs+1) ~ Test_environment ",
+#                                         gen = "G0" , subscript = "G0",
+#                                         fruit1 = "Strawberry", fruit2 = "Blackberry",
+#                                         xaxis_labelprint = "Oviposition stimulation\nin sympatry",
+#                                         yaxis_labelprint = "Oviposition stimulation\nin allopatry")
+# PPMR_G2_Pref_Stim_BlackChe <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
+#                                         formula="log(Nb_eggs+1) ~ Test_environment  ",
+#                                         gen = "G2" , subscript = "G2",
+#                                         fruit1 = "Blackberry", fruit2 = "Cherry",
+#                                         xaxis_labelprint = "Oviposition stimulation\nin sympatry",
+#                                         yaxis_labelprint = "Oviposition stimulation\nin allopatry")
+# PPMR_G2_Pref_Stim_CheStraw <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
+#                                         formula="log(Nb_eggs+1) ~ Test_environment ",
+#                                         gen = "G2" , subscript = "G2",
+#                                         fruit1 = "Cherry", fruit2 = "Strawberry",
+#                                         xaxis_labelprint = "Oviposition stimulation\nin sympatry",
+#                                         yaxis_labelprint = "Oviposition stimulation\nin allopatry")
+# PPMR_G2_Pref_Stim_StrawBlack <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
+#                                         formula="log(Nb_eggs+1) ~ Test_environment " ,
+#                                         gen = "G2" , subscript = "G2",
+#                                         fruit1 = "Strawberry", fruit2 = "Blackberry",
+#                                         xaxis_labelprint = "Oviposition stimulation\nin sympatry",
+#                                         yaxis_labelprint = "Oviposition stimulation\nin allopatry")
+# 
+# 
+# PPMR_Pref_Stim <- cowplot::ggdraw() + 
+#   cowplot::draw_plot(PPMR_G0_Pref_Stim_BlackChe + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PPMR_G0_Pref_Stim_CheStraw + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PPMR_G0_Pref_Stim_StrawBlack + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
+#   cowplot::draw_plot(PPMR_G2_Pref_Stim_BlackChe + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.01, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PPMR_G2_Pref_Stim_CheStraw + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.31, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PPMR_G2_Pref_Stim_StrawBlack + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.61, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot_label(c("Generation G1", "A", "B", "C", " ",
+#                     "Generation G3", "D", "E", "F", " "),  
+#                   x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
+#                   y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
+#                   hjust = c(0,0,0,0,0,0,0,0,0,0), 
+#                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+#                   size = 16) 
+#  PPMR_Pref_Stim
+#  
+#  
+#  
+#  
+# ###################################################### 
+# ########################### Save plot
+# ###################################################### 
+# 
+# 
+#  cowplot::save_plot(file =here::here("figures", "POP_effect_Offspring_performance.pdf"),
+#                     PPMR_Rate ,
+#                    base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+#  
+# cowplot::save_plot(file =here::here("figures", "POP_effect_Oviposition_Preference.pdf"),
+#                   PPMR_Pref,
+#                    base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+#  
+# 
+# cowplot::save_plot(file =here::here("figures", "POP_effect_Oviposition_Strimulation.pdf"),
+#                   PPMR_Pref_Stim,
+#                    base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+# 
+# 
+#  
+```
+
+
+# PLOT POP EFFECT - HETEROGENEITY
+```{r }
+# library("dplyr")
 PPMR_ALL_Pref_Stim_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
                                         formula="log(Nb_eggs+1) ~ Test_environment " ,
                                         gen = "G0" , 
+                                        formula_Blanquart="log(Nb_eggs+1) ~  Test_environment + Population + SA + Test_environment:Original_environment",
                                         xaxis_labelprint = "Oviposition stimulation in sympatry",
                                         yaxis_labelprint = "Oviposition stimulation in allopatry")
+
 PPMR_ALL_Pref_Stim_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
                                         formula="log(Nb_eggs+1) ~ Test_environment " ,
+                                        formula_Blanquart="log(Nb_eggs+1) ~  Test_environment + Population + SA + Test_environment:Original_environment",
                                         gen = "G2" , 
                                         xaxis_labelprint = "Oviposition stimulation in sympatry",
                                         yaxis_labelprint = "Oviposition stimulation in allopatry")
 
 
 PPMR_ALL_Pref_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment + BoxID" ,
+                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
+                                        formula_Blanquart="log(Nb_eggs+1) ~ Test_environment + Population + SA + 
+                    Test_environment:Original_environment + BoxID",
                                         gen = "G0" , 
                                         xaxis_labelprint = "Oviposition preference in sympatry",
                                         yaxis_labelprint = "Oviposition preference in allopatry")
 PPMR_ALL_Pref_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment + BoxID" ,
+                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
+                                        formula_Blanquart="log(Nb_eggs+1) ~ Test_environment + Population + SA + 
+                    Test_environment:Original_environment + BoxID",
                                         gen = "G2" , 
                                         xaxis_labelprint = "Oviposition preference in sympatry",
                                         yaxis_labelprint = "Oviposition preference in allopatry")
@@ -1610,11 +1604,13 @@ PPMR_ALL_Pref_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_th
 PPMR_ALL_Perf_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
                                         gen = "G0" , 
+                                        formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
                                         xaxis_labelprint = "Offspring performance in sympatry",
                                         yaxis_labelprint = "Offspring performance in allopatry")
 PPMR_ALL_Perf_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
-                                        gen = "G2" , 
+                                        gen = "G2" ,
+                                        formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
                                         xaxis_labelprint = "Offspring performance in sympatry",
                                         yaxis_labelprint = "Offspring performance in allopatry")
 

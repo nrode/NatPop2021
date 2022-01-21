@@ -3,6 +3,7 @@
 #' @description Create a bivariate plot with residuals from common garden experiment 
 #' @param dataset name of the dataset (tibble format)
 #' @param formula formula of the model to use to compute the residuals
+#' @param formula_Blanquart formula of the model to estimate Blanquart Local Adaptation 
 #' @param gen can be G0 or G2
 #' @param test_environment name of the column including the test environment
 #' @param original_environment name of the column including the environment of origin of each population 
@@ -17,10 +18,13 @@
 #' @param ylim scale for y-axis
 #' @param fixedxylim (logical) should the limits for the scale of x-axis and y-axis be computed a the range of the trait across all test_environments (default=FALSE)
 #' @param bisector (logical) print a bisector line through the origin (default=FALSE)
-#' @param errorbars print bars for standard errors
 #' @param printcor print correlation between the two variables
 #' @param printSA print SA 
 #' @param subscript subscript used when printing the correlation on the final graph
+#' @param test_Blanquart print the results of the Blanquart's SA test
+#' 
+#' @importFrom dplyr vars across
+#'
 #' 
 #' @return plot
 #' @export 
@@ -31,6 +35,7 @@
 
 plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
                                                   formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
+                                                  formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
                                                   test_environment="Test_environment",
                                                   original_environment="Original_environment",
                                                   gen = "G2",
@@ -40,24 +45,24 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
                                                   xaxis_labelprint = "Offspring performance\nin sympatry",
                                                   yaxis_labelprint = "Offspring performance\nin allopatry",
                                                   xlim=NULL, ylim=NULL, fixedxylim=TRUE, bisector=FALSE, 
-                                                  errorbars=TRUE, printcor=FALSE, printSA=FALSE){
+                                                  printcor=FALSE, printSA=FALSE, test_Blanquart=TRUE){
   
   # Subset dataset per generation 
   dataset <- dataset[dataset$Generation == gen,]
   
   
-  # Subset dataset
-  if (gen == "G0") {
-    scale_label = c("G0/G1")
-    scale_values = c(21)
-  }else{
-    if (gen == "G2") {
-      scale_label = c("G2/G3")
-      scale_values = c(16)
-    }else {
-      print("Error: unknown generation")
-    }
-  }
+  # # Subset dataset
+  # if (gen == "G0") {
+  #   scale_label = c("G0/G1")
+  #   scale_values = c(21)
+  # }else{
+  #   if (gen == "G2") {
+  #     scale_label = c("G2/G3")
+  #     scale_values = c(16)
+  #   }else {
+  #     print("Error: unknown generation")
+  #   }
+  # }
   
   
   
@@ -86,16 +91,18 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
     print("The length of coltest_envlevels and the number of levels of test_environment are different")
   }
   
-  if(!is.null(coltest_envlevels)){
-    colfruit1 <- coltest_envlevels[envlevels==fruit1]
-    colfruit2 <- coltest_envlevels[envlevels==fruit2]
-  }else{
-    colfruit1 <- scales::hue_pal()(length(envlevels))[envlevels==fruit1]
-    colfruit2 <- scales::hue_pal()(length(envlevels))[envlevels==fruit2]
-    print("No color provided, using default color palette")
-    scales::show_col(scales::hue_pal()(length(envlevels)))
-    
-  }
+  
+  # 
+  # if(!is.null(coltest_envlevels)){
+  #   colfruit1 <- coltest_envlevels[envlevels==fruit1]
+  #   colfruit2 <- coltest_envlevels[envlevels==fruit2]
+  # }else{
+  #   colfruit1 <- scales::hue_pal()(length(envlevels))[envlevels==fruit1]
+  #   colfruit2 <- scales::hue_pal()(length(envlevels))[envlevels==fruit2]
+  #   print("No color provided, using default color palette")
+  #   scales::show_col(scales::hue_pal()(length(envlevels)))
+  #   
+  # }
   
   ## Fit model
   m <- lm(formula, data=dataset)
@@ -118,24 +125,35 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
     dplyr::select(-SdResiduals)
   
   ## Compute range of values for MeanResiduals
-  if(errorbars){
-    rangexy <- c(min(datameanres$MeanResiduals-datameanres$SeResiduals, na.rm=TRUE), 
+  rangexy <- c(min(datameanres$MeanResiduals-datameanres$SeResiduals, na.rm=TRUE), 
                  max(datameanres$MeanResiduals+datameanres$SeResiduals, na.rm=TRUE))
-  }else{
-    rangexy <- range(datameanres$MeanResiduals)
-  }
   
+  
+  ## Transform in dataframe
   datameanres<-as.data.frame(datameanres)
   
   
+  #Transform dataset: symp and allop columns
   datameanres$SA <- ifelse(datameanres$Test_environment==datameanres$Original_environment,1,0)
+  
+  #Remove populations without SA value
+  datameanres <- droplevels(datameanres)
+  populations_withsymp <- unique(datameanres$Population[datameanres$SA=="1"])
+  populations_withsymp <- droplevels(populations_withsymp)
+  pop_toremove <- setdiff(levels(datameanres$Population), populations_withsymp)
+  
+  if(!identical(pop_toremove, character(0))){
+    print("Populations that do not have measures in sympatry have been removed")
+    datameanres<-datameanres[datameanres$Population!=pop_toremove,]
+    datameanres <- droplevels(datameanres)
+  }
+
+  
+  #Create new columns for symp
   datameanres$Mean_Symp <- NA
   datameanres$Se_Symp <-  NA
   datameanres$N_Symp<-  NA
-  
-  datameanres <- datameanres[-55,]
-  datameanres<-droplevels(datameanres)
-  
+
   for (i in levels(datameanres$Population[datameanres$SA==1])) {
     meansymp <- datameanres$MeanResiduals[datameanres$SA==1&datameanres$Population==i]
     se_symp <- datameanres$SeResiduals[datameanres$SA==1&datameanres$Population==i]
@@ -154,6 +172,7 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
   datameanres$Symp <-  datameanres$Original_environment
   datameanres$Allop <-  datameanres$Test_environment
   
+  #Remove useless row and columns
   datameanres <- datameanres[datameanres$SA!=1,]
   datameanres <- datameanres[,-c(2:7)]
   
@@ -239,18 +258,38 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
   #   dplyr::mutate(SA_se = SA_sd/sqrt(Npop))
   datameanres
   
+  ######### Blanquart test 
+  ## Fit model
+  lm_val <- lm(formula_Blanquart, data=dataset)
+  Fratio = anova(lm_val)["SA",3]/anova(lm_val)["Test_environment:Original_environment",3]
+  pvalue = 1 - pf(Fratio,anova(lm_val)["SA",1],anova(lm_val)["Test_environment:Original_environment",1])
+  df1 = anova(lm_val)["SA",1]
+  df2 = anova(lm_val)["Test_environment:Original_environment",1]
   
   
+  #Equation
+  equation_Blanquart <- as.character(as.expression(substitute(italic(F)[df1~","~df2]~"="~Fratio~";"~italic(P)~"="~pvalue,
+                                                    list(Fratio = format(Fratio, digits = 2, nsmall=2),
+                                                         df1 = format(df1, digits = 2), 
+                                                         df2 = format(df2, digits = 2), 
+                                                         pvalue = format(pvalue, digits = 2)))))
  
+  #Ylim 
+  max_plot <- max(max(datameanres$Mean_Allop+datameanres$Se_Allop, na.rm = TRUE), 
+                  max(datameanres$Mean_Symp+datameanres$Se_Symp, na.rm = TRUE)) 
+  min_plot <-  min(min(datameanres$Mean_Allop-datameanres$Se_Allop, na.rm = TRUE), 
+                   min(datameanres$Mean_Symp-datameanres$Se_Symp, na.rm = TRUE)) 
   
-  ## Check whether legend should be drawn
+  ######### PLOT 
   plot_pair <- ggplot(data = datameanres,
                       aes(x = Mean_Symp, 
                             y = Mean_Allop), 
                             color = Symp, 
                             shape = Allop) +
-    geom_vline(xintercept = 0, linetype ="dashed", color = "grey")+
-    geom_hline(yintercept = 0, linetype ="dashed", color = "grey") +
+    geom_abline(intercept = 0, slope=1, linetype ="dashed", color = "grey") +
+    geom_errorbar(data = datameanres, aes(ymin=Mean_Allop-Se_Allop, ymax=Mean_Allop+Se_Allop, col=Symp), size=0.3) +
+    geom_errorbarh(data = datameanres, aes(xmin=Mean_Symp-Se_Symp, xmax=Mean_Symp+Se_Symp, col=Symp), size=0.3) + 
+    geom_point(aes(shape = Allop, col=Symp, fill=Symp),  size=3, alpha=1)  + 
     xlab(xaxis_labelprint)  +
     ylab(yaxis_labelprint) +
     scale_fill_manual(name="Fly population from:",   
@@ -263,44 +302,32 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
                        labels=c("Blackberry","Cherry","Strawberry"),
                        values=c("#301934","#BC3C6D", "#3FAA96"),
                        drop=FALSE) + 
+    scale_shape_manual(name = "Test environment:",
+                       labels = c("Blackberry","Cherry","Strawberry"), 
+                       values =  c(15,16,17)) + 
     theme(plot.title = element_text(hjust = 0.5)) + 
     theme_LO_sober + theme (
       panel.grid.major.y = element_blank(),
-      panel.grid.minor.y = element_blank()
-    )
+      panel.grid.minor.y = element_blank())
   
-  
-  
-  #Add y = x 
-  if(bisector){
-    plot_pair <- plot_pair + geom_abline(intercept = 0, slope=1, linetype ="solid", color = "grey")
+  if(test_Blanquart){
+    plot_pair <- plot_pair + annotate('text', x = min_plot, y = max_plot, 
+                                      label = equation_Blanquart, parse = TRUE, hjust = 0, size = 4) 
   }
-  
-  
-  ## Add errorbars 
-  if(errorbars){
-    plot_pair <- plot_pair +
-      geom_errorbar(data = datameanres, aes(ymin=Mean_Allop-Se_Allop, ymax=Mean_Allop+Se_Allop, col=Symp)) +
-      geom_errorbarh(data = datameanres, aes(xmin=Mean_Symp-Se_Symp, xmax=Mean_Symp+Se_Symp, col=Symp))
-  }
-  
   
   # Add point
-  if (gen == "G0") {
-    plot_pair <- plot_pair + geom_point(aes(shape = Allop, col=Symp), fill="white", size=3, stroke=1.3) + 
-    scale_shape_manual(name = "Test Environment:",
-                       labels = c("Blackberry","Cherry","Strawberry"), 
-                       values =  c(22,21,24)) 
-  }else{
-    if (gen == "G2") {
-      plot_pair <- plot_pair + geom_point(aes(shape = Allop, col=Symp, fill=Symp),  size=3, stroke=1.3)  + 
-        scale_shape_manual(name = "Test Environment:",
-                           labels = c("Blackberry","Cherry","Strawberry"), 
-                           values =  c(15,16,17)) 
-    }else {
-      print("Error: unknown generation")
-    }
-  }
+  # if (gen == "G0") {
+  #   plot_pair <- plot_pair + geom_point(aes(shape = Allop, col=Symp), fill="white", size=3, stroke=1.3) + 
+  #   scale_shape_manual(name = "Test Environment:",
+  #                      labels = c("Blackberry","Cherry","Strawberry"), 
+  #                      values =  c(22,21,24)) 
+  # }else{
+  #   if (gen == "G2") {
+  #     plot_pair <- plot_pair + 
+  #   }else {
+  #     print("Error: unknown generation")
+  #   }
+  # }
   
   
   ## Change range limit
@@ -347,6 +374,8 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
                                                    list(subscript = subscript,
                                                         SAmean = format(SAstats$SA_mean, digits = 2, nsmall=2), 
                                                         se = format(SAstats$SA_se, digits = 2)))))
+    
+
     
     ## Position of the equation depends on the range of values of x and y
     if(fixedxylim){

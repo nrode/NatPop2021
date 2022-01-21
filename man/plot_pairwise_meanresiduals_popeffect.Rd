@@ -8,6 +8,8 @@
 plot_pairwise_meanresiduals_popeffect(
   dataset = data_PERF_Rate,
   formula = "asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
+ 
+    formula_Blanquart = "asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
   test_environment = "Test_environment",
   original_environment = "Original_environment",
   gen = "G2",
@@ -20,14 +22,16 @@ plot_pairwise_meanresiduals_popeffect(
   ylim = NULL,
   fixedxylim = TRUE,
   bisector = FALSE,
-  errorbars = TRUE,
   printcor = FALSE,
-  printSA = FALSE
+  printSA = FALSE,
+  test_Blanquart = TRUE
 )
 
 plot_pairwise_meanresiduals_popeffect(
   dataset = data_PERF_Rate,
   formula = "asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
+ 
+    formula_Blanquart = "asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
   test_environment = "Test_environment",
   original_environment = "Original_environment",
   gen = "G2",
@@ -40,15 +44,17 @@ plot_pairwise_meanresiduals_popeffect(
   ylim = NULL,
   fixedxylim = TRUE,
   bisector = FALSE,
-  errorbars = TRUE,
   printcor = FALSE,
-  printSA = FALSE
+  printSA = FALSE,
+  test_Blanquart = TRUE
 )
 }
 \arguments{
 \item{dataset}{name of the dataset (tibble format)}
 
 \item{formula}{formula of the model to use to compute the residuals}
+
+\item{formula_Blanquart}{formula of the model to estimate Blanquart Local Adaptation}
 
 \item{test_environment}{name of the column including the test environment}
 
@@ -74,11 +80,13 @@ plot_pairwise_meanresiduals_popeffect(
 
 \item{bisector}{(logical) print a bisector line through the origin (default=FALSE)}
 
-\item{errorbars}{print bars for standard errors}
-
 \item{printcor}{print correlation between the two variables}
 
 \item{printSA}{print SA}
+
+\item{test_Blanquart}{print the results of the Blanquart's SA test}
+
+\item{errorbars}{print bars for standard errors}
 
 \item{fruit1}{fruit for y-axis}
 
