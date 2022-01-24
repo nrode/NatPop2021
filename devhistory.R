@@ -53,6 +53,7 @@ usethis::use_r("plot_Pairwise_meanresiduals")
 usethis::use_r("plot_Pairwise_meanresiduals_popeffect")
 usethis::use_r("plot_Pairwise_meanresiduals_popeffect_Alltogether")
 usethis::use_r("utils-pipe")
+usethis::use_r("plot_correlation_meanresiduals")
 
 ## Update NAMESPACE file
 devtools::document()
