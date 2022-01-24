@@ -115,43 +115,43 @@ levels(data_PREF$Population)
 
 # Load data
 ```{r }
-
-data <- read.table(file=here::here("data", "DATACOMPLET_PERF2018.csv"), header=TRUE, sep=";")
-
-head(data)
-
-## Keep only G2 data
-#data <- data[data$Generation=="G2",]
-
-#Remove WT3 population and Grape environment
-data <- data[data$Test_environment!="Grape"&data$Test_environment!="GF"&data$Population!="WT3",]
-## Keep WT3 data
-dataWT3 <- data[data$Population=="WT3",]
-
-## Keep only blackberry populations
-#data <- data[data$Original_environment=="Blackberry",]
-
-
-## Convert as factor
-data$Original_environment <- factor(data$Original_environment)
-data$Test_environment <- factor(data$Test_environment)
-data$Population <- factor(data$Population)
-data$City <- factor(data$City)
-## New factor for model with compound symmetry matrix (see)
-data$City_Test_environment <- as.factor(paste(data$City, data$Test_environment, sep="_"))
-
-## Compute egg score
-data$EggScore <- as.factor(ifelse(data$Nb_eggs<51, 1, ifelse(data$Nb_eggs<101, 2, ifelse(data$Nb_eggs<151, 3, 4))))
-data$EggScoreFive <- as.factor(ifelse(data$Nb_eggs<51, 1, ifelse(data$Nb_eggs<101, 2, ifelse(data$Nb_eggs<151, 3, ifelse(data$Nb_eggs<201, 4, 5)))))
-data$EggScoreSmall <- as.factor(ifelse(data$Nb_eggs<51, 1, ifelse(data$Nb_eggs<76, 2, ifelse(data$Nb_eggs<101, 3, ifelse(data$Nb_eggs<126, 4, ifelse(data$Nb_eggs<151, 5, 6))))))
-data$EggScoreNum <- as.numeric(data$EggScore)
-## Correct number of eggs
-data$Nb_eggscorrected <- ifelse(data$Nb_adults>data$Nb_eggs, data$Nb_adults, data$Nb_eggs)
-data$Emergence_Rate <-data$Nb_adults/data$Nb_eggscorrected
-head(data)
-
-## Remove data without number of eggs
-data <- data[!is.na(data$Nb_eggs),]
+# 
+# data <- read.table(file=here::here("data", "DATACOMPLET_PERF2018.csv"), header=TRUE, sep=";")
+# 
+# head(data)
+# 
+# ## Keep only G2 data
+# #data <- data[data$Generation=="G2",]
+# 
+# #Remove WT3 population and Grape environment
+# data <- data[data$Test_environment!="Grape"&data$Test_environment!="GF"&data$Population!="WT3",]
+# ## Keep WT3 data
+# dataWT3 <- data[data$Population=="WT3",]
+# 
+# ## Keep only blackberry populations
+# #data <- data[data$Original_environment=="Blackberry",]
+# 
+# 
+# ## Convert as factor
+# data$Original_environment <- factor(data$Original_environment)
+# data$Test_environment <- factor(data$Test_environment)
+# data$Population <- factor(data$Population)
+# data$City <- factor(data$City)
+# ## New factor for model with compound symmetry matrix (see)
+# data$City_Test_environment <- as.factor(paste(data$City, data$Test_environment, sep="_"))
+# 
+# ## Compute egg score
+# data$EggScore <- as.factor(ifelse(data$Nb_eggs<51, 1, ifelse(data$Nb_eggs<101, 2, ifelse(data$Nb_eggs<151, 3, 4))))
+# data$EggScoreFive <- as.factor(ifelse(data$Nb_eggs<51, 1, ifelse(data$Nb_eggs<101, 2, ifelse(data$Nb_eggs<151, 3, ifelse(data$Nb_eggs<201, 4, 5)))))
+# data$EggScoreSmall <- as.factor(ifelse(data$Nb_eggs<51, 1, ifelse(data$Nb_eggs<76, 2, ifelse(data$Nb_eggs<101, 3, ifelse(data$Nb_eggs<126, 4, ifelse(data$Nb_eggs<151, 5, 6))))))
+# data$EggScoreNum <- as.numeric(data$EggScore)
+# ## Correct number of eggs
+# data$Nb_eggscorrected <- ifelse(data$Nb_adults>data$Nb_eggs, data$Nb_adults, data$Nb_eggs)
+# data$Emergence_Rate <-data$Nb_adults/data$Nb_eggscorrected
+# head(data)
+# 
+# ## Remove data without number of eggs
+# data <- data[!is.na(data$Nb_eggs),]
 
 
 
@@ -204,6 +204,13 @@ title_plot <- "CorrelationsG1_G3_Offspring_performance.pdf"
 title_plot <- "CorrelationsG0_G2_Oviposition_Stimulation.pdf"
 title_plot <- "CorrelationsG0_G2_Oviposition_Preference.pdf"
 
+axisG0 <- "Performance G1"
+axisG2 <- "Performance G3"
+axisG0 <- "Oviposition stimulation G0"
+axisG2 <- "Oviposition stimulation G2"
+axisG0 <- "Preference G0"
+axisG2 <- "Preference G2"
+
 modelformula <- asin(sqrt(Rate))  ~ Test_environment + log(Nb_eggs) + Generation
 modelformula <- log(Nb_eggs+1)  ~ Test_environment + Generation
 modelformula <- log(Nb_eggs+1)  ~ Test_environment + Generation + BoxID
@@ -218,16 +225,20 @@ dataselect <- data_PERF
 dataselect <- data_PREF_three
 
 ###PLOT 
-(PAIR_G0_G2 <- plot_correlation_meanresiduals(dataset = dataselect, formula=modelformula, envfactor="Generation", additional_factor="Test_environment", original_environment="Original_environment", col_original_environment= c("#301934","#BC3C6D", "#3FAA96"), grp_cols=c("City_Original_environment", "Original_environment", "Test_environment", "Generation"), facetwrap=TRUE, fixedxylim = FALSE, bisector = TRUE, xaxis_labelprint = "Preference G0", yaxis_labelprint =  "Preference G2"))
+(PAIR_G0_G2 <- plot_correlation_meanresiduals(dataset = dataselect, formula=modelformula, envfactor="Generation", additional_factor="Test_environment", original_environment="Original_environment", col_original_environment= c("#301934","#BC3C6D", "#3FAA96"), grp_cols=c("Population", "Original_environment", "Test_environment", "Generation"), facetwrap=TRUE, fixedxylim = FALSE, bisector = TRUE, xaxis_labelprint = axisG0, yaxis_labelprint =  axisG2))
 
-(PAIR_G0_G2_label <- plot_correlation_meanresiduals(dataset = data[dataselect,], formula=modelformula, envfactor="Generation", additional_factor="Test_environment", original_environment="Original_environment", col_original_environment= c("#301934","#BC3C6D", "#3FAA96"), grp_cols=c("City_Original_environment", "Original_environment", "Test_environment", "Generation"), facetwrap=TRUE, printnames=TRUE, printsamplesize=TRUE, fixedxylim = FALSE, bisector = TRUE, xaxis_labelprint = "Preference G0", yaxis_labelprint =  "Preference G2"))
+(PAIR_G0_G2_label <- plot_correlation_meanresiduals(dataset = data[dataselect,], formula=modelformula, envfactor="Generation", additional_factor="Test_environment", original_environment="Original_environment", col_original_environment= c("#301934","#BC3C6D", "#3FAA96"), grp_cols=c("Population", "Original_environment", "Test_environment", "Generation"), facetwrap=TRUE, printnames=TRUE, printsamplesize=TRUE, fixedxylim = FALSE, bisector = TRUE, xaxis_labelprint = axisG0, yaxis_labelprint = axisG2))
 
-figure <- ggpubr::ggarrange(PAIR_G0_G2, PAIR_G0_G2_label,
-                    labels = c("A", "B"),
-                    ncol = 1, nrow = 2, common.legend = TRUE, legend = "bottom")
+# figure <- ggpubr::ggarrange(PAIR_G0_G2, PAIR_G0_G2_label,
+#                     labels = c("A", "B"),
+#                     ncol = 1, nrow = 2, common.legend = TRUE, legend = "bottom")
+# 
+# cowplot::save_plot(file =here::here("plots", title_plot),
+#                  figure, base_height = 20/cm(1),
+#                   base_width = 20/cm(1), dpi = 1200)
 
-cowplot::save_plot(file =here::here("plots", title_plot),
-                 figure, base_height = 20/cm(1),
+cowplot::save_plot(file =here::here("figures", title_plot),
+                 PAIR_G0_G2, base_height = 10/cm(1),
                   base_width = 20/cm(1), dpi = 1200)
 
 
