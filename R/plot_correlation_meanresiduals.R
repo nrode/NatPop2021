@@ -17,7 +17,6 @@
 #' @param xaxis_labelprint label of the x axis
 #' @param yaxis_labelprint label of the y axis
 #' @param fixedxylim (logical) should the limits for the scale of x-axis and y-axis be computed a the range of the trait across all test_environments (default=FALSE)
-#' @param bisector (logical) print a bisector line through the origin (default=FALSE)
 #' 
 plot_correlation_meanresiduals <- function(dataset = dataselect,
                                            formula="log(Nb_adults+1) ~",
@@ -32,7 +31,7 @@ plot_correlation_meanresiduals <- function(dataset = dataselect,
                                            labelsize=1,
                                            xaxis_labelprint = NULL,
                                            yaxis_labelprint =  NULL,
-                                           xlim=NULL, ylim=NULL, fixedxylim = TRUE, bisector = TRUE, errorbars=TRUE){
+                                           xlim=NULL, ylim=NULL, fixedxylim = TRUE,  errorbars=TRUE){
   
   ## Transform test_environment into factor
   print("Converting envfactor column into a factor")
@@ -145,10 +144,7 @@ plot_correlation_meanresiduals <- function(dataset = dataselect,
   }
   
   
-  ## Add bisector
-  if(bisector){
-    plot_pair <- plot_pair + geom_abline(intercept = 0, slope=1, linetype ="solid", color = "grey")
-  }
+
   
   
   ##Add error bars
@@ -160,6 +156,7 @@ plot_correlation_meanresiduals <- function(dataset = dataselect,
   
   ## Add data points
   plot_pair <- plot_pair +
+    geom_abline(intercept = 0, slope=1, linetype ="dashed", color = "grey") +
     geom_point(size=3, stroke=1.3, col="white") + 
     geom_point(size=3, stroke=1.3, alpha = 0.9) + 
     theme(plot.title = element_text(hjust = 0.5)) +         
