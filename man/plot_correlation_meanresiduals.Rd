@@ -21,7 +21,6 @@ plot_correlation_meanresiduals(
   xlim = NULL,
   ylim = NULL,
   fixedxylim = TRUE,
-  bisector = TRUE,
   errorbars = TRUE
 )
 }
@@ -57,8 +56,6 @@ plot_correlation_meanresiduals(
 \item{ylim}{scale for y-axis}
 
 \item{fixedxylim}{(logical) should the limits for the scale of x-axis and y-axis be computed a the range of the trait across all test_environments (default=FALSE)}
-
-\item{bisector}{(logical) print a bisector line through the origin (default=FALSE)}
 }
 \description{
 Create a bivariate plot showing the relationship between a trait measured using an environmental factor with two levels

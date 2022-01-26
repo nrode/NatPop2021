@@ -1,4 +1,4 @@
-#' Plot pairwise residuals
+#' Plot pairwise residuals pop effect
 #'
 #' @description Create a bivariate plot with residuals from common garden experiment 
 #' @param dataset name of the dataset (tibble format)

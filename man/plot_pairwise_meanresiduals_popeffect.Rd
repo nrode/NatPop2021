@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_Pairwise_meanresiduals_popeffect.R
 \name{plot_pairwise_meanresiduals_popeffect}
 \alias{plot_pairwise_meanresiduals_popeffect}
-\title{Plot pairwise residuals}
+\title{Plot pairwise residuals pop effect}
 \usage{
 plot_pairwise_meanresiduals_popeffect(
   dataset = data_PERF_Rate,
@@ -20,7 +20,6 @@ plot_pairwise_meanresiduals_popeffect(
   xlim = NULL,
   ylim = NULL,
   fixedxylim = TRUE,
-  bisector = FALSE,
   printcor = FALSE,
   printSA = FALSE,
   test_Blanquart = TRUE
@@ -55,8 +54,6 @@ plot_pairwise_meanresiduals_popeffect(
 
 \item{fixedxylim}{(logical) should the limits for the scale of x-axis and y-axis be computed a the range of the trait across all test_environments (default=FALSE)}
 
-\item{bisector}{(logical) print a bisector line through the origin (default=FALSE)}
-
 \item{printcor}{print correlation between the two variables}
 
 \item{printSA}{print SA}
@@ -77,5 +74,5 @@ Create a bivariate plot with residuals from common garden experiment
 }
 \examples{
 plot_pairwise_meanresiduals(dataset = data_PERF_Rate, formula=modelformula, fruit1 = "Cherry", fruit2 = "Blackberry", 
-grp_cols=c("City", "Generation", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", additional_factor="Generation", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE)
+grp_cols=c("City", "Generation", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", additional_factor="Generation", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE)
 }
