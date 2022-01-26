@@ -17,7 +17,6 @@
 #' @param xlim scale for x-axis
 #' @param ylim scale for y-axis
 #' @param fixedxylim (logical) should the limits for the scale of x-axis and y-axis be computed a the range of the trait across all test_environments (default=FALSE)
-#' @param bisector (logical) print a bisector line through the origin (default=FALSE)
 #' @param printcor print correlation between the two variables
 #' @param printSA print SA 
 #' @param subscript subscript used when printing the correlation on the final graph
@@ -31,7 +30,7 @@
 #'
 #' @examples
 #'plot_pairwise_meanresiduals(dataset = data_PERF_Rate, formula=modelformula, fruit1 = "Cherry", fruit2 = "Blackberry", 
-#'grp_cols=c("City", "Generation", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", additional_factor="Generation", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE)
+#'grp_cols=c("City", "Generation", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", additional_factor="Generation", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE)
 
 plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
                                                   formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
@@ -44,7 +43,7 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
                                                   coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"),
                                                   xaxis_labelprint = "Offspring performance\nin sympatry",
                                                   yaxis_labelprint = "Offspring performance\nin allopatry",
-                                                  xlim=NULL, ylim=NULL, fixedxylim=TRUE, bisector=FALSE, 
+                                                  xlim=NULL, ylim=NULL, fixedxylim=TRUE,  
                                                   printcor=FALSE, printSA=FALSE, test_Blanquart=TRUE){
   
   # Subset dataset per generation 

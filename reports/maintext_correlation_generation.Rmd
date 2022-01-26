@@ -1,5 +1,5 @@
 ---
-title: "Pop nat analysis"
+title: "Correlation between generations"
 author: "Laure Olazcuaga, Nicolas Rode"
 date: "`r format(Sys.Date(), '%d-%B-%Y')`"
 output: 
@@ -114,79 +114,124 @@ levels(data_PREF$Population)
 
 
 # CORRELATIONS BETWEEN GO and G2
-## Without accounting for differences among original environments in G0
-### Plot
+## Plot
 ```{r }
-
-title_plot <- "CorrelationsG1_G3_Offspring_performance.pdf"
-title_plot <- "CorrelationsG0_G2_Oviposition_Stimulation.pdf"
-title_plot <- "CorrelationsG0_G2_Oviposition_Preference.pdf"
-
-axisG0 <- "Performance G1"
-axisG2 <- "Performance G3"
-axisG0 <- "Oviposition stimulation G0"
-axisG2 <- "Oviposition stimulation G2"
-axisG0 <- "Preference G0"
-axisG2 <- "Preference G2"
-
-modelformula <- asin(sqrt(Rate))  ~ Test_environment + log(Nb_eggs) + Generation
-modelformula <- log(Nb_eggs+1)  ~ Test_environment + Generation
-modelformula <- log(Nb_eggs+1)  ~ Test_environment + Generation + BoxID
-
-
-## Select the datasets to use for the graph
+### OFFSPRING PERFORMANCE 
 dataselect <- data_PERF_Rate
-dataselect <- data_PERF
-dataselect <- data_PREF_three
+axis <- c("Offspring performance G1","Offspring performance G3")
+modelformula <- asin(sqrt(Rate))  ~   Test_environment + Generation + log(Nb_eggs) 
 
-###PLOT 
-(PAIR_G0_G2 <- plot_correlation_meanresiduals(dataset = dataselect, 
+## Accounting for differences among original environments in G0
+# modelformula <- asin(sqrt(Rate))  ~   Original_environment*Generation + Test_environment + Generation + log(Nb_eggs) 
+PAIR_G0_G2_PERFORMANCE <- plot_correlation_meanresiduals(dataset = dataselect, 
                                               formula = modelformula, 
                                               envfactor="Generation", 
                                               additional_factor="Test_environment",
                                               original_environment="Original_environment", 
-                                              col_original_environment= c("#301934","#BC3C6D", "#3FAA96"),
-                                              grp_cols=c("Population", "Original_environment", "Test_environment","Generation"),
-                                              facetwrap=TRUE, fixedxylim = FALSE, 
-                                              bisector = TRUE, xaxis_labelprint = axisG0, 
-                                              yaxis_labelprint =  axisG2))
+                                              col_original_environment= c("#301934",
+                                                                          "#BC3C6D", "#3FAA96"),
+                                              grp_cols=c("Population", "Original_environment",
+                                                         "Test_environment","Generation"),
+                                              facetwrap=FALSE, fixedxylim = FALSE, 
+                                              xaxis_labelprint = axis[1], 
+                                              yaxis_labelprint =  axis[2])
+
+### STIMULATION
+dataselect <- data_PERF
+axis <- c("Oviposition stimulation G0","Oviposition stimulation G2")
+modelformula <- log(Nb_eggs+1)  ~ Test_environment + Generation
+
+## Accounting for differences among original environments in G0
+#modelformula <- log(Nb_eggs+1)  ~ Original_environment*Generation + Test_environment 
+
+###PLOT 
+PAIR_G0_G2_STIMULATION <- plot_correlation_meanresiduals(dataset = dataselect, 
+                                              formula = modelformula, 
+                                              envfactor="Generation", 
+                                              additional_factor="Test_environment",
+                                              original_environment="Original_environment", 
+                                              col_original_environment= c("#301934",
+                                                                          "#BC3C6D", "#3FAA96"),
+                                              grp_cols=c("Population", "Original_environment",
+                                                         "Test_environment","Generation"),
+                                              facetwrap=FALSE, fixedxylim = FALSE, 
+                                              xaxis_labelprint = axis[1], 
+                                              yaxis_labelprint =  axis[2])
+
+
+### PREFERENCE
+dataselect <- data_PREF_three
+axis <- C("Oviposition preference G0","Oviposition preference G2")
+modelformula <- log(Nb_eggs+1)  ~ Test_environment + Generation + BoxID
+## Accounting for differences among original environments in G0
+#modelformula <- log(Nb_eggs+1)  ~ Original_environment*Generation + Test_environment + Generation + BoxID
+PAIR_G0_G2_PREFERENCE <- plot_correlation_meanresiduals(dataset = dataselect, 
+                                              formula = modelformula, 
+                                              envfactor="Generation", 
+                                              additional_factor="Test_environment",
+                                              original_environment="Original_environment", 
+                                              col_original_environment= c("#301934",
+                                                                          "#BC3C6D", "#3FAA96"),
+                                              grp_cols=c("Population", "Original_environment",
+                                                         "Test_environment","Generation"),
+                                              facetwrap=FALSE, fixedxylim = FALSE, 
+                                              xaxis_labelprint = axis[1], 
+                                              yaxis_labelprint =  axis[2])
+
+
+# title_plot <- "CorrelationsG0_G2_Oviposition_Stimulation.pdf"
+# title_plot <- "CorrelationsG1_G3_Offspring_performance.pdf"
+# title_plot <- "CorrelationsG0_G2_Oviposition_Preference.pdf"
+ 
+legend <- lemon::g_legend(PAIR_G0_G2_PREFERENCE)
 
 
 
-cowplot::save_plot(file =here::here("figures", title_plot),
-                 PAIR_G0_G2, base_height = 10/cm(1),
-                  base_width = 20/cm(1), dpi = 1200)
+PAIR_G0_G2 <- cowplot::ggdraw() + 
+  cowplot::draw_plot(PAIR_G0_G2_PREFERENCE + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.01, y = 0, width = 0.25, height = 1) + 
+  cowplot::draw_plot( PAIR_G0_G2_STIMULATION+ theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.31, y = 0, width = 0.25, height = 1) + 
+  cowplot::draw_plot(PAIR_G0_G2_PERFORMANCE + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.61, y = 0, width = 0.25, height = 1) + 
+  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0000001, height = 0.0000001) + 
+  cowplot::draw_plot_label(c("A", "B", "C", " "),  
+                  x = c(0.01, 0.30, 0.61, 0.92), 
+                  y = c(0.98, 0.98, 0.98, 0.98), 
+                  hjust = c(0,0,0,0), 
+                  vjust = c(1.5, 1.5, 1.5, 1.5),
+                  size = 16) 
+ PAIR_G0_G2
+ 
+
+cowplot::save_plot(file =here::here("figures", "Correlation_G0_G2.pdf"),
+                  PAIR_G0_G2,
+                   base_height = 10/cm(1), base_width = 36/cm(1), dpi = 610)
+
 
 
 ```
 
-### Analyses of Emergence rate
+## Analyses
 ```{r }
-## Create new variable
-data$City_Original_environment <- as.factor(paste(data$City, data$Original_environment, sep="_"))
 
-## Blackberry
-m00 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ log(Nb_eggscorrected) + (0+ lme4::dummy(Generation, "G0") |  City_Original_environment) + (0+lme4::dummy(Generation, "G2")|City_Original_environment), data=data[data$Test_environment=="Blackberry"&!is.na(data$Emergence_Rate),], REML = FALSE)
+### OFFSPRING PERFORMANCE 
+m00 <- lme4::lmer(asin(sqrt(Rate))  ~ Test_environment + log(Nb_eggs) +
+                    (0+ lme4::dummy(Generation, "G0") |  Population) + 
+                    (0+lme4::dummy(Generation, "G2") | Population), 
+                  data=data_PERF_Rate, REML = TRUE)
 
-m01 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ log(Nb_eggscorrected)+ (0+Generation | City_Original_environment) , data=data[data$Test_environment=="Blackberry"&!is.na(data$Emergence_Rate),], REML = TRUE)
+m01 <- lme4::lmer(asin(sqrt(Rate))  ~ Test_environment + log(Nb_eggs)+ 
+                    (0+ Generation | Population) ,
+                  data=data_PERF_Rate, REML = TRUE)
 
 summary(m00)
 summary(m01)
 MuMIn::model.sel(m00, m01)
 
-
-
-## Strawberry
-m00 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ log(Nb_eggscorrected) + (0+ lme4::dummy(Generation, "G0")| City_Original_environment) + (0+lme4::dummy(Generation, "G2")|City_Original_environment), data=data[data$Test_environment=="Strawberry"&!is.na(data$Emergence_Rate),], REML = TRUE)
-m01 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ log(Nb_eggscorrected) + (0+Generation|City_Original_environment) , data=data[data$Test_environment=="Strawberry"&!is.na(data$Emergence_Rate),], REML = TRUE)
-MuMIn::model.sel(m00, m01)
-
-## Cherry
-m00 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ log(Nb_eggscorrected) + (0+ lme4::dummy(Generation, "G0")| City_Original_environment) + (0+lme4::dummy(Generation, "G2")|City_Original_environment), data=data[data$Test_environment=="Cherry"&!is.na(data$Emergence_Rate),], REML = TRUE)
-m01 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ log(Nb_eggscorrected)+ (0+Generation|City_Original_environment) , data=data[data$Test_environment=="Cherry"&!is.na(data$Emergence_Rate),], REML = TRUE)
-MuMIn::model.sel(m00, m01)
-
-##Cl:Performance in G0 and G2 are not correlated
 
 ```
 
@@ -194,13 +239,17 @@ MuMIn::model.sel(m00, m01)
 
 ### Analyses of Oviposition Preference
 ```{r }
-## Create new variable
-data$City_Original_environment <- as.factor(paste(data$City, data$Original_environment, sep="_"))
+modelformula <- log(Nb_eggs+1)  ~ Test_environment + Generation + BoxID
 
 ## Blackberry
-m00 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + (0+ lme4::dummy(Generation, "G0") |  City_Original_environment) + (0+lme4::dummy(Generation, "G2")|City_Original_environment), data=data[data$Test_environment=="Blackberry",], REML = FALSE)
+m00 <- lme4::lmer(log(Nb_eggs+1)  ~ Test_environment + BoxID + 
+                    (0+lme4::dummy(Generation, "G0") |  Population) + 
+                    (0+lme4::dummy(Generation, "G2")|Population),
+                  data=data_PREF_three, REML = TRUE)
 
-m01 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + (0+Generation | City_Original_environment) , data=data[data$Test_environment=="Blackberry",], REML = TRUE)
+m01 <- lme4::lmer(log(Nb_eggs+1)  ~ Test_environment + BoxID + 
+                    (0+Generation | Population),
+                  data=data_PREF_three, REML = TRUE)
 
 summary(m00)
 summary(m01)
@@ -209,55 +258,34 @@ MuMIn::model.sel(m00, m01)
 
 
 ## Strawberry
-m00 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + (0+ lme4::dummy(Generation, "G0") |  City_Original_environment) + (0+lme4::dummy(Generation, "G2")|City_Original_environment), data=data[data$Test_environment=="Strawberry",], REML = FALSE)
+m00 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + 
+                    (0+lme4::dummy(Generation, "G0") |  Population) + 
+                    (0+lme4::dummy(Generation, "G2") | Population), 
+                  data=data_PREF_three[data_PREF_three$Test_environment=="Strawberry",],
+                  REML = TRUE)
 
-m01 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + (0+Generation | City_Original_environment) , data=data[data$Test_environment=="Strawberry",], REML = TRUE)
+m01 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + (0+Generation | Population) ,
+                  data=data_PREF_three[data_PREF_three$Test_environment=="Strawberry",], REML = TRUE)
 
 MuMIn::model.sel(m00, m01)
 
 ## Cherry
-m00 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + (0+ lme4::dummy(Generation, "G0") |  City_Original_environment) + (0+lme4::dummy(Generation, "G2")|City_Original_environment), data=data[data$Test_environment=="Cherry",], REML = FALSE)
+m00 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + (0+ lme4::dummy(Generation, "G0") |  Population) +
+                    (0+lme4::dummy(Generation, "G2")|Population),
+                  data=data_PREF_three[data_PREF_three$Test_environment=="Cherry",], REML = TRUE)
 
-m01 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + (0+Generation | City_Original_environment) , data=data[data$Test_environment=="Cherry",], REML = TRUE)
+m01 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + (0+Generation | Population) ,
+                  data=data_PREF_three[data_PREF_three$Test_environment=="Cherry",], REML = TRUE)
 
 MuMIn::model.sel(m00, m01)
+
+dataselect <- data_PREF_three
+
 
 ##Cl:Performance in G0 and G2 are not correlated
 
 ```
 
-## Accounting for differences among original environments in G0
-### Plot
-```{r }
-
-head(data)
-title_plot <- "CorrelationsG0_G2_EmergenceRateLaureG0differences.pdf"
-modelformula <- asin(sqrt(Emergence_Rate))  ~ Original_environment*Generation + Test_environment + log(Nb_eggscorrected)
-#modelformula <- log(Nb_adults+1)  ~ Test_environment + log(Nb_eggscorrected+1)
-
-## Create new variable
-data$City_Original_environment <- as.factor(paste(data$City, data$Original_environment, sep="_"))
-head(data)
-
-## Select the datasets to use for the graph
-dataselect <- !is.na(data$Emergence_Rate)
-#dataselect <- !is.na(data$Nb_adults)&!is.na(data$Nb_eggscorrected)
-
-###PLOT 
-(PAIR_G0_G2 <- plot_correlation_meanresiduals(dataset = data[dataselect,], formula=modelformula, envfactor="Generation", additional_factor="Test_environment", original_environment="Original_environment", col_original_environment= c("#301934","#BC3C6D", "#3FAA96"), grp_cols=c("City_Original_environment", "Original_environment", "Test_environment", "Generation"), facetwrap=TRUE, fixedxylim = FALSE, bisector = TRUE, xaxis_labelprint = "Performance G1", yaxis_labelprint =  "Performance G3"))
-
-(PAIR_G0_G2_label <- plot_correlation_meanresiduals(dataset = data[dataselect,], formula=modelformula, envfactor="Generation", additional_factor="Test_environment", original_environment="Original_environment", col_original_environment= c("#301934","#BC3C6D", "#3FAA96"), grp_cols=c("City_Original_environment", "Original_environment", "Test_environment", "Generation"), facetwrap=TRUE, printnames=TRUE, printsamplesize=TRUE, fixedxylim = FALSE, bisector = TRUE, xaxis_labelprint = "Performance G1", yaxis_labelprint =  "Performance G3"))
-
-figure <- ggpubr::ggarrange(PAIR_G0_G2, PAIR_G0_G2_label,
-                    labels = c("A", "B"),
-                    ncol = 1, nrow = 2, common.legend = TRUE, legend = "bottom")
-
-cowplot::save_plot(file =here::here("plots", title_plot),
-                 figure, base_height = 20/cm(1),
-                  base_width = 20/cm(1), dpi = 1200)
-
-
-```
 
 ### Analyses of Emergence rate
 ```{r }
