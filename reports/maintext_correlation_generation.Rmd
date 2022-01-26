@@ -113,89 +113,7 @@ levels(data_PREF$Population)
 
 
 
-# Load data
-```{r }
-# 
-# data <- read.table(file=here::here("data", "DATACOMPLET_PERF2018.csv"), header=TRUE, sep=";")
-# 
-# head(data)
-# 
-# ## Keep only G2 data
-# #data <- data[data$Generation=="G2",]
-# 
-# #Remove WT3 population and Grape environment
-# data <- data[data$Test_environment!="Grape"&data$Test_environment!="GF"&data$Population!="WT3",]
-# ## Keep WT3 data
-# dataWT3 <- data[data$Population=="WT3",]
-# 
-# ## Keep only blackberry populations
-# #data <- data[data$Original_environment=="Blackberry",]
-# 
-# 
-# ## Convert as factor
-# data$Original_environment <- factor(data$Original_environment)
-# data$Test_environment <- factor(data$Test_environment)
-# data$Population <- factor(data$Population)
-# data$City <- factor(data$City)
-# ## New factor for model with compound symmetry matrix (see)
-# data$City_Test_environment <- as.factor(paste(data$City, data$Test_environment, sep="_"))
-# 
-# ## Compute egg score
-# data$EggScore <- as.factor(ifelse(data$Nb_eggs<51, 1, ifelse(data$Nb_eggs<101, 2, ifelse(data$Nb_eggs<151, 3, 4))))
-# data$EggScoreFive <- as.factor(ifelse(data$Nb_eggs<51, 1, ifelse(data$Nb_eggs<101, 2, ifelse(data$Nb_eggs<151, 3, ifelse(data$Nb_eggs<201, 4, 5)))))
-# data$EggScoreSmall <- as.factor(ifelse(data$Nb_eggs<51, 1, ifelse(data$Nb_eggs<76, 2, ifelse(data$Nb_eggs<101, 3, ifelse(data$Nb_eggs<126, 4, ifelse(data$Nb_eggs<151, 5, 6))))))
-# data$EggScoreNum <- as.numeric(data$EggScore)
-# ## Correct number of eggs
-# data$Nb_eggscorrected <- ifelse(data$Nb_adults>data$Nb_eggs, data$Nb_adults, data$Nb_eggs)
-# data$Emergence_Rate <-data$Nb_adults/data$Nb_eggscorrected
-# head(data)
-# 
-# ## Remove data without number of eggs
-# data <- data[!is.na(data$Nb_eggs),]
-
-
-
-```
-
-# Load Performance Data
-```{r }
-
-# data <- read.table(file=here::here("data", "DATACOMPLET_PREF2018.csv"), header=TRUE, sep=",")
-# 
-# head(data)
-# 
-# ## Keep only G2 data
-# #data <- data[data$Generation=="G2",]
-# 
-# #Remove WT3 population and other environments
-# data <- data[(data$Test_environment=="Blackberry"|data$Test_environment=="Strawberry"|data$Test_environment=="Cherry")&data$Population!="WT3",]
-# 
-# ## Keep only blackberry populations
-# #data <- data[data$Original_environment=="Blackberry",]
-# 
-# 
-# ## Convert as factor
-# data$Original_environment <- factor(data$Original_environment)
-# data$Test_environment <- factor(data$Test_environment)
-# data$Population <- factor(data$Population)
-# #data$City <- factor(data$City)
-# data$City <- data$Population
-# ## New factor for model with compound symmetry matrix (see)
-# data$City_Original_environment <- as.factor(paste(data$City, data$Original_environment, sep="_"))
-```
-# Plot density dependence
-```{r }
-# ## Density dependence in egg-to-adult survival
-# ggplot(data, aes(x=log(Nb_eggscorrected), y=Emergence_Rate)) + geom_point() +  geom_smooth(method=lm, se=TRUE, fullrange=TRUE, formula = y ~ x+ I(x^2))+facet_wrap(~ Test_environment, scales = "free_y") 
-# 
-# ggplot(data, aes(x=log(EggScoreNum), y=Emergence_Rate)) + geom_point() +  geom_smooth(method=lm, se=TRUE, fullrange=TRUE, formula = y ~ x+ I(x^2))+facet_wrap(~ Test_environment, scales = "free_y") 
-# 
-# ggplot(data, aes(x=Nb_eggs, y=Nb_adults)) + geom_point() +  geom_smooth(method=lm, se=TRUE, fullrange=TRUE, formula = y ~ x+ I(x^2))+facet_wrap(~ Test_environment, scales = "free_y") 
-
-```
-
-
-# Correlations between G0 and G2
+# CORRELATIONS BETWEEN GO and G2
 ## Without accounting for differences among original environments in G0
 ### Plot
 ```{r }
@@ -215,9 +133,6 @@ modelformula <- asin(sqrt(Rate))  ~ Test_environment + log(Nb_eggs) + Generation
 modelformula <- log(Nb_eggs+1)  ~ Test_environment + Generation
 modelformula <- log(Nb_eggs+1)  ~ Test_environment + Generation + BoxID
 
-# ## Create new variable
-# data$City_Original_environment <- as.factor(paste(data$City, data$Original_environment, sep="_"))
-# head(data)
 
 ## Select the datasets to use for the graph
 dataselect <- data_PERF_Rate
@@ -225,17 +140,18 @@ dataselect <- data_PERF
 dataselect <- data_PREF_three
 
 ###PLOT 
-(PAIR_G0_G2 <- plot_correlation_meanresiduals(dataset = dataselect, formula=modelformula, envfactor="Generation", additional_factor="Test_environment", original_environment="Original_environment", col_original_environment= c("#301934","#BC3C6D", "#3FAA96"), grp_cols=c("Population", "Original_environment", "Test_environment", "Generation"), facetwrap=TRUE, fixedxylim = FALSE, bisector = TRUE, xaxis_labelprint = axisG0, yaxis_labelprint =  axisG2))
+(PAIR_G0_G2 <- plot_correlation_meanresiduals(dataset = dataselect, 
+                                              formula = modelformula, 
+                                              envfactor="Generation", 
+                                              additional_factor="Test_environment",
+                                              original_environment="Original_environment", 
+                                              col_original_environment= c("#301934","#BC3C6D", "#3FAA96"),
+                                              grp_cols=c("Population", "Original_environment", "Test_environment","Generation"),
+                                              facetwrap=TRUE, fixedxylim = FALSE, 
+                                              bisector = TRUE, xaxis_labelprint = axisG0, 
+                                              yaxis_labelprint =  axisG2))
 
-(PAIR_G0_G2_label <- plot_correlation_meanresiduals(dataset = data[dataselect,], formula=modelformula, envfactor="Generation", additional_factor="Test_environment", original_environment="Original_environment", col_original_environment= c("#301934","#BC3C6D", "#3FAA96"), grp_cols=c("Population", "Original_environment", "Test_environment", "Generation"), facetwrap=TRUE, printnames=TRUE, printsamplesize=TRUE, fixedxylim = FALSE, bisector = TRUE, xaxis_labelprint = axisG0, yaxis_labelprint = axisG2))
 
-# figure <- ggpubr::ggarrange(PAIR_G0_G2, PAIR_G0_G2_label,
-#                     labels = c("A", "B"),
-#                     ncol = 1, nrow = 2, common.legend = TRUE, legend = "bottom")
-# 
-# cowplot::save_plot(file =here::here("plots", title_plot),
-#                  figure, base_height = 20/cm(1),
-#                   base_width = 20/cm(1), dpi = 1200)
 
 cowplot::save_plot(file =here::here("figures", title_plot),
                  PAIR_G0_G2, base_height = 10/cm(1),
@@ -273,6 +189,9 @@ MuMIn::model.sel(m00, m01)
 ##Cl:Performance in G0 and G2 are not correlated
 
 ```
+
+
+
 ### Analyses of Oviposition Preference
 ```{r }
 ## Create new variable
@@ -306,6 +225,7 @@ MuMIn::model.sel(m00, m01)
 ##Cl:Performance in G0 and G2 are not correlated
 
 ```
+
 ## Accounting for differences among original environments in G0
 ### Plot
 ```{r }
@@ -364,356 +284,5 @@ m01 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ Generation*Original_environment+
 MuMIn::model.sel(m00, m01)
 
 ##Cl:Performance in G0 and G2 are not correlated
-
-```
-
-# Correlation sympatry vs. allopatry
-## Check data
-```{r }
-## NB: Corneilhan present in G2, but not in G0
-length(unique(data$City[data$Generation=="G0"]))
-length(unique(data$City[data$Generation=="G2"]))
-
-## Some combinations of population x environment are missing
-data[data$Generation=="G2"&data$City=="Avignon"&data$Original_environment=="Cherry",]
-
-
-## Log effect of number of eggs provides a better description of the data
-m0 <- lm( asin(sqrt(Emergence_Rate))~ Test_environment + log(EggScoreNum), data=data)
-m1 <- lm( asin(sqrt(Emergence_Rate))~ Test_environment + EggScoreNum, data=data)
-
-AIC(m0, m1)
-
-## Log effect of number of eggs provides a better description of the data
-## It accounts for both linear and quadratic effects on the number of adults
-m0 <- lm(log(Nb_adults+1) ~ Test_environment + log(EggScoreNum), data=data)
-m1 <- lm(log(Nb_adults+1) ~ Test_environment + EggScoreNum, data=data)
-
-AIC(m0, m1)
-```
-## Make plot
-### G0 and G2 together
-```{r }
-
-#lm(asin(sqrt(Emergence_Rate))  ~ Test_environment + EggScoreNum  )
-title_plot <- "CorrelationsEmergence_Rate_FocalPopG0andG2Laure.pdf"
-
-#modelformula <- asin(sqrt(Emergence_Rate))  ~ Test_environment + log(EggScoreNum)
-modelformula <- asin(sqrt(Emergence_Rate))  ~ Test_environment + log(Nb_eggscorrected)
-#modelformula <- log(Nb_adults+1) ~ Test_environment + log(EggScoreNum)
-
-#m00 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ Test_environment + EggScoreNum + (1 | City) + (1 | City:Test_environment), data=data[data$Generation=="G0",], REML = TRUE)
-m00 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ Test_environment + EggScoreNum + (0+ lme4::dummy(Generation, "G0") | City) + (0+ lme4::dummy(Generation, "G0")| City:Test_environment)+ (0+ lme4::dummy(Generation, "G2") | City) + (0+ lme4::dummy(Generation, "G2")| City:Test_environment), data=data, REML = TRUE)
-
-summary(m00)
-
-## Select the dataset to use for the graph
-dataselect <- !is.na(data$Emergence_Rate)
-## dataselect <- !is.na(data$Nb_adults)
-
-###PLOT G0 and G2
-(PAIR_BLACK_CHERRY <- plot_pairwise_meanresiduals(dataset = data[dataselect,], formula=modelformula, fruit1 = "Cherry", fruit2 = "Blackberry", grp_cols=c("City", "Generation", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", additional_factor="Generation", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), shape_additional_factor=c(21, 16), fixedxylim = TRUE, bisector = TRUE))
-
-(PAIR_CHERRY_STRAW  <- plot_pairwise_meanresiduals(dataset = data[dataselect,], formula=modelformula, fruit1 = "Strawberry", fruit2 = "Cherry", grp_cols=c("City", "Generation", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", additional_factor="Generation", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), shape_additional_factor=c(21, 16), fixedxylim = TRUE, bisector = TRUE))
-
-(PAIR_STRW_BLACK  <- plot_pairwise_meanresiduals(dataset = data[dataselect,], formula=modelformula, fruit1 = "Blackberry", fruit2 = "Strawberry", grp_cols=c("City", "Generation", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", additional_factor="Generation", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), shape_additional_factor=c(21, 16), fixedxylim = TRUE, bisector = TRUE))
-
-
-## Prepare Figure for G0
-figure <- ggpubr::ggarrange(PAIR_BLACK_CHERRY, PAIR_CHERRY_STRAW, PAIR_STRW_BLACK,
-                    labels = c("A", "B","C"),
-                    ncol = 3, nrow = 1, common.legend = TRUE, legend = "bottom")
-
-
-cowplot::save_plot(file =here::here("plots", title_plot),
-                 figure, base_height = 10/cm(1),
-                  base_width = 30/cm(1), dpi = 1200)
-```
-### G0 and G2 separate
-```{r, eval=TRUE }
-
-title_plot <- "CorrelationsNb_adults_FocalPopG0orG2Lauretest.pdf"
-
-modelformula <- asin(sqrt(Emergence_Rate))  ~ Test_environment + log(EggScoreNum)
-modelformula <- log(Nb_adults+1) ~ Test_environment + log(EggScoreNum)
-
-## Select the dataset to use for the graph
-dataselectG0 <- data$Generation=="G0"&!is.na(data$Emergence_Rate)
-dataselectG2 <- data$Generation=="G2"&!is.na(data$Emergence_Rate)
-#dataselectG0 <- data$Generation=="G0"&!is.na(data$Emergence_Rate)&data$Original_environment=="Blackberry"
-#dataselectG2 <- data$Generation=="G2"&!is.na(data$Emergence_Rate)&data$Original_environment=="Blackberry"
-dataselectG0 <- data$Generation=="G0"&!is.na(data$Nb_adults)
-dataselectG2 <- data$Generation=="G2"&!is.na(data$Nb_adults)
-
-###PLOT G0 and G2
-(PAIR_BLACK_CHERRY_G0 <- plot_pairwise_meanresiduals(dataset = data[dataselectG0,], formula=modelformula, fruit1 = "Cherry", fruit2 = "Blackberry", grp_cols=c("City", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE, subscript = "G0"))
-
-(PAIR_CHERRY_STRAW_G0  <- plot_pairwise_meanresiduals(dataset = data[dataselectG0,], formula=modelformula, fruit1 = "Strawberry", fruit2 = "Cherry", grp_cols=c("City", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE, subscript = "G0"))
-
-(PAIR_STRW_BLACK_G0  <- plot_pairwise_meanresiduals(dataset = data[dataselectG0,], formula=modelformula, fruit1 = "Blackberry", fruit2 = "Strawberry", grp_cols=c("City", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE, subscript = "G0"))
-
-###PLOT G2
-(PAIR_BLACK_CHERRY_G2 <- plot_pairwise_meanresiduals(dataset = data[dataselectG2,], formula=modelformula, fruit1 = "Cherry", fruit2 = "Blackberry", grp_cols=c("City", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE, subscript = "G2"))
-
-(PAIR_CHERRY_STRAW_G2  <- plot_pairwise_meanresiduals(dataset = data[dataselectG2,], formula=modelformula, fruit1 = "Strawberry", fruit2 = "Cherry", grp_cols=c("City", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE, subscript = "G2"))
-
-(PAIR_STRW_BLACK_G2  <- plot_pairwise_meanresiduals(dataset = data[dataselectG2,], formula=modelformula, fruit1 = "Blackberry", fruit2 = "Strawberry", grp_cols=c("City", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE, subscript = "G2"))
-
-## Prepare Figure for G0
-figure1 <- ggpubr::ggarrange(PAIR_BLACK_CHERRY_G0, PAIR_CHERRY_STRAW_G0, PAIR_STRW_BLACK_G0,
-                    labels = c("A", "B","C"),
-                    ncol = 3, nrow = 1, legend = "none")
-figure1 <- ggpubr::annotate_figure(figure1, top = ggpubr::text_grob("G0 generation", 
-               color = "black", face = "bold", size = 14))
-
-## Prepare Figure for G2
-figure2 <- ggpubr::ggarrange(PAIR_BLACK_CHERRY_G2, PAIR_CHERRY_STRAW_G2, PAIR_STRW_BLACK_G2,
-                    labels = c( "D", "E", "F"),
-                    ncol = 3, nrow = 1, common.legend = TRUE, legend = "bottom")
-figure2 <- ggpubr::annotate_figure(figure2, top = ggpubr::text_grob("G2 generation", 
-              color = "black", face = "bold", size = 14))
-
-## Combine figures
-figure <- ggpubr::ggarrange(figure1, figure2, 
-                            labels=NA,
-                            ncol = 1, nrow = 2)
-
-cowplot::save_plot(file =here::here("plots", title_plot),
-                 figure, base_height = 20/cm(1),
-                  base_width = 30/cm(1), dpi = 1200)
-```
-
-### G0 and G2 separate  (blackberry only)
-```{r, eval=TRUE}
-
-title_plot <- "CorrelationsNb_adults_FocalPopG0orG2LaureBlackberry.pdf"
-
-modelformula <- log(Nb_adults+1)~ Test_environment+log(EggScoreNum)
-
-## Select the dataset to use for the graph
-dataselectG0 <- data$Generation=="G0"&!is.na(data$Nb_adults)&data$Original_environment=="Blackberry"
-dataselectG2 <- data$Generation=="G2"&!is.na(data$Nb_adults)&data$Original_environment=="Blackberry"
-
-###PLOT G0 and G2
-(PAIR_BLACK_CHERRY_G0 <- plot_pairwise_meanresiduals(dataset = data[dataselectG0,], formula=modelformula, fruit1 = "Cherry", fruit2 = "Blackberry", grp_cols=c("City", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE, subscript = "G0"))
-
-(PAIR_STRW_BLACK_G0  <- plot_pairwise_meanresiduals(dataset = data[dataselectG0,], formula=modelformula, fruit1 = "Blackberry", fruit2 = "Strawberry", grp_cols=c("City", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE, subscript = "G0"))
-
-###PLOT G2
-(PAIR_BLACK_CHERRY_G2 <- plot_pairwise_meanresiduals(dataset = data[dataselectG2,], formula=modelformula, fruit1 = "Cherry", fruit2 = "Blackberry", grp_cols=c("City", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE, subscript = "G2"))
-
-(PAIR_STRW_BLACK_G2  <- plot_pairwise_meanresiduals(dataset = data[dataselectG2,], formula=modelformula, fruit1 = "Blackberry", fruit2 = "Strawberry", grp_cols=c("City", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE, subscript = "G2"))
-
-## Prepare Figure for G0
-figure1 <- ggpubr::ggarrange(PAIR_BLACK_CHERRY_G0, PAIR_STRW_BLACK_G0,
-                    labels = c("A", "B"),
-                    ncol = 2, nrow = 1, legend = "none")
-figure1 <- ggpubr::annotate_figure(figure1, top = ggpubr::text_grob("G0 generation", 
-               color = "black", face = "bold", size = 14))
-
-## Prepare Figure for G2
-figure2 <- ggpubr::ggarrange(PAIR_BLACK_CHERRY_G2, PAIR_STRW_BLACK_G2,
-                    labels = c( "C", "D"),
-                    ncol = 2, nrow = 1, common.legend = TRUE, legend = "bottom")
-figure2 <- ggpubr::annotate_figure(figure2, top = ggpubr::text_grob("G2 generation", 
-              color = "black", face = "bold", size = 14))
-
-## Combine figures
-figure <- ggpubr::ggarrange(figure1, figure2, 
-                            labels=NA,
-                            ncol = 1, nrow = 2)
-
-cowplot::save_plot(file =here::here("plots", title_plot),
-                 figure, base_height = 20/cm(1),
-                  base_width = 30/cm(1), dpi = 1200)
-```
-
-# Analysis with mixed model
-## G0
-```{r }
-## Variance only among populations
-m00 <- lme4::lmer(log(Nb_adults+1) ~ EggScoreNum + (1 | City), data=data[data$Generation=="G0",], REML = TRUE)
-summary(m00)
-
-## Variance among populations and among environments within population
-m01 <- lme4::lmer(log(Nb_adults+1) ~ EggScoreNum + (1 | City) + (1 | City:Test_environment), data=data[data$Generation=="G0",], REML = TRUE)
-summary(m01)
-anova(m00, m01)
-
-## Model with correlation among environments does not converge as model is likely over-parameterized
-m02 <- lme4::lmer(log(Nb_adults+1) ~ EggScoreNum + (0 + Test_environment | City), data=data[data$Generation=="G0",], REML = TRUE)
-summary(m02)
-
-## Same models with spaMM
-## Variance only among populations
-m0 <- spaMM::fitme(log(Nb_adults+1) ~ EggScoreNum + (1 | City), data = data[data$Generation=="G0",], method="REML")
-summary(m0)
-
-## Variance among populations and among environments within population
-m1 <-  spaMM::fitme(log(Nb_adults+1) ~ EggScoreNum + (1 | City) + (1 | City:Test_environment), data = data[data$Generation=="G0",], method="REML")
-summary(m1)
-
-## Model with correlation among environments does not converge as model is likely over-parameterized
-m2 <-  spaMM::fitme(log(Nb_adults+1) ~ EggScoreNum + (0 + Test_environment | City), data = data[data$Generation=="G0",], method="REML")
-summary(m2)
-
-## The estimates of spaMM and lmer are the same
-data.frame(lme4::VarCorr(m01))
-spaMM::VarCorr(m1)
-
-## restricted likelihoods (-2*REML criterion at convergence) are the same
-logLik(m00)
-spaMM::logLik.HLfit(m0)
-
-logLik(m01)
-spaMM::logLik.HLfit(m1)
-
-## Fit compound symmetry model with spaMM
-
-corrmatrix <- function(rho, npop, nenv) { # matrice (ici) (13*3)*(13*3) bloc-diagonale avec 13 blocs chacun égal à la matrice 3*3 ayant la structure de la matrice de variance-covariance entre environnements (incluant le paramètre rho)
-  resu <- matrix(rho, ncol=nenv, nrow=nenv)
-  diag(resu) <- 1
-  resu <- as(kronecker(diag(npop), resu),"sparseMatrix")
-  colnames(resu) <- rownames(resu) <- levels(data$City_Test_environment)
-  resu
-}
-dim(corrmatrix(rho=-1, npop=20, nenv=3))
-
-## Build function to vary rho, the correlation between combinations of genotype and environment
-objfn <- function(rho, npop, nenv, form, method) { # fonction à optimiser par rapport à rho: renvoit logL ou restricted logL selon l'argument "method"
-
-## Function that compute the loglikelihood with different values of rho
-fit_given_rho <-  spaMM::fitme(form, data= data[data$Generation=="G0",], method=method, corrMatrix=corrmatrix(rho, npop, nenv)) # avec un terme corrMatrix(...) dans la formula, pour un effet aléa dont la correlation est décrite par l'argument corrMatrix
-  resu <- -logLik(fit_given_rho)
-  print(c(rho, resu))
-  resu
-}
-
-
-(optr <- optimize(objfn, interval = c(-0.499, 1), npop=length(unique(data$City)), nenv=length(unique(data$Test_environment)), form=log(Nb_adults+1) ~ EggScoreNum + (1 | City) + corrMatrix(1 | City_Test_environment) , method="REML") ) # restricted likelihood independante de rho
-
-m3 <-  spaMM::fitme(log(Nb_adults+1) ~ EggScoreNum + (1 | City) + corrMatrix(1 | City_Test_environment), data =  data[data$Generation=="G0",], corrMatrix=corrmatrix(optr$minimum, length(unique(data$City)), length(unique(data$Test_environment)))) # fit (ML) final
-summary(m3)
-
-(optr <- optimize(objfn, interval = c(-0.499, 1), npop=length(unique(data$City)), nenv=length(unique(data$Test_environment)), form=log(Nb_adults+1) ~ EggScoreNum + corrMatrix(1 | City_Test_environment) , method="REML") ) # restricted likelihood independante de rho
-
-m4 <-  spaMM::fitme(log(Nb_adults+1) ~ EggScoreNum + corrMatrix(1 | City_Test_environment), data =  data[data$Generation=="G0",], corrMatrix=corrmatrix(optr$minimum, length(unique(data$City)), length(unique(data$Test_environment)))) # fit (ML) final
-summary(m4)
-
-## restricted likelihoods (-2*REML criterion at convergence) are the same
-spaMM::logLik.HLfit(m0)
-spaMM::logLik.HLfit(m1)
-spaMM::logLik.HLfit(m2)
-spaMM::logLik.HLfit(m3)
-spaMM::logLik.HLfit(m4)
-
-## Prediction are the same
-sum(predict(m1)-predict(m2))
-sum(predict(m1)-predict(m3))
-sum(predict(m1)-predict(m4))
-
-anova(m00, m01)
-## Cl: m0 and m1 are the best models, large variance among populations, small variance among environments within each population
-```
-## G2
-```{r }
-## Variance only among populations
-m00 <- lme4::lmer(log(Nb_adults+1) ~ EggScoreNum + (1 | City), data=data[data$Generation=="G2",], REML = TRUE)
-summary(m00)
-
-## Variance among populations and among environments within population
-m01 <- lme4::lmer(log(Nb_adults+1) ~ EggScoreNum + (1 | City) + (1 | City:Test_environment), data=data[data$Generation=="G2",], REML = TRUE)
-summary(m01)
-anova(m00, m01)
-
-## Model with correlation among environments does not converge as model is likely over-parameterized
-m02 <- lme4::lmer(log(Nb_adults+1) ~ EggScoreNum + (0 + Test_environment | City), data=data[data$Generation=="G2",], REML = TRUE)
-summary(m02)
-
-## Same models with spaMM
-## Variance only among populations
-m0 <-  spaMM::fitme(log(Nb_adults+1) ~ EggScoreNum + (1 | City), data = data[data$Generation=="G2",], method="REML")
-summary(m0)
-
-## Variance among populations and among environments within population
-m1 <-  spaMM::fitme(log(Nb_adults+1) ~ EggScoreNum + (1 | City) + (1 | City:Test_environment), data = data[data$Generation=="G2",], method="REML")
-summary(m1)
-
-## Model with correlation among environments does not converge as model is likely over-parameterized
-m2 <-  spaMM::fitme(log(Nb_adults+1) ~ EggScoreNum + (0 + Test_environment | City), data = data[data$Generation=="G2",], method="REML")
-summary(m2)
-
-## The estimates of spaMM and lmer are the same
-data.frame(lme4::VarCorr(m01))
-spaMM::VarCorr(m1)
-
-## restricted likelihoods (-2*REML criterion at convergence) are the same
-logLik(m00)
-spaMM::logLik.HLfit(m0)
-
-logLik(m01)
-spaMM::logLik.HLfit(m1)
-
-## Fit compound symmetry model with spaMM
-
-corrmatrix <- function(rho, npop, nenv) { # matrice (ici) (13*3)*(13*3) bloc-diagonale avec 13 blocs chacun égal à la matrice 3*3 ayant la structure de la matrice de variance-covariance entre environnements (incluant le paramètre rho)
-  resu <- matrix(rho, ncol=nenv, nrow=nenv)
-  diag(resu) <- 1
-  resu <- as(kronecker(diag(npop), resu),"sparseMatrix")
-  colnames(resu) <- rownames(resu) <- levels(data$City_Test_environment)
-  resu
-}
-dim(corrmatrix(rho=-1, npop=20, nenv=3))
-
-## Build function to vary rho, the correlation between combinations of genotype and environment
-objfn <- function(rho, npop, nenv, form, method) { # fonction à optimiser par rapport à rho: renvoit logL ou restricted logL selon l'argument "method"
-
-## Function that compute the loglikelihood with different values of rho
-fit_given_rho <-  spaMM::fitme(form, data = data[data$Generation=="G2",], method=method, corrMatrix=corrmatrix(rho, npop, nenv)) # avec un terme corrMatrix(...) dans la formula, pour un effet aléa dont la correlation est décrite par l'argument corrMatrix
-  resu <- -logLik(fit_given_rho)
-  print(c(rho, resu))
-  resu
-}
-
-(optr <- optimize(objfn, interval = c(-0.499, 1), npop=length(unique(data$City)), nenv=length(unique(data$Test_environment)), form=log(Nb_adults+1) ~ EggScoreNum + (1 | City) + corrMatrix(1 | City_Test_environment) , method="REML") ) # restricted likelihood independante de rho
-
-m3 <-  spaMM::fitme(log(Nb_adults+1) ~ EggScoreNum + (1 | City) + corrMatrix(1 | City_Test_environment), data =  data[data$Generation=="G2",], corrMatrix=corrmatrix(rho=optr$minimum, npop=length(unique(data$City)), nenv=length(unique(data$Test_environment)))) # fit (ML) final
-summary(m3)
-
-(optr <- optimize(objfn, interval = c(-0.499, 1), npop=length(unique(data$City)), nenv=length(unique(data$Test_environment)), form=log(Nb_adults+1) ~ EggScoreNum + corrMatrix(1 | City_Test_environment) , method="REML") ) # restricted likelihood independante de rho
-
-m4 <-  spaMM::fitme(log(Nb_adults+1) ~ EggScoreNum + corrMatrix(1 | City_Test_environment), data =  data[data$Generation=="G2",], corrMatrix=corrmatrix(optr$minimum, length(unique(data$City)), length(unique(data$Test_environment)))) # fit (ML) final
-summary(m4)
-
-## restricted likelihoods (-2*REML criterion at convergence) are the same
-spaMM::logLik.HLfit(m0)
-spaMM::logLik.HLfit(m1)
-spaMM::logLik.HLfit(m2)
-spaMM::logLik.HLfit(m3)
-spaMM::logLik.HLfit(m4)
-
-## Prediction are the same
-sum(predict(m1)-predict(m2))
-sum(predict(m1)-predict(m3))
-sum(predict(m1)-predict(m4))
-
-spaMM::get_any_IC(m0, also_cAIC=FALSE)
-spaMM::get_any_IC(m1, also_cAIC=FALSE)
-spaMM::get_any_IC(m2, also_cAIC=FALSE)
-spaMM::get_any_IC(m3, also_cAIC=FALSE)
-spaMM::get_any_IC(m4, also_cAIC=FALSE)
-
-anova(m00, m01)
-anova(m00, m01)
-## Cl: m2 and m4 are the best models, variance among populations equivalent to the variance among environments within each population
-```
-# Different variance among environments for each population
-```{r }
-model.mix2 <- nlme::lme(log(Nb_adults+1) ~ EggScoreNum, 
-  random=list(Test_environment = nlme::pdBlocked(list(nlme::pdIdent(~1),
-                                    nlme::pdDiag(~City - 1)))), data=data[data$Generation=="G2",])
-summary(model.mix2)
-nlme::VarCorr(model.mix2)
-
 
 ```

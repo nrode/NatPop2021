@@ -19,14 +19,14 @@
 #' @param fixedxylim (logical) should the limits for the scale of x-axis and y-axis be computed a the range of the trait across all test_environments (default=FALSE)
 #' @param bisector (logical) print a bisector line through the origin (default=FALSE)
 #' 
-plot_correlation_meanresiduals <- function(dataset = data,
+plot_correlation_meanresiduals <- function(dataset = dataselect,
                                            formula="log(Nb_adults+1) ~",
                                            envfactor="Env",
                                            original_environment=NULL,
                                            additional_factor=NULL,
                                            col_original_environment=NULL,
                                            grp_cols=c("Pop", "Fruit", "Env"),
-                                           facetwrap=TRUE,
+                                           facetwrap=FALSE,
                                            printnames=FALSE,
                                            printsamplesize=FALSE,
                                            labelsize=1,
@@ -101,16 +101,13 @@ plot_correlation_meanresiduals <- function(dataset = data,
       plot_pair <- ggplot(data = datameanreswide,
                           aes_q(x = as.name(colenvfactor[1]), 
                                 y = as.name(colenvfactor[2])))
+      
     }else{
       plot_pair <- ggplot(data = datameanreswide,
                           aes_q(x = as.name(colenvfactor[1]), 
                                 y = as.name(colenvfactor[2]),
-                                color = as.name(original_environment))) +
-        scale_color_manual(name="Fly population from:",   
-                           breaks=originalenvlevels,
-                           labels=originalenvlevels,
-                           values=col_original_environment,
-                           drop=FALSE)
+                                color = as.name(original_environment)))  
+
     }
     
   }else{
@@ -126,12 +123,8 @@ plot_correlation_meanresiduals <- function(dataset = data,
                             aes_q(x = as.name(colenvfactor[1]), 
                                   y = as.name(colenvfactor[2]), 
                                   color = as.name(original_environment))) +
-          scale_color_manual(name="Fly population from:",   
-                             breaks=originalenvlevels,
-                             labels=originalenvlevels,
-                             values=col_original_environment,
-                             drop=FALSE) +
-          facet_wrap(facets=additional_factor, scales = "free_y")
+          facet_wrap(facets=additional_factor, scales = "free_y") 
+        
       }
       
       
@@ -146,12 +139,7 @@ plot_correlation_meanresiduals <- function(dataset = data,
                             aes_q(x = as.name(colenvfactor[1]), 
                                   y = as.name(colenvfactor[2]), 
                                   shape = as.name(additional_factor),
-                                  color = as.name(original_environment))) +
-          scale_color_manual(name="Fly population from:",   
-                             breaks=originalenvlevels,
-                             labels=originalenvlevels,
-                             values=col_original_environment,
-                             drop=FALSE)
+                                  color = as.name(original_environment))) 
       }
     }
   }
@@ -162,13 +150,38 @@ plot_correlation_meanresiduals <- function(dataset = data,
     plot_pair <- plot_pair + geom_abline(intercept = 0, slope=1, linetype ="solid", color = "grey")
   }
   
+  
+  ##Add error bars
+  if(errorbars){
+    plot_pair <- plot_pair  +
+      geom_errorbarh(aes(xmin=datameanreswide[[colenvfactor[1]]]-datameanreswide[[Seenvfactor[1]]], xmax=datameanreswide[[colenvfactor[1]]]+datameanreswide[[Seenvfactor[1]]]), size=0.3) +
+      geom_errorbar(data = datameanreswide, aes(ymin=datameanreswide[[colenvfactor[2]]]-datameanreswide[[Seenvfactor[2]]], ymax=datameanreswide[[colenvfactor[2]]]+datameanreswide[[Seenvfactor[2]]]), size=0.3)
+  }
+  
   ## Add data points
   plot_pair <- plot_pair +
-    geom_vline(xintercept = 0, linetype ="dashed", color = "grey") +
-    geom_hline(yintercept = 0, linetype ="dashed", color = "grey") +
-    #guides(fill = FALSE) +
-    geom_point(size=3, stroke=1.3) + 
-    theme(plot.title = element_text(hjust = 0.5))
+    geom_point(size=3, stroke=1.3, col="white") + 
+    geom_point(size=3, stroke=1.3, alpha = 0.9) + 
+    theme(plot.title = element_text(hjust = 0.5)) +         
+    xlab(xaxis_labelprint)  +
+    ylab(yaxis_labelprint) +
+    scale_fill_manual(name="Fly population from:",   
+                      breaks=c("Blackberry","Cherry","Strawberry"),
+                      labels=c("Blackberry","Cherry","Strawberry"),
+                      values=c("#301934","#BC3C6D", "#3FAA96"),
+                      drop=FALSE) +
+    scale_color_manual(name="Fly population from:",   
+                       breaks=c("Blackberry","Cherry","Strawberry"),
+                       labels=c("Blackberry","Cherry","Strawberry"),
+                       values=c("#301934","#BC3C6D", "#3FAA96"),
+                       drop=FALSE) + 
+    scale_shape_manual(name = "Test environment:",
+                       labels = c("Blackberry","Cherry","Strawberry"), 
+                       values =  c(15,16,17)) + 
+    theme(plot.title = element_text(hjust = 0.5)) + 
+    theme_LO_sober + theme (
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor.y = element_blank())
   
   if(!is.null(xaxis_labelprint)){
     plot_pair <- plot_pair + xlab(xaxis_labelprint)
@@ -193,12 +206,7 @@ plot_correlation_meanresiduals <- function(dataset = data,
     
   }
   
-  ##Add error bars
-  if(errorbars){
-    plot_pair <- plot_pair  +
-      geom_errorbarh(aes(xmin=datameanreswide[[colenvfactor[1]]]-datameanreswide[[Seenvfactor[1]]], xmax=datameanreswide[[colenvfactor[1]]]+datameanreswide[[Seenvfactor[1]]])) +
-      geom_errorbar(data = datameanreswide, aes(ymin=datameanreswide[[colenvfactor[2]]]-datameanreswide[[Seenvfactor[2]]], ymax=datameanreswide[[colenvfactor[2]]]+datameanreswide[[Seenvfactor[2]]]))
-  }
+
   
   ## Set x- and y-axes
   if(!is.null(xlim)&!is.null(ylim)){
@@ -218,3 +226,4 @@ plot_correlation_meanresiduals <- function(dataset = data,
     }
   }
 }
+

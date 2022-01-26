@@ -5,14 +5,14 @@
 \title{Plot the relationship between a trait measured using an environmental factor with two levels}
 \usage{
 plot_correlation_meanresiduals(
-  dataset = data,
+  dataset = dataselect,
   formula = "log(Nb_adults+1) ~",
   envfactor = "Env",
   original_environment = NULL,
   additional_factor = NULL,
   col_original_environment = NULL,
   grp_cols = c("Pop", "Fruit", "Env"),
-  facetwrap = TRUE,
+  facetwrap = FALSE,
   printnames = FALSE,
   printsamplesize = FALSE,
   labelsize = 1,
