@@ -31,7 +31,7 @@ devtools::load_all()
 
 data_PERF <- import_data(dataset = "DATACOMPLET_PERF.csv", 
                          trait = "performance",
-                         remove_testenvt = NA, 
+                         remove_testenvt = c("Grape"), 
                          remove_pop = c("Blackberry31", "Blackberry32", "Blackberry33",
                                         "Blackberry34", "Blackberry35",
                                         "Blackberry36", "Blackberry37", "Blackberry38",
@@ -45,7 +45,10 @@ data_PERF <- import_data(dataset = "DATACOMPLET_PERF.csv",
                          remove_rate = NA)
 
 head(data_PERF)
-tapply(data_PERF$Nb_adults,list(data_PERF$Original_environment,data_PERF$Generation),length)
+tapply(data_PERF$Nb_adults,list(data_PERF$Original_environment,
+                                data_PERF$Generation),length)
+tapply(data_PERF$Nb_adults,list(data_PERF$Original_environment,data_PERF$Test_environment,
+                                data_PERF$Generation),length)
 data_PERF$Date_P=as.Date(data_PERF$Date_P, format="%d/%m/%Y")
 
 #############################
@@ -54,7 +57,7 @@ data_PERF$Date_P=as.Date(data_PERF$Date_P, format="%d/%m/%Y")
 
 data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv", 
                          trait = "performance",
-                         remove_testenvt = NA, 
+                         remove_testenvt = c("Grape"), 
                          remove_pop = c("Blackberry31", "Blackberry32",
                                         "Blackberry33", "Blackberry34", 
                                         "Blackberry35",
@@ -175,8 +178,8 @@ m1 <- lme4::lmer(asin(sqrt(Rate)) ~ Test_environment+ log(Nb_eggs) +
                    (1|Date_P), data = data_PERF_Rate)
 summary(m1)
 
-m1 <- lme4::lmer(resid ~ (1|Date_P), data = data_PERF_Rate, REML= TRUE)
-summary(m1)
+# m1 <- lme4::lmer(resid ~ (1|Date_P), data = data_PERF_Rate, REML= TRUE)
+# summary(m1)
 
 m1 <- lme4::lmer(asin(sqrt(Rate)) ~ Test_environment+ log(Nb_eggs) + (1|Date_P), data = data_PERF_Rate)
 m2 <- lm(asin(sqrt(Rate)) ~ Test_environment+ log(Nb_eggs), data = data_PERF_Rate)
@@ -190,11 +193,11 @@ anova(m1, m2)
 ## Oviposition stimulation
 ```{r }
 #Extract residuals Rate~Treatment 
-m1 <- aov(log(Nb_eggs+1) ~ Test_environment, data = data_PERF_Rate)
-data_PERF_Rate$resid_eggs <- residuals(m1)
+m1 <- aov(log(Nb_eggs+1) ~ Test_environment, data = data_PERF)
+data_PERF$resid_eggs <- residuals(m1)
 
 
-wt3eggs<-ggplot(data = data_PERF_Rate,
+wt3eggs<-ggplot(data = data_PERF,
                 aes(x = Date_P, y = resid_eggs)) + 
   geom_point(size = 1.5, alpha = 0.7) +
   ylab("Residuals(oviposition stimulation)")  +
@@ -206,10 +209,10 @@ wt3eggs<-ggplot(data = data_PERF_Rate,
 wt3eggs
 
 #Variance intra date
-m1 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + (1|Date_P), data = data_PERF_Rate)
+m1 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + (1|Date_P), data = data_PERF)
 summary(m1)
-m1 <- lme4::lmer(resid_eggs ~ 1 + (1|Date_P), data = data_PERF_Rate)
-summary(m1)
+#m1 <- lme4::lmer(resid_eggs ~ 1 + (1|Date_P), data = data_PERF_Rate)
+#summary(m1)
 
 
 m1 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + (1|Date_P), data = data_PERF_Rate,  REML=TRUE)
@@ -244,8 +247,16 @@ wt3eggspref<-ggplot(data = data_PREF,
 wt3eggspref
 
 #Variance intra date
-m1 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment +  (1|Date_P) + (1|BoxID), data = data_PREF,  REML=TRUE)
-m2 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + (1|BoxID), data = data_PREF,  REML=TRUE)
+m1 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment  + (1|Date_P)+ (1|BoxID), 
+                 data = data_PREF)
+summary(m1)
+
+
+
+m1 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment +  (1|Date_P) + (1|BoxID), 
+                 data = data_PREF,  REML=TRUE)
+m2 <- lme4::lmer(log(Nb_eggs+1) ~ Test_environment + (1|BoxID), data = data_PREF, 
+                 REML=TRUE)
 
 
 #Test significant
