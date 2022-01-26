@@ -161,7 +161,7 @@ PAIR_G0_G2_STIMULATION <- plot_correlation_meanresiduals(dataset = dataselect,
 
 ### PREFERENCE
 dataselect <- data_PREF_three
-axis <- C("Oviposition preference G0","Oviposition preference G2")
+axis <- c("Oviposition preference G0","Oviposition preference G2")
 modelformula <- log(Nb_eggs+1)  ~ Test_environment + Generation + BoxID
 ## Accounting for differences among original environments in G0
 #modelformula <- log(Nb_eggs+1)  ~ Original_environment*Generation + Test_environment + Generation + BoxID
@@ -206,12 +206,12 @@ PAIR_G0_G2 <- cowplot::ggdraw() +
                   size = 16) 
  PAIR_G0_G2
  
-
-cowplot::save_plot(file =here::here("figures", "Correlation_G0_G2.pdf"),
-                  PAIR_G0_G2,
-                   base_height = 10/cm(1), base_width = 36/cm(1), dpi = 610)
-
-
+# 
+# cowplot::save_plot(file =here::here("figures", "Correlation_G0_G2.pdf"),
+#                   PAIR_G0_G2,
+#                    base_height = 10/cm(1), base_width = 36/cm(1), dpi = 610)
+# 
+# 
 
 ```
 
@@ -231,86 +231,43 @@ m01 <- lme4::lmer(asin(sqrt(Rate))  ~ Test_environment + log(Nb_eggs)+
 summary(m00)
 summary(m01)
 MuMIn::model.sel(m00, m01)
+##Cl:Performance in G0 and G2 are not correlated
 
 
-```
-
-
-
-### Analyses of Oviposition Preference
-```{r }
-modelformula <- log(Nb_eggs+1)  ~ Test_environment + Generation + BoxID
-
-## Blackberry
-m00 <- lme4::lmer(log(Nb_eggs+1)  ~ Test_environment + BoxID + 
-                    (0+lme4::dummy(Generation, "G0") |  Population) + 
+### OVIPOSITION PREFERENCE
+m00 <- lme4::lmer(log(Nb_eggs+1)  ~ Test_environment  + BoxID + 
+                    (0+lme4::dummy(Generation, "G0")|Population) + 
                     (0+lme4::dummy(Generation, "G2")|Population),
                   data=data_PREF_three, REML = TRUE)
 
-m01 <- lme4::lmer(log(Nb_eggs+1)  ~ Test_environment + BoxID + 
-                    (0+Generation | Population),
+m01 <- lme4::lmer(log(Nb_eggs+1)  ~ Test_environment  + BoxID + 
+                    (0+Generation|Population),
                   data=data_PREF_three, REML = TRUE)
 
 summary(m00)
 summary(m01)
 MuMIn::model.sel(m00, m01)
-
-
-
-## Strawberry
-m00 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + 
-                    (0+lme4::dummy(Generation, "G0") |  Population) + 
-                    (0+lme4::dummy(Generation, "G2") | Population), 
-                  data=data_PREF_three[data_PREF_three$Test_environment=="Strawberry",],
-                  REML = TRUE)
-
-m01 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + (0+Generation | Population) ,
-                  data=data_PREF_three[data_PREF_three$Test_environment=="Strawberry",], REML = TRUE)
-
-MuMIn::model.sel(m00, m01)
-
-## Cherry
-m00 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + (0+ lme4::dummy(Generation, "G0") |  Population) +
-                    (0+lme4::dummy(Generation, "G2")|Population),
-                  data=data_PREF_three[data_PREF_three$Test_environment=="Cherry",], REML = TRUE)
-
-m01 <- lme4::lmer(log(Nb_eggs+1)  ~ BoxID + (0+Generation | Population) ,
-                  data=data_PREF_three[data_PREF_three$Test_environment=="Cherry",], REML = TRUE)
-
-MuMIn::model.sel(m00, m01)
-
-dataselect <- data_PREF_three
-
-
 ##Cl:Performance in G0 and G2 are not correlated
 
-```
 
 
-### Analyses of Emergence rate
-```{r }
-## Create new variable
-data$City_Original_environment <- as.factor(paste(data$City, data$Original_environment, sep="_"))
 
-## Blackberry
-m00 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ Generation*Original_environment+log(Nb_eggscorrected) + (0+ lme4::dummy(Generation, "G0") |  City_Original_environment) + (0+lme4::dummy(Generation, "G2")|City_Original_environment), data=data[data$Test_environment=="Blackberry"&!is.na(data$Emergence_Rate),], REML = TRUE)
 
-m01 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ Generation*Original_environment+log(Nb_eggscorrected) + (0+Generation | City_Original_environment), data=data[data$Test_environment=="Blackberry"&!is.na(data$Emergence_Rate),], REML = TRUE)
+### OVIPOSITION STIMULATION
+m00 <- lme4::lmer(log(Nb_eggs+1)  ~ Test_environment   + 
+                    (0+lme4::dummy(Generation, "G0")|Population) + 
+                    (0+lme4::dummy(Generation, "G2")|Population),
+                  data=data_PREF, REML = TRUE)
+
+m01 <- lme4::lmer(log(Nb_eggs+1)  ~ Test_environment   + 
+                    (0+Generation|Population),
+                  data=data_PREF, REML = TRUE)
 
 summary(m00)
 summary(m01)
 MuMIn::model.sel(m00, m01)
-
-## Strawberry
-m00 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ Generation*Original_environment+log(Nb_eggscorrected) + (0+ lme4::dummy(Generation, "G0")| City_Original_environment) + (0+lme4::dummy(Generation, "G2")|City_Original_environment), data=data[data$Test_environment=="Strawberry"&!is.na(data$Emergence_Rate),], REML = TRUE)
-m01 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ Generation*Original_environment+log(Nb_eggscorrected) + (0+Generation|City_Original_environment) , data=data[data$Test_environment=="Strawberry"&!is.na(data$Emergence_Rate),], REML = TRUE)
-MuMIn::model.sel(m00, m01)
-
-## Cherry
-m00 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ Generation*Original_environment+log(Nb_eggscorrected) + (0+ lme4::dummy(Generation, "G0")| City_Original_environment) + (0+lme4::dummy(Generation, "G2")|City_Original_environment), data=data[data$Test_environment=="Cherry"&!is.na(data$Emergence_Rate),], REML = TRUE)
-m01 <- lme4::lmer(asin(sqrt(Emergence_Rate))  ~ Generation*Original_environment+log(Nb_eggscorrected)+ (0+Generation|City_Original_environment) , data=data[data$Test_environment=="Cherry"&!is.na(data$Emergence_Rate),], REML = TRUE)
-MuMIn::model.sel(m00, m01)
-
 ##Cl:Performance in G0 and G2 are not correlated
+
+
 
 ```
