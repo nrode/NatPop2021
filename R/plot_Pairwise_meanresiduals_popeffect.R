@@ -3,6 +3,7 @@
 #' @description Create a bivariate plot with residuals from common garden experiment 
 #' @param dataset name of the dataset (tibble format)
 #' @param formula formula of the model to use to compute the residuals
+#' @param formula_Blanquart formula of the model to estimate Blanquart Local Adaptation 
 #' @param gen can be G0 or G2
 #' @param test_environment name of the column including the test environment
 #' @param original_environment name of the column including the environment of origin of each population 
@@ -17,10 +18,13 @@
 #' @param ylim scale for y-axis
 #' @param fixedxylim (logical) should the limits for the scale of x-axis and y-axis be computed a the range of the trait across all test_environments (default=FALSE)
 #' @param bisector (logical) print a bisector line through the origin (default=FALSE)
-#' @param errorbars print bars for standard errors
 #' @param printcor print correlation between the two variables
 #' @param printSA print SA 
 #' @param subscript subscript used when printing the correlation on the final graph
+#' @param test_Blanquart print the results of the Blanquart's SA test
+#' 
+#' @importFrom dplyr vars across
+#'
 #' 
 #' @return plot
 #' @export 
@@ -30,38 +34,35 @@
 #'grp_cols=c("City", "Generation", "Original_environment", "Test_environment") , test_environment="Test_environment", original_environment="Original_environment", additional_factor="Generation", coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"), fixedxylim = TRUE, bisector = TRUE)
 
 plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
-                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
-                                        test_environment="Test_environment",
-                                        original_environment="Original_environment",
-                                        gen = "G2",
-                                        subscript = NA,
-                                        grp_cols=c("Population", "Original_environment", "Test_environment"), 
-                                        fruit1 = "Cherry",
-                                        fruit2 = "Blackberry",
-                                        onlyfocalpop=TRUE,
-                                        #coltest_envlevels = NULL, 
-                                        coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"),
-                                        xaxis_labelprint = "Offspring performance\nin sympatry",
-                                        yaxis_labelprint = "Offspring performance\nin allopatry",
-                                        xlim=NULL, ylim=NULL, fixedxylim=TRUE, bisector=FALSE, 
-                                        errorbars=TRUE, printcor=TRUE, printSA=FALSE){
+                                                  formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)",
+                                                  formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
+                                                  test_environment="Test_environment",
+                                                  original_environment="Original_environment",
+                                                  gen = "G2",
+                                                  subscript = NA,
+                                                  grp_cols=c("Population", "Original_environment", "Test_environment"), 
+                                                  coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"),
+                                                  xaxis_labelprint = "Offspring performance\nin sympatry",
+                                                  yaxis_labelprint = "Offspring performance\nin allopatry",
+                                                  xlim=NULL, ylim=NULL, fixedxylim=TRUE, bisector=FALSE, 
+                                                  printcor=FALSE, printSA=FALSE, test_Blanquart=TRUE){
   
   # Subset dataset per generation 
   dataset <- dataset[dataset$Generation == gen,]
   
   
-  # Subset dataset
-    if (gen == "G0") {
-      scale_label = c("G0/G1")
-      scale_values = c(21)
-  }else{
-    if (gen == "G2") {
-      scale_label = c("G2/G3")
-      scale_values = c(16)
-    }else {
-      print("Error: unknown generation")
-    }
-  }
+  # # Subset dataset
+  # if (gen == "G0") {
+  #   scale_label = c("G0/G1")
+  #   scale_values = c(21)
+  # }else{
+  #   if (gen == "G2") {
+  #     scale_label = c("G2/G3")
+  #     scale_values = c(16)
+  #   }else {
+  #     print("Error: unknown generation")
+  #   }
+  # }
   
   
   
@@ -90,16 +91,18 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
     print("The length of coltest_envlevels and the number of levels of test_environment are different")
   }
   
-  if(!is.null(coltest_envlevels)){
-    colfruit1 <- coltest_envlevels[envlevels==fruit1]
-    colfruit2 <- coltest_envlevels[envlevels==fruit2]
-  }else{
-    colfruit1 <- scales::hue_pal()(length(envlevels))[envlevels==fruit1]
-    colfruit2 <- scales::hue_pal()(length(envlevels))[envlevels==fruit2]
-    print("No color provided, using default color palette")
-    scales::show_col(scales::hue_pal()(length(envlevels)))
-    
-  }
+  
+  # 
+  # if(!is.null(coltest_envlevels)){
+  #   colfruit1 <- coltest_envlevels[envlevels==fruit1]
+  #   colfruit2 <- coltest_envlevels[envlevels==fruit2]
+  # }else{
+  #   colfruit1 <- scales::hue_pal()(length(envlevels))[envlevels==fruit1]
+  #   colfruit2 <- scales::hue_pal()(length(envlevels))[envlevels==fruit2]
+  #   print("No color provided, using default color palette")
+  #   scales::show_col(scales::hue_pal()(length(envlevels)))
+  #   
+  # }
   
   ## Fit model
   m <- lm(formula, data=dataset)
@@ -122,206 +125,294 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
     dplyr::select(-SdResiduals)
   
   ## Compute range of values for MeanResiduals
-  if(errorbars){
-    rangexy <- c(min(datameanres$MeanResiduals-datameanres$SeResiduals, na.rm=TRUE), 
+  rangexy <- c(min(datameanres$MeanResiduals-datameanres$SeResiduals, na.rm=TRUE), 
                  max(datameanres$MeanResiduals+datameanres$SeResiduals, na.rm=TRUE))
-  }else{
-    rangexy <- range(datameanres$MeanResiduals)
+  
+  
+  ## Transform in dataframe
+  datameanres<-as.data.frame(datameanres)
+  
+  
+  #Transform dataset: symp and allop columns
+  datameanres$SA <- ifelse(datameanres$Test_environment==datameanres$Original_environment,1,0)
+  
+  #Remove populations without SA value
+  datameanres <- droplevels(datameanres)
+  populations_withsymp <- unique(datameanres$Population[datameanres$SA=="1"])
+  populations_withsymp <- droplevels(populations_withsymp)
+  pop_toremove <- setdiff(levels(datameanres$Population), populations_withsymp)
+  
+  if(!identical(pop_toremove, character(0))){
+    print("Populations that do not have measures in sympatry have been removed")
+    datameanres<-datameanres[datameanres$Population!=pop_toremove,]
+    datameanres <- droplevels(datameanres)
+  }
+
+  
+  #Create new columns for symp
+  datameanres$Mean_Symp <- NA
+  datameanres$Se_Symp <-  NA
+  datameanres$N_Symp<-  NA
+
+  for (i in levels(datameanres$Population[datameanres$SA==1])) {
+    meansymp <- datameanres$MeanResiduals[datameanres$SA==1&datameanres$Population==i]
+    se_symp <- datameanres$SeResiduals[datameanres$SA==1&datameanres$Population==i]
+    N_symp <- datameanres$SampSize[datameanres$SA==1&datameanres$Population==i]
+    datameanres$Mean_Symp[datameanres$Population==i] <- meansymp
+    datameanres$Se_Symp[datameanres$Population==i] <-  se_symp
+    datameanres$N_Symp[datameanres$Population==i] <-  N_symp
+    rm(meansymp,se_symp,N_symp)
   }
   
-  ## Display only populations sampled from fruit1 or fruit2
-  if(onlyfocalpop&!is.null(original_environment)){
-    print(paste0("Displaying only populations from ", fruit1, " and ", fruit2, "."))
-    datameanres <-  dplyr::filter(datameanres, 
-                                  !!as.symbol(original_environment)==fruit1 |!!as.symbol(original_environment)==fruit2)
-  }
+
+  datameanres$Mean_Allop <- datameanres$MeanResiduals
+  datameanres$Se_Allop <-  datameanres$SeResiduals
+  datameanres$N_Allop <-  datameanres$SampSize
   
-  ## Reformat from long to wide format
-  datameanreswide <- datameanres %>% 
-    tidyr::pivot_wider(names_from = all_of(test_environment), values_from = c("MeanResiduals","SeResiduals", "SampSize"))
+  datameanres$Symp <-  datameanres$Original_environment
+  datameanres$Allop <-  datameanres$Test_environment
   
+  #Remove useless row and columns
+  datameanres <- datameanres[datameanres$SA!=1,]
+  datameanres <- datameanres[,-c(2:7)]
   
-  ## Keep two columns with allopatry and sympatry
-  data_fruit1_fruit2 <- datameanreswide[, c(grp_cols[-length(grp_cols)], paste0("MeanResiduals_", c(fruit1, fruit2)), paste0("SeResiduals_", c(fruit1, fruit2)))]
+  datameanres$N <- (datameanres$N_Symp+datameanres$N_Allop)/2
   
-  
-  
-  
-  ## If sympatry equal fruit1 replace with fruit1, otherwise fruit2
-  data_fruit1_fruit2 <- data_fruit1_fruit2 %>% 
-    dplyr::mutate(sympatry = ifelse(!!as.symbol(original_environment)==fruit1, 
-                                    !!as.symbol(paste0("MeanResiduals_", fruit1)), 
-                                    !!as.symbol(paste0("MeanResiduals_", fruit2))))
-  data_fruit1_fruit2 <- data_fruit1_fruit2 %>% 
-    dplyr::mutate(se_sympatry = ifelse(!!as.symbol(original_environment)==fruit1, 
-                                       !!as.symbol(paste0("SeResiduals_", fruit1)),
-                                       !!as.symbol(paste0("SeResiduals_", fruit2))))
-  
-  ## If sympatry equal fruit1 replace with fruit2, otherwise fruit1
-  data_fruit1_fruit2 <- data_fruit1_fruit2 %>% 
-    dplyr::mutate(allopatry = ifelse(!!as.symbol(original_environment)==fruit1, 
-                                     !!as.symbol(paste0("MeanResiduals_", fruit2)),
-                                     !!as.symbol(paste0("MeanResiduals_", fruit1))))
-  
-  data_fruit1_fruit2 <- data_fruit1_fruit2 %>% 
-    dplyr::mutate(se_allopatry = ifelse(!!as.symbol(original_environment)==fruit1, 
-                                        !!as.symbol(paste0("SeResiduals_", fruit2)),
-                                        !!as.symbol(paste0("SeResiduals_", fruit1))))
+  # 
+  # 
+  # datameanres <- ifelse(datameanres$Test_environment==datameanres$Original_environment, 
+  #                       datameanres$MeanSymp=datameanres$MeanResiduals
+  #   dplyr::mutate(sympatry = ifelse(!!as.symbol(original_environment)==fruit1,
+  #                                   !!as.symbol(paste0("MeanResiduals_", fruit1)),
+  #                                   !!as.symbol(paste0("MeanResiduals_", fruit2))))
+  # 
+  # 
+  # 
+  # # # ## Display only populations sampled from fruit1 or fruit2
+  # # if(onlyfocalpop&!is.null(original_environment)){
+  # #   print(paste0("Displaying only populations from ", fruit1, " and ", fruit2, "."))
+  # #   datameanres <-  dplyr::filter(datameanres,
+  # #                                 !!as.symbol(original_environment)==fruit1 |!!as.symbol(original_environment)==fruit2)
+  # # }
+  # # 
+  # # ## Reformat from long to wide format
+  # # datameanreswide <- datameanres %>% 
+  # #   tidyr::pivot_wider(names_from = all_of(test_environment), values_from = c("MeanResiduals","SeResiduals", "SampSize"))
+  # # 
+  # # 
+  # # 
+  # # 
+  # # 
+  # # 
+  # # 
+  # # 
+  # # 
+  # # ## Keep two columns with allopatry and sympatry
+  # # data_fruit1_fruit2 <- datameanreswide[, c(grp_cols[-length(grp_cols)], 
+  # #                                           paste0("MeanResiduals_", c(fruit1, fruit2)), 
+  # #                                           paste0("SeResiduals_", c(fruit1, fruit2)))]
+  # # 
+  # 
+  # 
+  # 
+  # ## If sympatry equal fruit1 replace with fruit1, otherwise fruit2
+  # data_fruit1_fruit2 <- data_fruit1_fruit2 %>% 
+  #   dplyr::mutate(sympatry = ifelse(!!as.symbol(original_environment)==fruit1, 
+  #                                   !!as.symbol(paste0("MeanResiduals_", fruit1)), 
+  #                                   !!as.symbol(paste0("MeanResiduals_", fruit2))))
+  # data_fruit1_fruit2 <- data_fruit1_fruit2 %>% 
+  #   dplyr::mutate(se_sympatry = ifelse(!!as.symbol(original_environment)==fruit1, 
+  #                                      !!as.symbol(paste0("SeResiduals_", fruit1)),
+  #                                      !!as.symbol(paste0("SeResiduals_", fruit2))))
+  # 
+  # ## If sympatry equal fruit1 replace with fruit2, otherwise fruit1
+  # data_fruit1_fruit2 <- data_fruit1_fruit2 %>% 
+  #   dplyr::mutate(allopatry = ifelse(!!as.symbol(original_environment)==fruit1, 
+  #                                    !!as.symbol(paste0("MeanResiduals_", fruit2)),
+  #                                    !!as.symbol(paste0("MeanResiduals_", fruit1))))
+  # 
+  # data_fruit1_fruit2 <- data_fruit1_fruit2 %>% 
+  #   dplyr::mutate(se_allopatry = ifelse(!!as.symbol(original_environment)==fruit1, 
+  #                                       !!as.symbol(paste0("SeResiduals_", fruit2)),
+  #                                       !!as.symbol(paste0("SeResiduals_", fruit1))))
   
   
   
   ## Compute average sample size
-  data_fruit1_fruit2$N <- rowMeans(datameanreswide[, paste0("SampSize_", c(fruit1, fruit2))])
-  ## Compute SA
-  data_fruit1_fruit2 <- data_fruit1_fruit2 %>% 
-    dplyr::mutate(SA = sympatry-allopatry)
+  # Mea$N <- rowMeans(datameanreswide[, paste0("SampSize_", c(fruit1, fruit2))])
+  # ## Compute SA
+  # data_fruit1_fruit2 <- data_fruit1_fruit2 %>% 
+  #   dplyr::mutate(SA = sympatry-allopatry)
   
-  ## Remove columns
-  data_fruit1_fruit2 <- data_fruit1_fruit2 %>%
-    dplyr::select(-!!as.symbol(paste0("MeanResiduals_", fruit1)), -!!as.symbol(paste0("SeResiduals_", fruit1)), -!!as.symbol(paste0("MeanResiduals_", fruit2)), -!!as.symbol(paste0("SeResiduals_", fruit2)))
+  # ## Remove columns
+  # data_fruit1_fruit2 <- data_fruit1_fruit2 %>%
+  #   dplyr::select(-!!as.symbol(paste0("MeanResiduals_", fruit1)), -!!as.symbol(paste0("SeResiduals_", fruit1)), -!!as.symbol(paste0("MeanResiduals_", fruit2)), -!!as.symbol(paste0("SeResiduals_", fruit2)))
+  # 
+  # weighted_var = function (x, w) sum(w * (x - weighted.mean(x, w, na.rm = TRUE)) ^ 2, na.rm = TRUE) / sum(w, na.rm = TRUE)
+  # weighted_sd = function (x, w) sqrt(weighted_var(x, w))
+  # 
+  # SAstats <- data_fruit1_fruit2%>%
+  #   dplyr::ungroup() %>%
+  #   dplyr::summarise(SA_mean = weighted.mean(SA, N, na.rm = TRUE), SA_sd = weighted_sd(SA, N), Npop = length(N))
+  # SAstats <- SAstats %>% 
+  #   dplyr::mutate(SA_se = SA_sd/sqrt(Npop))
+  datameanres
   
-  weighted_var = function (x, w) sum(w * (x - weighted.mean(x, w, na.rm = TRUE)) ^ 2, na.rm = TRUE) / sum(w, na.rm = TRUE)
-  weighted_sd = function (x, w) sqrt(weighted_var(x, w))
+  ######### Blanquart test 
+  ## Fit model
+  lm_val <- lm(formula_Blanquart, data=dataset)
+  Fratio = anova(lm_val)["SA",3]/anova(lm_val)["Test_environment:Original_environment",3]
+  pvalue = 1 - pf(Fratio,anova(lm_val)["SA",1],anova(lm_val)["Test_environment:Original_environment",1])
+  df1 = anova(lm_val)["SA",1]
+  df2 = anova(lm_val)["Test_environment:Original_environment",1]
   
-  SAstats <- data_fruit1_fruit2%>%
-    dplyr::ungroup() %>%
-    dplyr::summarise(SA_mean = weighted.mean(SA, N, na.rm = TRUE), SA_sd = weighted_sd(SA, N), Npop = length(N))
-  SAstats <- SAstats %>% 
-    dplyr::mutate(SA_se = SA_sd/sqrt(Npop))
   
-  ## Check whether legend should be drawn
-    plot_pair <- ggplot(data = data_fruit1_fruit2,
-                        aes_q(x = as.name(names(data_fruit1_fruit2)[length(grp_cols)]), 
-                              y = as.name(names(data_fruit1_fruit2)[length(grp_cols)+2]), 
-                              color = as.name(names(data_fruit1_fruit2)[length(grp_cols)-1]))) +
-      geom_vline(xintercept = 0, linetype ="dashed", color = "grey")+
-      geom_hline(yintercept = 0, linetype ="dashed", color = "grey") +
-      xlab(xaxis_labelprint)  +
-      ylab(yaxis_labelprint) +
-      scale_color_manual(name="Fly population from:",   
-                         breaks=originalenvlevels,
-                         labels=originalenvlevels,
-                         values=coltest_envlevels,
-                         drop=FALSE) + 
-      scale_shape_manual(name = "Generation",
-                         labels = scale_label, values=scale_values) + 
-      ggtitle(paste(fruit1, "vs.", fruit2)) +
-      theme(plot.title = element_text(hjust = 0.5)) + 
-      theme_LO_sober + theme (
-        panel.grid.major.y = element_blank(),
-        panel.grid.minor.y = element_blank()
-      )
-    
+  #Equation
+  equation_Blanquart <- as.character(as.expression(substitute(italic(F)[df1~","~df2]~"="~Fratio~";"~italic(P)~"="~pvalue,
+                                                    list(Fratio = format(Fratio, digits = 2, nsmall=2),
+                                                         df1 = format(df1, digits = 2), 
+                                                         df2 = format(df2, digits = 2), 
+                                                         pvalue = format(pvalue, digits = 2)))))
+ 
+  #Ylim 
+  max_plot <- max(max(datameanres$Mean_Allop+datameanres$Se_Allop, na.rm = TRUE), 
+                  max(datameanres$Mean_Symp+datameanres$Se_Symp, na.rm = TRUE)) 
+  min_plot <-  min(min(datameanres$Mean_Allop-datameanres$Se_Allop, na.rm = TRUE), 
+                   min(datameanres$Mean_Symp-datameanres$Se_Symp, na.rm = TRUE)) 
   
+  ######### PLOT 
+  plot_pair <- ggplot(data = datameanres,
+                      aes(x = Mean_Symp, 
+                            y = Mean_Allop), 
+                            color = Symp, 
+                            shape = Allop) +
+    geom_abline(intercept = 0, slope=1, linetype ="dashed", color = "grey") +
+    geom_errorbar(data = datameanres, aes(ymin=Mean_Allop-Se_Allop, ymax=Mean_Allop+Se_Allop, col=Symp), size=0.3) +
+    geom_errorbarh(data = datameanres, aes(xmin=Mean_Symp-Se_Symp, xmax=Mean_Symp+Se_Symp, col=Symp), size=0.3) + 
+    geom_point(aes(shape = Allop, col=Symp, fill=Symp),  size=3, alpha=1)  + 
+    xlab(xaxis_labelprint)  +
+    ylab(yaxis_labelprint) +
+    scale_fill_manual(name="Fly population from:",   
+                       breaks=c("Blackberry","Cherry","Strawberry"),
+                       labels=c("Blackberry","Cherry","Strawberry"),
+                       values=c("#301934","#BC3C6D", "#3FAA96"),
+                       drop=FALSE) +
+    scale_color_manual(name="Fly population from:",   
+                       breaks=c("Blackberry","Cherry","Strawberry"),
+                       labels=c("Blackberry","Cherry","Strawberry"),
+                       values=c("#301934","#BC3C6D", "#3FAA96"),
+                       drop=FALSE) + 
+    scale_shape_manual(name = "Test environment:",
+                       labels = c("Blackberry","Cherry","Strawberry"), 
+                       values =  c(15,16,17)) + 
+    theme(plot.title = element_text(hjust = 0.5)) + 
+    theme_LO_sober + theme (
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor.y = element_blank())
+  
+  if(test_Blanquart){
+    plot_pair <- plot_pair + annotate('text', x = min_plot, y = max_plot, 
+                                      label = equation_Blanquart, parse = TRUE, hjust = 0, size = 4) 
+  }
+  
+  # Add point
+  # if (gen == "G0") {
+  #   plot_pair <- plot_pair + geom_point(aes(shape = Allop, col=Symp), fill="white", size=3, stroke=1.3) + 
+  #   scale_shape_manual(name = "Test Environment:",
+  #                      labels = c("Blackberry","Cherry","Strawberry"), 
+  #                      values =  c(22,21,24)) 
+  # }else{
+  #   if (gen == "G2") {
+  #     plot_pair <- plot_pair + 
+  #   }else {
+  #     print("Error: unknown generation")
+  #   }
+  # }
+  
+  
+  ## Change range limit
+  if(fixedxylim){
+    plot_pair <- plot_pair +
+      xlim(rangexy[1],rangexy[2]) +
+      ylim(rangexy[1], rangexy[2])
     
-    #Add y = x 
-    if(bisector){
-      plot_pair <- plot_pair + geom_abline(intercept = 0, slope=1, linetype ="solid", color = "grey")
-    }
-    
-    
-    ## Add errorbars 
-    if(errorbars){
-      plot_pair <- plot_pair +
-        geom_errorbar(data = data_fruit1_fruit2, aes(ymin=allopatry-se_allopatry, ymax=allopatry+se_allopatry)) +
-        geom_errorbarh(data = data_fruit1_fruit2, aes(xmin=sympatry-se_sympatry, xmax=sympatry+se_sympatry))
-    }
-    
-    
-    # Add point
-    if (gen == "G0") {
-      plot_pair <- plot_pair + geom_point(aes(shape = gen), fill="white", size=3, stroke=1.3)  
-    }else{
-      if (gen == "G2") {
-        plot_pair <- plot_pair + geom_point(aes(shape = gen), size=3, stroke=1.3)  
-      }else {
-        print("Error: unknown generation")
-      }
-    }
-
-
-    ## Change range limit
-    if(fixedxylim){
-      plot_pair <- plot_pair +
-        xlim(rangexy[1],rangexy[2]) +
-        ylim(rangexy[1], rangexy[2])
-      
-    } else{
-      plot_pair <- plot_pair +
-        xlim(min(layer_scales(plot_pair)$x$range$range, 
-                 layer_scales(plot_pair)$y$range$range),
-             max(layer_scales(plot_pair)$x$range$range, 
-                 layer_scales(plot_pair)$y$range$range)) +
-        ylim(min(layer_scales(plot_pair)$x$range$range, 
-                 layer_scales(plot_pair)$y$range$range), 
-             max(layer_scales(plot_pair)$x$range$range, 
-                 layer_scales(plot_pair)$y$range$range))
-    }
-    
-    if(!is.null(xlim)&!is.null(ylim)){
-      plot_pair <- plot_pair +
-        xlim(min(xlim[1], ylim[1]), max(xlim[2], ylim[2])) +
-        ylim(min(xlim[1], ylim[1]), max(xlim[2], ylim[2]))
-    }
-    
-    
-    ## Add correlation
-    if(printcor){
-      ## Compute weighted correlation
-      weightedcor <- sjstats:::weighted_correlation(data_fruit1_fruit2,
-                                                    x = allopatry, 
-                                                    y = sympatry, 
-                                                    weights = N, 
-                                                    ci.lvl = 0.95)
-      rho <- as.numeric(weightedcor$estimate[1])
-      eq_rho <- as.character(as.expression(substitute(~~italic(rho)[subscript]~"="~weightedcor~"["~inf~";"~sup~"]",
-                                                      list(subscript=subscript,
-                                                           weightedcor = format(rho, digits = 2, nsmall=2), 
-                                                           inf = format(weightedcor$ci[1], digits = 2),
-                                                           sup = format(weightedcor$ci[2], digits = 2)))))
-      
-      eq_SA <- as.character(as.expression(substitute(~~italic(SA)[subscript]~"="~SAmean~"(+/-se="~se~")",
-                                                     list(subscript = subscript,
-                                                          SAmean = format(SAstats$SA_mean, digits = 2, nsmall=2), 
-                                                          se = format(SAstats$SA_se, digits = 2)))))
-    
-      ## Position of the equation depends on the range of values of x and y
-      if(fixedxylim){
-        plot_pair <- plot_pair + geom_text(x = min(rangexy)+0.2*(max(rangexy)-min(rangexy)), y = max(rangexy), 
-                                           label = eq_rho,
-                                           parse = TRUE, 
-                                           color="black", size = 3.5) 
-          if(printSA) { plot_pair <- plot_pair + geom_text(x =  min(rangexy)+0.275*(max(rangexy)-min(rangexy)), 
-                                                           y =  min(rangexy)+0.925*(max(rangexy)-min(rangexy)), 
-                    label = eq_SA,
-                    parse = TRUE, 
-                    color="black", size = 3.5) }
-        
-      }else{
-        rangex <- layer_scales(plot_pair)$x$range$range
-        rangey <- layer_scales(plot_pair)$y$range$range
-        plot_pair <- plot_pair + geom_text(x = min(rangex)+0.2*(max(rangex)-min(rangex)), y = max(rangey), 
-                                           label = eq_rho,
-                                           parse = TRUE, 
-                                           color="black", size = 3.5) +
-          if(printSA) {  geom_text(x =  min(rangex)+0.275*(max(rangex)-min(rangex)), y =  min(rangey)+0.925*(max(rangey)-min(rangey)), 
-                    label = eq_SA,
-                    parse = TRUE, 
-                    color="black", size = 3.5) }
-      }
-      if(!is.null(xlim)&!is.null(ylim)){
-        plot_pair <- plot_pair + geom_text(x =  min(xlim)+0.2*(max(xlim)-min(xlim)), y = max(ylim), 
-                                           label = eq_rho,
-                                           parse = TRUE, 
-                                           color="black", size = 3.5) +
-          if(printSA) {   geom_text(x =  min(xlim)+0.275*(max(xlim)-min(xlim)), y =  min(ylim)+0.925*(max(ylim)-min(ylim)), 
-                    label = eq_SA,
-                    parse = TRUE, 
-                    color="black", size = 3.5) }
-      }
-      
-    }
-    return(plot_pair)
+  } else{
+    plot_pair <- plot_pair +
+      xlim(min(layer_scales(plot_pair)$x$range$range, 
+               layer_scales(plot_pair)$y$range$range),
+           max(layer_scales(plot_pair)$x$range$range, 
+               layer_scales(plot_pair)$y$range$range)) +
+      ylim(min(layer_scales(plot_pair)$x$range$range, 
+               layer_scales(plot_pair)$y$range$range), 
+           max(layer_scales(plot_pair)$x$range$range, 
+               layer_scales(plot_pair)$y$range$range))
+  }
+  
+  if(!is.null(xlim)&!is.null(ylim)){
+    plot_pair <- plot_pair +
+      xlim(min(xlim[1], ylim[1]), max(xlim[2], ylim[2])) +
+      ylim(min(xlim[1], ylim[1]), max(xlim[2], ylim[2]))
   }
   
   
+  ## Add correlation
+  if(printcor){
+    ## Compute weighted correlation
+    weightedcor <- sjstats:::weighted_correlation(data_fruit1_fruit2,
+                                                  x = allopatry, 
+                                                  y = sympatry, 
+                                                  weights = N, 
+                                                  ci.lvl = 0.95)
+    rho <- as.numeric(weightedcor$estimate[1])
+    eq_rho <- as.character(as.expression(substitute(~~italic(rho)[subscript]~"="~weightedcor~"["~inf~";"~sup~"]",
+                                                    list(subscript=subscript,
+                                                         weightedcor = format(rho, digits = 2, nsmall=2), 
+                                                         inf = format(weightedcor$ci[1], digits = 2),
+                                                         sup = format(weightedcor$ci[2], digits = 2)))))
+    
+    eq_SA <- as.character(as.expression(substitute(~~italic(SA)[subscript]~"="~SAmean~"(+/-se="~se~")",
+                                                   list(subscript = subscript,
+                                                        SAmean = format(SAstats$SA_mean, digits = 2, nsmall=2), 
+                                                        se = format(SAstats$SA_se, digits = 2)))))
+    
+
+    
+    ## Position of the equation depends on the range of values of x and y
+    if(fixedxylim){
+      plot_pair <- plot_pair + geom_text(x = min(rangexy)+0.2*(max(rangexy)-min(rangexy)), y = max(rangexy), 
+                                         label = eq_rho,
+                                         parse = TRUE, 
+                                         color="black", size = 3.5) 
+      if(printSA) { plot_pair <- plot_pair + geom_text(x =  min(rangexy)+0.275*(max(rangexy)-min(rangexy)), 
+                                                       y =  min(rangexy)+0.925*(max(rangexy)-min(rangexy)), 
+                                                       label = eq_SA,
+                                                       parse = TRUE, 
+                                                       color="black", size = 3.5) }
+      
+    }else{
+      rangex <- layer_scales(plot_pair)$x$range$range
+      rangey <- layer_scales(plot_pair)$y$range$range
+      plot_pair <- plot_pair + geom_text(x = min(rangex)+0.2*(max(rangex)-min(rangex)), y = max(rangey), 
+                                         label = eq_rho,
+                                         parse = TRUE, 
+                                         color="black", size = 3.5) +
+        if(printSA) {  geom_text(x =  min(rangex)+0.275*(max(rangex)-min(rangex)), y =  min(rangey)+0.925*(max(rangey)-min(rangey)), 
+                                 label = eq_SA,
+                                 parse = TRUE, 
+                                 color="black", size = 3.5) }
+    }
+    if(!is.null(xlim)&!is.null(ylim)){
+      plot_pair <- plot_pair + geom_text(x =  min(xlim)+0.2*(max(xlim)-min(xlim)), y = max(ylim), 
+                                         label = eq_rho,
+                                         parse = TRUE, 
+                                         color="black", size = 3.5) +
+        if(printSA) {   geom_text(x =  min(xlim)+0.275*(max(xlim)-min(xlim)), y =  min(ylim)+0.925*(max(ylim)-min(ylim)), 
+                                  label = eq_SA,
+                                  parse = TRUE, 
+                                  color="black", size = 3.5) }
+    }
+    
+  }
+  return(plot_pair)
+}
+
