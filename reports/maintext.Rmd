@@ -1411,7 +1411,7 @@ PPMR_ALL <- cowplot::ggdraw() +
 
 
 
-# RELATION BETWEEN TRAITS
+# MOTHER KNOWS BEST - RELATION BETWEEN TRAITS
 ```{r }
 
 PLOT_Blackberry <- plot_RelationTraits_residuals(gen = "G2", 
@@ -1468,13 +1468,13 @@ legend <- lemon::g_legend(PLOT_Strawberry_G0)
                   size = 16) 
  RELATION_TRAITS_G0G2
  
- 
+
 # 
-# cowplot::save_plot(file =here::here("figures", "RELATION_TRAITS_G0G2.pdf"),
+# cowplot::save_plot(file =here::here("figures", "Supplements_MotherKnowsBest_Preference.pdf"),
 #                   RELATION_TRAITS_G0G2,
 #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+# 
 
-#  
 
 
 ##### With stimulation 
@@ -1527,9 +1527,9 @@ PLOT_Strawberry_Stim_G0 <- plot_RelationTraits_residuals(gen = "G0",
                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
                   size = 16) 
  RELATION_TRAITS_Stimulation_G0G2
-
 # 
-# cowplot::save_plot(file =here::here("figures", "RELATION_TRAITS_Stimulation_G0G2.pdf"),
+# 
+# cowplot::save_plot(file =here::here("figures", "Supplements_MotherKnowsBest_Stimulation.pdf"),
 #                   RELATION_TRAITS_Stimulation_G0G2,
 #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
 
