@@ -122,20 +122,6 @@ levels(data_PREF$Population)
 (PLOT_eggs_G2 <- plot_RTP_realdata(dataset = data_PERF, trait = "Nb_eggs", gen = "G2"))
 
 
-
-###PLOT 
-(PAIR_BLACK_CHERRY_EGGS <- plot_PairwisePOP_realdata(dataset = data_PERF, 
-                                                           trait = "Nb_eggs", gen = "Both", 
-                                                           fruit1 = "Cherry", fruit2 = "Blackberry"))
-
-(PAIR_CHERRY_STRAW_EGGS  <- plot_PairwisePOP_realdata(dataset = data_PERF, 
-                                                            trait = "Nb_eggs", gen = "Both",
-                                                            fruit1 = "Strawberry", fruit2 = "Cherry"))
-
-(PAIR_STRW_BLACK_EGGS  <- plot_PairwisePOP_realdata(dataset = data_PERF, 
-                                                          trait = "Nb_eggs", gen = "Both",
-                                                          fruit1 = "Blackberry", 
-                                                     fruit2 = "Strawberry"))
 ```
 
 
@@ -147,25 +133,6 @@ levels(data_PREF$Population)
 (PLOT_rate_G2 <- plot_RTP_realdata(dataset = data_PERF_Rate, trait = "Rate", gen = "G2"))
 
 
-
-## Heterogeneity across populations
-(PAIR_BLACK_CHERRY_RATE <- plot_PairwisePOP_realdata(dataset = data_PERF_Rate, 
-                                                      trait = "Rate", 
-                                                      gen = "Both", 
-                                                      fruit1 = "Cherry", 
-                                                      fruit2 = "Blackberry"))
-
-(PAIR_CHERRY_STRAW_RATE <- plot_PairwisePOP_realdata(dataset = data_PERF_Rate, 
-                                                      trait = "Rate", 
-                                                      gen = "Both", 
-                                                      fruit1 = "Strawberry", 
-                                                      fruit2 = "Cherry"))
-
-(PAIR_STRW_BLACK_RATE <- plot_PairwisePOP_realdata(dataset = data_PERF_Rate, 
-                                                    trait = "Rate", 
-                                                    gen = "Both",
-                                                    fruit1 = "Blackberry", 
-                                                    fruit2 = "Strawberry"))
 ```
 
 # Preference
@@ -179,26 +146,6 @@ levels(data_PREF$Population)
 
 
 
-
-
-###PLOT 
-(PAIR_BLACK_CHERRY_PREF <- plot_PairwisePOP_realdata(dataset = data_PREF_three,
-                                                      trait = "Nb_eggs", 
-                                                      gen = "Both", 
-                                                      fruit1 = "Cherry", 
-                                                      fruit2 = "Blackberry"))
-
-(PAIR_CHERRY_STRAW_PREF  <- plot_PairwisePOP_realdata(dataset = data_PREF_three, 
-                                                       trait = "Nb_eggs", 
-                                                       gen = "Both",
-                                                       fruit1 = "Strawberry", 
-                                                       fruit2 = "Cherry"))
-
-(PAIR_STRW_BLACK_PREF  <- plot_PairwisePOP_realdata(dataset = data_PREF_three, 
-                                                     trait = "Nb_eggs", 
-                                                     gen = "Both",
-                                                     fruit1 = "Blackberry", 
-                                                     fruit2 = "Strawberry"))
 ```
 
 
@@ -244,63 +191,6 @@ LOCAL_ADAPTATION_PLOT_REALDATA <- cowplot::ggdraw() +
  #                   LOCAL_ADAPTATION_PLOT_REALDATA,
  #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
 
-
-
-```
-
-
-
-
-# PLOT HETEROGENEITY
-```{r }
-
-legend <- lemon::g_legend(PAIR_CHERRY_STRAW_PREF)
-
-  
-############## ALL GENERATION 
-HETEROGENEITY_PLOT_REALDATA <- cowplot::ggdraw() +
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_PREF+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0, y = 0.66, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_PREF+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.30, y = 0.66, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_PREF+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0.60, y = 0.66, width = 0.28, height = 0.28) +    
-  #cowplot::draw_plot(legend, x = 0.85, y = 0.8, width = 0.0001, height = 0.0001) +
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_EGGS+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0, y = 0.33, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_EGGS+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.30, y = 0.33, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_EGGS+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0.60, y = 0.33, width = 0.28, height = 0.28) +    
-  cowplot::draw_plot(PAIR_BLACK_CHERRY_RATE+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0, y = 0, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_CHERRY_STRAW_RATE+theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.30, y = 0, width = 0.28, height = 0.28) +
-  cowplot::draw_plot(PAIR_STRW_BLACK_RATE+theme(legend.position = "none", 
-                                        plot.title = element_blank()),
-            x = 0.60, y = 0, width = 0.28, height = 0.28) +    
-  cowplot::draw_plot(legend, x = 0.938, y = 0.5, width = 0.0001, height = 0.0001)  + 
-  cowplot::draw_plot_label(c("Oviposition preference", 
-                             "Oviposition stimulation", 
-                             "Offspring performance"),  
-                  x = c(0.48,0.48,0.48), 
-                  y = c(0.96, 0.63, 0.29), 
-                  hjust = c(0.5,0.5,0.5), 
-                  vjust = c(0.5,0.5,0.5),
-                  size = 16) 
-HETEROGENEITY_PLOT_REALDATA
-# 
-# cowplot::save_plot(file =here::here("figures","Supplement_Heterogeneity_Data.pdf"),
-#                   HETEROGENEITY_PLOT_REALDATA, base_height = 30/cm(1),
-#                   base_width = 30/cm(1), dpi = 1200)
 
 
 ```
