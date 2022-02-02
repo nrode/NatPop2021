@@ -108,10 +108,11 @@ plot_CorrelationTraits_residuals <- function(gen = "G2", fruit = "All",
     geom_vline(xintercept = 0, linetype = "dashed", color = "grey")+
     geom_hline(yintercept = 0, linetype = "dashed", color = "grey") +
     geom_errorbar(data = TEMP_SUM, aes(ymin=MeanResiduals2-SeResiduals2, 
-                                       ymax=MeanResiduals2+SeResiduals2, col=Original_environment), size=0.3) +
+                                       ymax=MeanResiduals2+SeResiduals2, col=Original_environment), size=0.2, alpha=0.7) +
     geom_errorbarh(data = TEMP_SUM, aes(xmin=MeanResiduals1-SeResiduals1,
-                                        xmax=MeanResiduals1+SeResiduals1, col=Original_environment), size=0.3) + 
-    geom_point(aes(color = Original_environment, shape = Test_environment, fill = Original_environment),  size=3, alpha=1)  + 
+                                        xmax=MeanResiduals1+SeResiduals1, col=Original_environment), size=0.2, alpha=0.7) + 
+    geom_point(aes(color = Original_environment, shape = Test_environment,
+                   fill = Original_environment),  size=3, alpha=0.85)  + 
     xlab(axis_label_trait1)  +
     ylab(axis_label_trait2) +
     scale_fill_manual(name="Fly population from:",   

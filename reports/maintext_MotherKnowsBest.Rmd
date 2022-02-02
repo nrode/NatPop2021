@@ -170,26 +170,34 @@ MKB_G2 <- plot_CorrelationTraits_residuals(gen = "G2", fruit = "All",
                                  printcor=TRUE)
 
 
+legend <- lemon::g_legend(MKB_G2)
 
 
 ## ALL GENERATIONS 
 MotherKnowsBest_G0G2 <- cowplot::ggdraw() + 
   cowplot::draw_plot(MKB_G0 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
-            x = 0.01, y = 0.5, width = 0.24, height = 0.43) + 
+            x = 0.01, y = 0.5, width = 0.75, height = 0.43) + 
   cowplot::draw_plot(MKB_G2 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
-            x = 0.31, y = 0.5, width = 0.24, height = 0.43) + 
-  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
-  cowplot::draw_plot_label(c("Generation: G0/G1", "A", "B", "C", " ",
-                    "Generation: G2/G3", "D", "E", "F", " "),  
-                  x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
-                  y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
-                  hjust = c(0,0,0,0,0,0,0,0,0,0), 
-                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
-                  size = 16) 
- RELATION_TRAITS_Stimulation_G0G2
+            x = 0.01, y = 0, width = 0.75, height = 0.43) + 
+  cowplot::draw_plot(legend, x = 0.87, y = 0.5, width = 0.00001, height = 0.00001) + 
+  cowplot::draw_plot_label(c("Generation: G0/G1", "A", "Generation: G2/G3", "B"),  
+                  x = c(0.33, 0.01, 0.33, 0.01), 
+                  y = c(0.97, 0.97,  0.47, 0.47), 
+                  hjust = c(0,0,0,0), 
+                  vjust = c(1.5, 1.5, 1.5, 1.5),
+                  size = 14) 
+ MotherKnowsBest_G0G2
  
+ 
+
+ cowplot::save_plot(file =here::here("figures", "Supplements_MotherKnowsBest.pdf"),
+                   MotherKnowsBest_G0G2,
+                   base_height = 22/cm(1), base_width = 14/cm(1), dpi = 610)
+
+
+
  
  
 ```
@@ -255,7 +263,7 @@ legend <- lemon::g_legend(PLOT_Strawberry_G0)
  
 
 # 
-# cowplot::save_plot(file =here::here("figures", "Supplements_MotherKnowsBest_Preference.pdf"),
+# cowplot::save_plot(file =here::here("figures", "Supplements_MotherKnowsBest_Preference_fruitpairs.pdf"),
 #                   RELATION_TRAITS_G0G2,
 #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
 # 
@@ -314,7 +322,7 @@ PLOT_Strawberry_Stim_G0 <- plot_RelationTraits_residuals(gen = "G0",
  RELATION_TRAITS_Stimulation_G0G2
 # 
 # 
-# cowplot::save_plot(file =here::here("figures", "Supplements_MotherKnowsBest_Stimulation.pdf"),
+# cowplot::save_plot(file =here::here("figures", "Supplements_MotherKnowsBest_Stimulation_fruitpairs.pdf"),
 #                   RELATION_TRAITS_Stimulation_G0G2,
 #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
 
