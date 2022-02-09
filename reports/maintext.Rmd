@@ -118,6 +118,8 @@ levels(data_PREF$Population)
 ## Exploration data
 ```{r }
 
+glmm::binomial.glmm()$family.glmm
+
 tapply(data_PERF$Nb_eggs, list(data_PERF$Original_environment, data_PERF$Test_environment, data_PERF$Generation), mean, na.rm = TRUE)
 
 
