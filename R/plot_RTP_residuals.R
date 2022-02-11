@@ -168,12 +168,16 @@ plot_RTP_residuals <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen
     
     ### Add stroke
     plot2 <- plot + 
-      geom_point(aes(alpha = SA, fill = interaction(SA, Original_environment)), 
+      geom_point(aes(alpha = SA, fill = interaction(SA, Original_environment), shape = SA), 
                  position = pd, size = 4) + 
       scale_alpha_manual(values = c(0,1)) + 
-      guides(fill = FALSE, alpha = FALSE) 
+      scale_shape_manual(name="Test environment:",   
+                        breaks=c("1", "0"),
+                        labels=c("Sympatric","Allopatric"),
+                        values=c(16,21)) + 
+      guides(alpha = FALSE, fill=FALSE) 
 
-    
+    plot2
   return(plot2) 
 }
   

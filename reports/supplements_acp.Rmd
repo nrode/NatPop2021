@@ -169,10 +169,34 @@ ACP_ALL <- cowplot::ggdraw() +
                   size = 16) 
  ACP_ALL
  
+ 
+ ACP_ALL <- cowplot::ggdraw() + 
+  cowplot::draw_plot(acp_pref_G0 + theme(legend.position = "none"), 
+            x = 0.0, y = 0.66, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(acp_stim_G0 + theme(legend.position = "none"), 
+            x = 0.0, y = 0.33, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(acp_Rate_G0 + theme(legend.position = "none"), 
+            x = 0.01, y = 0, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(acp_pref_G2 + theme(legend.position = "none"), 
+            x = 0.44, y = 0.66, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(acp_stim_G2 + theme(legend.position = "none"), 
+            x = 0.44, y = 0.33, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(acp_Rate_G2 + theme(legend.position = "none"), 
+            x = 0.44, y = 0, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(legend, x = 0.915, y = 0.5, width = 0.000001, height = 0.000001) + 
+  cowplot::draw_plot_label(c(" "," ","A", "B", "C",
+                    "D", "E", "F"),  
+                  x = c(0.12,0.55, 0, 0.44, 0, 0.44, 0, 0.44 ), 
+                  y = c(1,1, 0.99, 0.99, 0.66,  0.66, 0.33, 0.33), 
+                  hjust = c(0,0,0,0,0,0,0,0), 
+                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+                  size = 18) 
+ ACP_ALL
+ 
 
-cowplot::save_plot(file =here::here("figures", "ACP_pop.pdf"),
+cowplot::save_plot(file =here::here("figures", "Supplements_ACP_pop.pdf"),
                   ACP_ALL,
-                   base_height = 16/cm(1), base_width = 30/cm(1), dpi = 610)
+                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
 
 
 

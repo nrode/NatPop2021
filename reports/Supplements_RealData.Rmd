@@ -192,6 +192,43 @@ LOCAL_ADAPTATION_PLOT_REALDATA <- cowplot::ggdraw() +
  #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
 
 
+ 
+ ## ALL GENERATIONS 
+LOCAL_ADAPTATION_PLOT_REALDATA <- cowplot::ggdraw() + 
+  cowplot::draw_plot(PLOT_pref_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.0, y = 0.66, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PLOT_eggs_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.0, y = 0.33, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PLOT_rate_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.01, y = 0, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PLOT_pref_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.44, y = 0.66, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PLOT_eggs_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.44, y = 0.33, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PLOT_rate_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.44, y = 0, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(legend, x = 0.915, y = 0.5, width = 0.000001, height = 0.000001) + 
+  cowplot::draw_plot_label(c("Generation: G0/G1","Generation: G2/G3","A", "B", "C",
+                    "D", "E", "F"),  
+                  x = c(0.12,0.55, 0, 0.44, 0, 0.44, 0, 0.44 ), 
+                  y = c(1,1, 0.99, 0.99, 0.66,  0.66, 0.33, 0.33), 
+                  hjust = c(0,0,0,0,0,0,0,0), 
+                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+                  size = 18) 
+ LOCAL_ADAPTATION_PLOT_REALDATA
+ 
+
+  # #
+ # cowplot::save_plot(file =here::here("figures", "Supplements_Local_Adaptation_Data.pdf"),
+ #                   LOCAL_ADAPTATION_PLOT_REALDATA,
+ #                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
+
 
 ```
 
