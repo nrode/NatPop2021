@@ -1024,11 +1024,11 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
  
  # 
  # 
- cowplot::save_plot(file =here::here("figures", "Supplements_Local_Adaptation_Residuals.pdf"),
-                   LOCAL_ADAPTATION_PLOT,
-                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
-
-
+ # cowplot::save_plot(file =here::here("figures", "Supplements_Local_Adaptation_Residuals.pdf"),
+ #                   LOCAL_ADAPTATION_PLOT,
+ #                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
+ # 
+ # 
 
 
 ```

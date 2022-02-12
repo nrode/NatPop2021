@@ -309,9 +309,13 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
   
   ### Add stroke
   plot2 <- plot + 
-    geom_point(aes(alpha = SA, fill = interaction(SA, Original_environment)), 
+    geom_point(aes(alpha = SA, fill = interaction(SA, Original_environment), shape = SA), 
                position = pd, size = 4) + 
     scale_alpha_manual(values = c(0,1)) + 
+    scale_shape_manual(name="Test environment:",   
+                       breaks=c("1", "0"),
+                       labels=c("Sympatric","Allopatric"),
+                       values=c(16,21)) + 
     guides(fill = FALSE, alpha = FALSE) 
   
 
