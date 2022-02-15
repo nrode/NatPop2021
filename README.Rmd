@@ -19,30 +19,32 @@ Title <- "Analysis Nat Pop 2021"
 ## GENERAL INFORMATION
 
 ####  1. Description
-This research compendium describes how to analyze fecundity, egg-to-adult viability and oviposition preference data from an experiment conducted in D. suzukii in 2018, in South of France (CBGP, Montpellier, France). [here](https://github.com/nrode/NatPop2021).
+This research compendium describes how to analyze fecundity, egg-to-adult viability and oviposition preference data from an experiment conducted in D. suzukii in 2018, in South of France (CBGP, Montpellier, France). [here](https://github.com/nrode/NatPop2021).  
 
-The analyses of this research compendium are published in JOURNAL NAME in DATE. 
-:writing_hand: Citation - Link to come. 
+The analyses of this research compendium are published in JOURNAL NAME in DATE.   
+:writing_hand: Citation - Link to come.   
 
 ####  2. Author information and main investigators
 	Corresponding Investigator and first author:
 		Name: Laure Olazcuaga
 		Institution: CBGP, INRAE, France and Colorado State University, USA
 		Email: olaz.laure@gmail.com
-		ORCID: "0000-0001-9100-1305
+		ORCID: 0000-0001-9100-1305
 
 	Co-investigator and last author: 
 		Name: Nicolas Rode
 		Institution: CBGP, INRAE, France
-    Email: nicolas.rode@inrae.fr
-    ORCID: "0000-0002-1121-4202
+		Email: nicolas.rode@inrae.fr
+		ORCID: 0000-0002-1121-4202
 
-For the complete list of authors of the manuscript, see the manuscript. 
+For the complete list of authors of the manuscript, see the manuscript.  
 
 ####  3. Date and Geopgraphic locationof data collection
-:date: 2018. 
-:round_pushpin: South of France. 
-The exact date and location data is here.[:clipboard: TableS6](data/TableS6.csv). 
+:date: 2018.   
+
+:round_pushpin: South of France.   
+
+The exact date and location data is here.[:clipboard: TableS6](data/TableS6.csv).  
 
 ####  4. Funding sources that supported the collection of the data
 Data collection was supported by the Languedoc-Roussillon region (France) through the European Union program FEDER FSE IEJ 2014-2020 (project CPADROL), the INRAE scientific department SPE (AAP-SPE 2016), the National Science Foundation (DEB-0949619), the USDA Agriculture and Food Research Initiative award (2014-67013-21594), Hatch project 1012868, the French Agropolis Fondation (LabEx Agro–Montpellier) through the AAP “International Mobility” (CfP 2015-02), the French programme investissement d'avenir, and the LabEx CEMEB through the AAP "invited scientist 2016", the CeMEB LabEx/University of Montpellier (ANR-10-LABX-04-01) and the INRAE scientific department SPE (AAP-SPE 2021PestAdapt).
@@ -53,23 +55,23 @@ Data collection was supported by the Languedoc-Roussillon region (France) throug
 
 ## CONTENTS
 
-The [:hammer: dev_history.R](dev_history.R) file allow to rebuild our research compendium from scratch for maximum reproducibility.
-
-The [:open_file_folder: **data**](data/) directory contains the data sets used in the analyses. 
-
-##### Data et file overview
- - [:bar_chart: Data_Pref](data/DATACOMPLET_PREF.csv) : Dataset containing oviposition preference data..
-
- - [:bar_chart: Data_Perf](data/DATACOMPLET_PERF.csv) : Dataset containing offsrping performance and oviposition stimulation data.
- 
- - [:bar_chart: TableS6](data/TableS6.csv) : Database containing location and sampling date for each population. 
-
+The [:hammer: dev_history.R](devhistory.R) file allow to rebuild our research compendium from scratch for maximum reproducibility.
 
 The [:open_file_folder: **figures**](figures/) directory contains the figures generated during the analyses.
 
 The [:open_file_folder: **R**](R/) directory contains the functions used in the analyses.
 
 The [:open_file_folder: **man**](man/) directory contains the documentation for the functions.
+
+The [:open_file_folder: **data**](data/) directory contains the data sets used in the analyses. 
+
+#### Data et file overview
+ - [:bar_chart: Data_Pref](data/DATACOMPLET_PREF.csv) : Dataset containing oviposition preference data..
+
+ - [:bar_chart: Data_Perf](data/DATACOMPLET_PERF.csv) : Dataset containing offsrping performance and oviposition stimulation data.
+ 
+ - [:bar_chart: TableS6](data/TableS6.csv) : Database containing location and sampling date for each population. 
+
   
 The [:open_file_folder: **reports**](reports/) directory contains the `.Rmd` files used to build each part of the analyses and produce the final figures. They also have rendered versions and `.html` suitable for reading in a web browser.
 
