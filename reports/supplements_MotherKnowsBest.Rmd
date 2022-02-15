@@ -192,7 +192,7 @@ MotherKnowsBest_G0G2 <- cowplot::ggdraw() +
  
  
 
- cowplot::save_plot(file =here::here("figures", "Supplements_MotherKnowsBest.pdf"),
+ cowplot::save_plot(file =here::here("figures", "Supplements_FigS8_MotherKnowsBest.pdf"),
                    MotherKnowsBest_G0G2,
                    base_height = 22/cm(1), base_width = 14/cm(1), dpi = 610)
 

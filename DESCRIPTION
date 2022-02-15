@@ -13,7 +13,7 @@ Authors@R:
            email = "olaz.laure@gmail.com",
            comment = c(ORCID = "0000-0001-9100-1305")))
 Description: This research compendium describes how to analyze fecundity, egg-to-adult viability and oviposition preference data
-    from an experiment conducted in D. suzukii in 2019.
+    from an experiment conducted in D. suzukii in 2018.
 URL: https://github.com/nrode/NatPop2021
 BugReports: https://github.com/nrode/NatPop2021/issues
 License: MIT + file LICENSE

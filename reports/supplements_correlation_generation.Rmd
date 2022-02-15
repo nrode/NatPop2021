@@ -207,7 +207,7 @@ PAIR_G0_G2 <- cowplot::ggdraw() +
  PAIR_G0_G2
  
 # 
-# cowplot::save_plot(file =here::here("figures", "Correlation_G0_G2.pdf"),
+# cowplot::save_plot(file =here::here("figures", "Supplements_FigS9_Correlation_G0_G2.pdf"),
 #                   PAIR_G0_G2,
 #                    base_height = 10/cm(1), base_width = 36/cm(1), dpi = 610)
 # 
