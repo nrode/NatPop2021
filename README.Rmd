@@ -72,7 +72,7 @@ The [:open_file_folder: **data**](data/) directory contains the data sets used i
  
  - [:bar_chart: TableS6](data/TableS6.csv) : Database containing location and sampling date for each population. 
  
- - [:clipboard: Readme_data](reports/Readme_data.txt) : A detailed description of all the dataset. 
+ - [:clipboard: Readme_data](data/Readme_data.txt) : A detailed description of all the dataset. 
 
   
 The [:open_file_folder: **reports**](reports/) directory contains the `.Rmd` files used to build each part of the analyses and produce the final figures. They also have rendered versions and `.html` suitable for reading in a web browser.
@@ -87,7 +87,7 @@ The [:open_file_folder: **reports**](reports/) directory contains the `.Rmd` fil
  
  - [:clipboard: Supplements_WT3](reports/supplements_WT3.Rmd) : All the analyses of the WT3 data.
  
- - [:clipboard: Supplements_realdata](reports/supplements_realdata.Rmd) : All the analyses with real data.
+ - [:clipboard: Supplements_realdata](reports/Supplements_realdata.Rmd) : All the analyses with real data.
  
  - [:clipboard: Supplements_MotherKnowsBest](reports/supplements_MotherKnowsBest.Rmd) : All the Mother knows best analyses. 
  
@@ -106,7 +106,7 @@ The [:open_file_folder: **reports**](reports/) directory contains the `.Rmd` fil
  
  - [:clipboard: Supplements_WT3](reports/supplements_WT3.html) : All the analyses of the WT3 data.
  
- - [:clipboard: Supplements_realdata](reports/supplements_realdata.html) : All the analyses with real data.
+ - [:clipboard: Supplements_realdata](reports/Supplements_realdata.html) : All the analyses with real data.
  
  - [:clipboard: Supplements_MotherKnowsBest](reports/supplements_MotherKnowsBest.html) : All the Mother knows best analyses. 
  
