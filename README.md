@@ -79,7 +79,7 @@ The [:open_file_folder: **reports**](reports/) directory contains the `.Rmd` fil
  
  - [:clipboard: Supplements_WT3](reports/supplements_WT3.Rmd) : All the analyses of the WT3 data.
  
- - [:clipboard: Supplements_realdata](reports/Supplements_realdata.Rmd) : All the analyses with real data.
+ - [:clipboard: Supplements_realdata](reports/Supplements_RealData.Rmd) : All the analyses with real data.
  
  - [:clipboard: Supplements_MotherKnowsBest](reports/supplements_MotherKnowsBest.Rmd) : All the Mother knows best analyses. 
  
@@ -98,7 +98,7 @@ The [:open_file_folder: **reports**](reports/) directory contains the `.Rmd` fil
  
  - [:clipboard: Supplements_WT3](reports/supplements_WT3.html) : All the analyses of the WT3 data.
  
- - [:clipboard: Supplements_realdata](reports/Supplements_realdata.html) : All the analyses with real data.
+ - [:clipboard: Supplements_realdata](reports/Supplements_RealData.html) : All the analyses with real data.
  
  - [:clipboard: Supplements_MotherKnowsBest](reports/supplements_MotherKnowsBest.html) : All the Mother knows best analyses. 
  
