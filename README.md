@@ -21,13 +21,14 @@ Citation - Link to come.
 		Name: Laure Olazcuaga
 		Institution: CBGP, INRAE, France and Colorado State University, USA
 		Email: olaz.laure@gmail.com
-		ORCID = "0000-0001-9100-1305
+		ORCID: "0000-0001-9100-1305
 
 	Co-investigator and last author: 
 		Name: Nicolas Rode
 		Institution: CBGP, INRAE, France
     Email: nicolas.rode@inrae.fr
-    ORCID = "0000-0002-1121-4202
+    ORCID: "0000-0002-1121-4202
+
 For the complete list of authors of the manuscript, see the manuscript. 
 
 ####  3. Date and Geopgraphic locationof data collection
