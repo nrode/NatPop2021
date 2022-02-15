@@ -39,12 +39,12 @@ The analyses of this research compendium are published in JOURNAL NAME in DATE.
 
 For the complete list of authors of the manuscript, see the manuscript.  
 
-####  3. Date and Geopgraphic locationof data collection
+####  3. Date and Geopgraphic location of data collection
 :date: 2018.   
 
 :round_pushpin: South of France.   
 
-The exact date and location data is here.[:clipboard: TableS6](data/TableS6.csv).  
+The exact date and location data is here: [:clipboard: TableS6](data/TableS6.csv).  
 
 ####  4. Funding sources that supported the collection of the data
 Data collection was supported by the Languedoc-Roussillon region (France) through the European Union program FEDER FSE IEJ 2014-2020 (project CPADROL), the INRAE scientific department SPE (AAP-SPE 2016), the National Science Foundation (DEB-0949619), the USDA Agriculture and Food Research Initiative award (2014-67013-21594), Hatch project 1012868, the French Agropolis Fondation (LabEx Agro–Montpellier) through the AAP “International Mobility” (CfP 2015-02), the French programme investissement d'avenir, and the LabEx CEMEB through the AAP "invited scientist 2016", the CeMEB LabEx/University of Montpellier (ANR-10-LABX-04-01) and the INRAE scientific department SPE (AAP-SPE 2021PestAdapt).
@@ -71,6 +71,8 @@ The [:open_file_folder: **data**](data/) directory contains the data sets used i
  - [:bar_chart: Data_Perf](data/DATACOMPLET_PERF.csv) : Dataset containing offsrping performance and oviposition stimulation data.
  
  - [:bar_chart: TableS6](data/TableS6.csv) : Database containing location and sampling date for each population. 
+ 
+ - [:clipboard: Readme_data](reports/Readme_data.txt) : A detailed description of all the dataset. 
 
   
 The [:open_file_folder: **reports**](reports/) directory contains the `.Rmd` files used to build each part of the analyses and produce the final figures. They also have rendered versions and `.html` suitable for reading in a web browser.
