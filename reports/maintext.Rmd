@@ -186,7 +186,53 @@ m2 <- aov(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 (rsqgen <- 1-anova(m2)[5, 3]/((anova(m2)[3, 2]+anova(m2)[5, 2])/(anova(m2)[3, 1]+anova(m2)[5, 1])))
 (rsqng <- 1-anova(m2)[6, 3]/((anova(m2)[4, 2]+anova(m2)[6, 2])/(anova(m2)[4, 1]+anova(m2)[6, 1])))
   
+
+
+#######################################################
+## Extract SA value   ###
+#######################################################
+
+#######################################################
+## Extract SA value   ###
+#######################################################
+#Model used previously
+m2 <- aov(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
+            Original_environment:Test_environment + 
+            Original_environment:Test_environment:IndicG0, 
+          data = data_PERF)
+summary(m2)
+
+#Same model as previously but different written differently (lm + *) 
+lm_estimates <- lm(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA*IndicG0 + SA +
+            Original_environment:Test_environment + 
+            Original_environment:Test_environment:IndicG0, 
+          data = data_PERF)
+aov(lm_estimates)
+#Extract SA value for later
+cf <-coef(summary(lm_estimates,complete = TRUE)) 
+indic <- grep("SA",rownames(cf))
+SAcoef <- cf[indic,1]
+names(SAcoef) <- c("SAGen", "SANonGen")
+SAcoef
+
+
   
+
+## Model (Powertest) to extract value of our dataset
+m <- lme4::lmer(log(Nb_eggs+1)  ~ SA + SA*IndicG0 + Test_environment:Generation  +
+                    (1|Population:Test_environment) +
+                    (0 + lme4::dummy(Generation, "G0")|Population:Test_environment),
+                  data = data_PERF)
+summary(m)
+lme4::fixef(m)
+#Extract SA value for later
+indic <- grep("SA",names(lme4::fixef(m)))
+SAcoef <- lme4::fixef(m)[indic]
+names(SAcoef) <- c("SAGen", "SANonGen")
+SAcoef
+
+
+
 ```
 
 
@@ -477,7 +523,7 @@ AvEmergenceRate[, , "Blackberry"][, "Cherry"]/AvEmergenceRate[, , "Cherry"][, "C
 ```
 
 
-## Analysis
+## Analysis without eggs
 ```{r }
 
 #######################################################
@@ -661,6 +707,52 @@ rsqng <- 1-anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+a
 (r2_SA_genet <- 1-(anova(m2)[6, 3]/((anova(m2)[3, 2]+anova(m2)[6, 2])/(anova(m2)[3, 1]+anova(m2)[6, 1]))))
 
 (r2_SA_nongenet <- 1-(anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+anova(m2)[7, 1]))))
+
+
+
+
+
+#######################################################
+## Extract SA value   ###
+#######################################################
+#Model used previously
+m2 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
+            Original_environment:Test_environment + 
+            Original_environment:Test_environment:IndicG0 +
+            log(Nb_eggs), 
+          data = data_PERF_Rate)
+summary(m2)
+
+#Same model as previously but different written differently (lm + *) 
+lm_estimates <- lm(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA*IndicG0 + SA +
+            Original_environment:Test_environment + 
+            Original_environment:Test_environment:IndicG0 +
+            log(Nb_eggs), 
+          data = data_PERF_Rate)
+aov(lm_estimates)
+#Extract SA value for later
+cf <-coef(summary(lm_estimates,complete = TRUE)) 
+indic <- grep("SA",rownames(cf))
+SAcoef <- cf[indic,1]
+names(SAcoef) <- c("SAGen", "SANonGen")
+SAcoef
+
+
+  
+
+## Model (Powertest) to extract value of our dataset
+m <- lme4::lmer(asin(sqrt(Rate)) ~ SA + SA*IndicG0 + Test_environment:Generation  +
+                  #log(Nb_eggs) +
+                    (1|Population:Test_environment) +
+                    (0 + lme4::dummy(Generation, "G0")|Population:Test_environment),
+                  data = data_PERF_Rate)
+summary(m)
+lme4::fixef(m)
+#Extract SA value for later
+indic <- grep("SA",names(lme4::fixef(m)))
+SAcoef <- lme4::fixef(m)[indic]
+names(SAcoef) <- c("SAGen", "SANonGen")
+SAcoef
 
 
 
@@ -926,6 +1018,55 @@ rsqgen <- 1-anova(m2)[6, 3]/((anova(m2)[3, 2]+anova(m2)[6, 2])/(anova(m2)[3, 1]+
 rsqng <- 1-anova(m2)[7, 3]/((anova(m2)[5, 2]+anova(m2)[7, 2])/(anova(m2)[5, 1]+anova(m2)[7, 1]))
   rsqgen
   rsqng
+
+  
+  
+  
+  
+
+#######################################################
+## Extract SA value   ###
+#######################################################
+#Model used previously
+m2 <- aov(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
+            Original_environment:Test_environment + 
+            Original_environment:Test_environment:IndicG0 +
+            BoxID, 
+          data = data_PREF_three)
+summary(m2)
+
+#Same model as previously but different written differently (lm + *) 
+lm_estimates <- lm(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA*IndicG0 + SA +
+            Original_environment:Test_environment + 
+            Original_environment:Test_environment:IndicG0 +
+            BoxID, 
+          data = data_PREF_three)
+aov(lm_estimates)
+summary(lm_estimates)
+
+#Extract SA value for later
+cf <-coef(summary(lm_estimates,complete = TRUE)) 
+indic <- grep("SA",rownames(cf))
+SAcoef <- cf[indic,1]
+names(SAcoef) <- c("SAGen", "SANonGen")
+SAcoef
+
+  
+
+## Model (Powertest) to extract value of our dataset
+m <- lme4::lmer(log(Nb_eggs+1) ~ SA + SA*IndicG0 + Test_environment:Generation  +
+                 # BoxID +
+                    (1|Population:Test_environment) +
+                    (0 + lme4::dummy(Generation, "G0")|Population:Test_environment),
+                  data = data_PREF_three)
+summary(m)
+lme4::fixef(m)
+#Extract SA value for later
+indic <- grep("SA",names(lme4::fixef(m)))
+SAcoef <- lme4::fixef(m)[indic]
+names(SAcoef) <- c("SAGen", "SANonGen")
+SAcoef
+
 
 ```
 
