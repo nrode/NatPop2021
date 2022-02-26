@@ -202,34 +202,24 @@ m2 <- aov(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
           data = data_PERF)
 summary(m2)
 
-#Same model as previously but different written differently (lm + *) 
-lm_estimates <- lm(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA*IndicG0 + SA +
-            Original_environment:Test_environment + 
-            Original_environment:Test_environment:IndicG0, 
-          data = data_PERF)
-aov(lm_estimates)
-#Extract SA value for later
-cf <-coef(summary(lm_estimates,complete = TRUE)) 
+
+#Model with pophab interaction to have corret SA estimates
+m3 <- lm(log(Nb_eggs+1)~ pop_gen + hab_gen + SA*IndicG0 + SA  , 
+         data = data_PERF)
+
+#Estimates SA
+cf <-coef(summary(m3,complete = TRUE)) 
 indic <- grep("SA",rownames(cf))
 SAcoef <- cf[indic,1]
-names(SAcoef) <- c("SAGen", "SANonGen")
+#names(SAcoef) <- c("SAGen", "SANonGen")
 SAcoef
 
-
+#Estimates se
+indic <- grep("SA",rownames(vcov(m3)))
+seSAcoef <- sqrt(diag(vcov(m3)[indic,indic]))
+#names(SAcoef) <- c("seSAGen", "seSANonGen")
+seSAcoef
   
-
-## Model (Powertest) to extract value of our dataset
-m <- lme4::lmer(log(Nb_eggs+1)  ~ SA + SA*IndicG0 + Test_environment:Generation  +
-                    (1|Population:Test_environment) +
-                    (0 + lme4::dummy(Generation, "G0")|Population:Test_environment),
-                  data = data_PERF)
-summary(m)
-lme4::fixef(m)
-#Extract SA value for later
-indic <- grep("SA",names(lme4::fixef(m)))
-SAcoef <- lme4::fixef(m)[indic]
-names(SAcoef) <- c("SAGen", "SANonGen")
-SAcoef
 
 
 
@@ -723,36 +713,24 @@ m2 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
           data = data_PERF_Rate)
 summary(m2)
 
-#Same model as previously but different written differently (lm + *) 
-lm_estimates <- lm(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA*IndicG0 + SA +
-            Original_environment:Test_environment + 
-            Original_environment:Test_environment:IndicG0 +
-            log(Nb_eggs), 
-          data = data_PERF_Rate)
-aov(lm_estimates)
-#Extract SA value for later
-cf <-coef(summary(lm_estimates,complete = TRUE)) 
+#Model with pophab interaction to have corret SA estimates
+m3 <- lm(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA*IndicG0 + SA  + log(Nb_eggs), 
+         data = data_PERF_Rate)
+
+#Estimates SA
+cf <-coef(summary(m3,complete = TRUE)) 
 indic <- grep("SA",rownames(cf))
 SAcoef <- cf[indic,1]
-names(SAcoef) <- c("SAGen", "SANonGen")
+#names(SAcoef) <- c("SAGen", "SANonGen")
 SAcoef
 
+#Estimates se
+indic <- grep("SA",rownames(vcov(m3)))
+seSAcoef <- sqrt(diag(vcov(m3)[indic,indic]))
+#names(SAcoef) <- c("seSAGen", "seSANonGen")
+seSAcoef
 
   
-
-## Model (Powertest) to extract value of our dataset
-m <- lme4::lmer(asin(sqrt(Rate)) ~ SA + SA*IndicG0 + Test_environment:Generation  +
-                  #log(Nb_eggs) +
-                    (1|Population:Test_environment) +
-                    (0 + lme4::dummy(Generation, "G0")|Population:Test_environment),
-                  data = data_PERF_Rate)
-summary(m)
-lme4::fixef(m)
-#Extract SA value for later
-indic <- grep("SA",names(lme4::fixef(m)))
-SAcoef <- lme4::fixef(m)[indic]
-names(SAcoef) <- c("SAGen", "SANonGen")
-SAcoef
 
 
 
@@ -1035,38 +1013,46 @@ m2 <- aov(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
           data = data_PREF_three)
 summary(m2)
 
-#Same model as previously but different written differently (lm + *) 
-lm_estimates <- lm(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA*IndicG0 + SA +
-            Original_environment:Test_environment + 
-            Original_environment:Test_environment:IndicG0 +
-            BoxID, 
+#but without interaction to have correct estimate of SA 
+m3 <- lm(log(Nb_eggs+1) ~ pop_gen + hab_gen +  SA:IndicG0 + SA +
+           BoxID, 
           data = data_PREF_three)
-aov(lm_estimates)
-summary(lm_estimates)
-
-#Extract SA value for later
-cf <-coef(summary(lm_estimates,complete = TRUE)) 
+# Pour les SA:
+# summary(m3)
+# coef(m3)
+cf <-coef(summary(m3,complete = TRUE)) 
 indic <- grep("SA",rownames(cf))
 SAcoef <- cf[indic,1]
 names(SAcoef) <- c("SAGen", "SANonGen")
 SAcoef
 
-  
+#With Nico
+m3 <- lm(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA:IndicG0 + SA + BoxID,
+data = data_PREF_three)
+summary(m3)
+coef(m3)
+vcov(m3)[420:423,420:423]
+test <- vcov(m3)[418:423,418:423]
+sqrt(test)
+#se SA0IndicG0 = 0.11936296 avec lmer 
+#se SA0:IndicG0 = 1.16490 avec lm (sans interaction)
 
-## Model (Powertest) to extract value of our dataset
-m <- lme4::lmer(log(Nb_eggs+1) ~ SA + SA*IndicG0 + Test_environment:Generation  +
-                 # BoxID +
-                    (1|Population:Test_environment) +
-                    (0 + lme4::dummy(Generation, "G0")|Population:Test_environment),
-                  data = data_PREF_three)
-summary(m)
-lme4::fixef(m)
-#Extract SA value for later
-indic <- grep("SA",names(lme4::fixef(m)))
-SAcoef <- lme4::fixef(m)[indic]
-names(SAcoef) <- c("SAGen", "SANonGen")
+
+#MYSELF
+m3 <- lm(log(Nb_eggs+1) ~ pop_gen + hab_gen + SA*IndicG0 + SA  + BoxID, data = data_PREF_three)
+
+#Estimates SA
+cf <-coef(summary(m3,complete = TRUE)) 
+indic <- grep("SA",rownames(cf))
+SAcoef <- cf[indic,1]
+#names(SAcoef) <- c("SAGen", "SANonGen")
 SAcoef
 
+#Estimates se
+indic <- grep("SA",rownames(vcov(m3)))
+seSAcoef <- sqrt(diag(vcov(m3)[indic,indic]))
+#names(SAcoef) <- c("seSAGen", "seSANonGen")
+seSAcoef
 
 ```
 
