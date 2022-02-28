@@ -405,7 +405,8 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
                                          label = eq_rho,
                                          parse = TRUE, 
                                          color="black", size = 3.5) +
-        if(printSA) {   geom_text(x =  min(xlim)+0.275*(max(xlim)-min(xlim)), y =  min(ylim)+0.925*(max(ylim)-min(ylim)), 
+        if(printSA) {   geom_text(x =  min(xlim)+0.275*(max(xlim)-min(xlim)), 
+                                  y =  min(ylim)+0.925*(max(ylim)-min(ylim)), 
                                   label = eq_SA,
                                   parse = TRUE, 
                                   color="black", size = 3.5) }

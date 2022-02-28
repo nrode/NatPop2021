@@ -1032,6 +1032,7 @@ data = data_PREF_three)
 summary(m3)
 coef(m3)
 vcov(m3)[420:423,420:423]
+
 test <- vcov(m3)[418:423,418:423]
 sqrt(test)
 #se SA0IndicG0 = 0.11936296 avec lmer 
@@ -1273,6 +1274,7 @@ PPMR_ALL_Pref_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_th
                                         gen = "G0" , 
                                         xaxis_labelprint = "Oviposition preference in sympatry",
                                         yaxis_labelprint = "Oviposition preference in allopatry")
+
 PPMR_ALL_Pref_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
                                         formula="log(Nb_eggs+1) ~ Test_environment " ,
                                         formula_Blanquart="log(Nb_eggs+1) ~ Test_environment + Population + SA + 
@@ -1284,9 +1286,17 @@ PPMR_ALL_Pref_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_th
 PPMR_ALL_Perf_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
                                         gen = "G0" , 
+                                        # fixedxylim = TRUE,
+                                        # xlim = c(-1,2), 
+                                        # ylim = c(-1,2), 
                                         formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
                                         xaxis_labelprint = "Offspring performance in sympatry",
                                         yaxis_labelprint = "Offspring performance in allopatry")
+
+
+
+
+
 PPMR_ALL_Perf_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
                                         gen = "G2" ,
