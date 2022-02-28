@@ -1287,8 +1287,8 @@ PPMR_ALL_Perf_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Ra
                                         formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
                                         gen = "G0" , 
                                         # fixedxylim = TRUE,
-                                        # xlim = c(-1,2), 
-                                        # ylim = c(-1,2), 
+                                        xlim = c(-0.8,1.15), 
+                                        ylim = c(-0.8,1.15), 
                                         formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
                                         xaxis_labelprint = "Offspring performance in sympatry",
                                         yaxis_labelprint = "Offspring performance in allopatry")
@@ -1375,9 +1375,9 @@ PPMR_ALL <- cowplot::ggdraw() +
                   size = 18) 
  PPMR_ALL
  
- # cowplot::save_plot(file =here::here("figures", "Fig4_POP_effect_ALL.pdf"),
- #                   PPMR_ALL,
- #                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
+ cowplot::save_plot(file =here::here("figures", "Fig4_POP_effect_ALL.pdf"),
+                   PPMR_ALL,
+                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
 
 
 ```

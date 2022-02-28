@@ -255,7 +255,7 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
   #   dplyr::summarise(SA_mean = weighted.mean(SA, N, na.rm = TRUE), SA_sd = weighted_sd(SA, N), Npop = length(N))
   # SAstats <- SAstats %>% 
   #   dplyr::mutate(SA_se = SA_sd/sqrt(Npop))
-  datameanres
+  #datameanres
   
   ######### Blanquart test 
   ## Fit model
@@ -273,11 +273,20 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
                                                          df2 = format(df2, digits = 2), 
                                                          pvalue = format(pvalue, digits = 2)))))
  
-  #Ylim 
-  max_plot <- max(max(datameanres$Mean_Allop+datameanres$Se_Allop, na.rm = TRUE), 
-                  max(datameanres$Mean_Symp+datameanres$Se_Symp, na.rm = TRUE)) 
-  min_plot <-  min(min(datameanres$Mean_Allop-datameanres$Se_Allop, na.rm = TRUE), 
-                   min(datameanres$Mean_Symp-datameanres$Se_Symp, na.rm = TRUE)) 
+
+  
+  if(!is.null(xlim)&!is.null(ylim)){
+    #Ylim 
+    max_plot <- max(ylim,xlim) 
+    min_plot <-  min(ylim,xlim) 
+  }else{
+    #Ylim 
+    max_plot <- max(max(datameanres$Mean_Allop+datameanres$Se_Allop, na.rm = TRUE), 
+                    max(datameanres$Mean_Symp+datameanres$Se_Symp, na.rm = TRUE)) 
+    min_plot <-  min(min(datameanres$Mean_Allop-datameanres$Se_Allop, na.rm = TRUE), 
+                     min(datameanres$Mean_Symp-datameanres$Se_Symp, na.rm = TRUE))  
+  }
+  
   
   ######### PLOT 
   plot_pair <- ggplot(data = datameanres,
@@ -310,9 +319,10 @@ plot_pairwise_meanresiduals_popeffect <- function(dataset = data_PERF_Rate,
       panel.grid.minor.y = element_blank())
   
   if(test_Blanquart){
-    plot_pair <- plot_pair + annotate('text', x = min_plot, y = max_plot, 
-                                      label = equation_Blanquart, parse = TRUE, hjust = 0, size = 4) 
+    plot_pair <- plot_pair + annotate('text', x = min_plot, y = max_plot,
+                                      label = equation_Blanquart, parse = TRUE, hjust = 0, size = 4)
   }
+
   
   # Add point
   # if (gen == "G0") {
