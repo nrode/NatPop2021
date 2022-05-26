@@ -564,6 +564,20 @@ m2 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 ```
 
 
+## Analysis variance of eggs as covariable
+```{r }
+
+#Goal estimate: 
+    # variance across tubes
+    # variance across pop 
+    # variance among host 
+
+(asin(sqrt(Rate)) ~ , data = data_PERF_Rate)
+
+log(nb_eggs+1) ~ (1|Population) + (1|Host), data = data_PERF_Rate)
+```
+
+
 
 ## Analysis with eggs as covariable
 ```{r }
