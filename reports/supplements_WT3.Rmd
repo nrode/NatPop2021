@@ -153,7 +153,7 @@ levels(data_PREF$Population)
 
 
 
-# NEW PLOT 
+# RESIDUALS PLOT 
 ## Egg-to-adult survival
 ```{r }
 #Extract residuals Rate~Treatment 
@@ -200,7 +200,7 @@ data_PERF$resid_eggs <- residuals(m1)
 wt3eggs<-ggplot(data = data_PERF,
                 aes(x = Date_P, y = resid_eggs)) + 
   geom_point(size = 1.5, alpha = 0.7) +
-  ylab("Residuals(oviposition stimulation)")  +
+  ylab("Residuals(fecundity)")  +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
   xlab("Date")  +
@@ -288,12 +288,100 @@ THREE_JOIN <- cowplot::ggdraw() +
 
 THREE_JOIN 
 
-# 
-# cowplot::save_plot(file = here::here("figures", "Supplements_FigS1_WT3.pdf"),
-#                    THREE_JOIN, base_height = 28/cm(1), base_width = 17/cm(1), dpi = 1200)
-# #
+
+cowplot::save_plot(file = here::here("figures", "Supplements_FigS1_WT3.pdf"),
+                   THREE_JOIN, base_height = 28/cm(1), base_width = 17/cm(1), dpi = 1200)
+#
 
 ```
+
+
+
+
+# RAW DATA PLOT 
+## Egg-to-adult survival
+```{r }
+wt3rate<-ggplot(data = data_PERF_Rate,
+                aes(x = Date_P, y = Rate, color = Test_environment)) + 
+  geom_point(size = 1.5, alpha = 0.7) +
+  ylab("Offspring performance")  +
+  xlab("Date")  +
+  scale_x_date(date_breaks = "1 month", 
+                 limits = as.Date(c('2018-06-01','2018-12-01'))) + 
+    guides(col=guide_legend("Test environment")) + 
+ theme_LO_sober
+wt3rate
+
+
+
+
+```
+
+
+## Oviposition stimulation
+```{r }
+
+wt3eggs<-ggplot(data = data_PERF,
+                aes(x = Date_P, y = Nb_eggs, color = Test_environment)) + 
+  geom_point(size = 1.5, alpha = 0.7) +
+  ylab("Fecundity")  +
+  scale_x_date(date_breaks = "1 month", 
+                 limits = as.Date(c('2018-06-01','2018-12-01'))) + 
+  xlab("Date")  +
+  guides(col=guide_legend("Test environment")) + 
+theme_LO_sober
+wt3eggs
+
+
+```
+
+
+
+## Oviposition Preference
+```{r }
+#Extract residuals Rate~Treatment 
+wt3eggspref<-ggplot(data = data_PREF,
+                aes(x = Date_P, y = Nb_eggs, color= Test_environment)) + 
+  geom_point(size = 1.5, alpha = 0.7) +
+  scale_x_date(date_breaks = "1 month", 
+                 limits = as.Date(c('2018-06-01','2018-12-01'))) + 
+  ylab("Oviposition preference")  +
+  guides(col=guide_legend("Test environment")) + 
+  xlab("Date")  +
+  theme_LO_sober
+wt3eggspref
+
+
+```
+
+
+
+
+## Allplots
+```{r }
+THREE_JOIN <- cowplot::ggdraw() + 
+  cowplot::draw_plot(wt3eggspref + theme(axis.title.x = element_blank()), 
+            x = 0, y = 0.66, width = 0.99, height = 0.33) + 
+  cowplot::draw_plot(wt3eggs + theme(axis.title.x = element_blank()), 
+            x = 0, y = 0.33, width = 0.99, height = 0.33) + 
+  cowplot::draw_plot(wt3rate, 
+            x = 0, y = 00, width = 0.99, height = 0.33) + 
+  cowplot::draw_plot_label(c("A", "B", "C"),  
+                  x = c(0, 0, 0), 
+                  y = c(1, 0.66, 0.33), 
+                  hjust = c(-0.5, -0.5, -0.5), 
+                  vjust = c(1.5, 1.5, 1.5),
+                  size = 16) 
+
+THREE_JOIN 
+
+
+cowplot::save_plot(file = here::here("figures", "Supplements_FigS1_WT3_RawData.pdf"),
+                   THREE_JOIN, base_height = 28/cm(1), base_width = 19/cm(1), dpi = 1200)
+#
+
+```
+
 
 
 
