@@ -572,12 +572,14 @@ m2 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
     # variance across pop 
     # variance among host 
 
-
-
 #### Mixte model
 lm_vareggs <- lme4::lmer(log(Nb_eggs) ~ 1 +  (1|Population) + (1|Test_environment),
                          data = data_PERF_Rate)
 summary(lm_vareggs)
+(VAR_TESTENVT<-as.data.frame(lme4::VarCorr(lm_vareggs))$vcov[2])
+(VAR_POPULATION<-as.data.frame(lme4::VarCorr(lm_vareggs))$vcov[1])
+(VAR_TUBE<-as.data.frame(lme4::VarCorr(lm_vareggs))$vcov[3])
+
 # Var host fruit: 0.01571
 # Var population: 0.55243
 # Var among tubes: 1.97954
@@ -597,39 +599,62 @@ VAR <- as.data.frame(lme4::VarCorr(lm_vareggs))$vcov
 ## Cl: Low variance among hosts (>1% of total variance)
 
 
-head(data_PERF_Rate)
-
-
-
 ## ANOVA 
 ## Fit model with ANOVA
 fit0 <- aov(log(Nb_eggs) ~ Population + Test_environment, data = data_PERF_Rate) 
 anova(fit0)
 
-# Among-groups population variance component
-VarPop <- (anova(fit0))[1,3]
-
-# Among-groups Test_environment variance component
-VarHost <- (anova(fit0))[2,3]
-
+#Variance among fruits 
+(var_fruit <- (anova(fit0)[2,3]-anova(fit0)[3,3])/mean(tapply(data_PERF_Rate$Nb_eggs,
+                                                              data_PERF_Rate$Test_environment,length)))
+#Variance among populations 
+(var_pop <- (anova(fit0)[1,3]-anova(fit0)[3,3])/mean(tapply(data_PERF_Rate$Nb_eggs,
+                                                            data_PERF_Rate$Population,length)))
 # Within group variance component = Residual variance
-VarRes <- (anova(fit0))[3,3]
+(var_tube <- (anova(fit0))[3,3])
 sigma(fit0)^2 # the two match
 
-## Number of replicates per tube
-n0=2 # 2 car tous les tubes gardés dans le dataframe ont 2 réplicas (Sarah & Léa)
-## Number of tubes - 1
-dfTube <- length(unique(data_tube$Tube[indic]))-1 # degree of freedom
-SSA0 <- summary(fit0)[[1]]$`Sum Sq`[1] # Sum of squares among tubes
-MSA0 <- SSA0/dfTube
-# dfRes <- length(unique(data_tube$Tube[indic]))*(n0-1) # degree of freedom
-# SSE0 <- summary(fit0)[[1]]$`Sum Sq`[2] # Sum of squares among replicas
-# VarRes <- SSE0/dfRes # Within group variance component = Residual variance
-# sigma(fit0)^2 # the two match
-## Among Tubes Variance 
-VarTube <- (MSA0-VarRes)/n0
-## Repeatability
-Repeatability0 <- VarTube/(VarRes+VarTubes) 
+
+
+
+
+
+#Plot 
+mod1 <- lm(asin(sqrt(Rate)) ~ log(Nb_eggs) * Test_environment, data = data_PERF_Rate)
+
+#Predict data
+filldata <- data.frame(Nb_eggs = rep(seq(min(data_PERF_Rate$Nb_eggs),max(data_PERF_Rate$Nb_eggs)),3), 
+                       Test_environment = rep(levels(data_PERF_Rate$Test_environment),
+                                              each = length(seq(min(data_PERF_Rate$Nb_eggs),
+                                                                max(data_PERF_Rate$Nb_eggs)))),
+                       Estimates = NA)
+
+filldata$Estimate_transformed <- predict(mod1, newdata=filldata, re.form=~0)
+filldata$Estimates <- (sin(filldata$Estimate_transformed))^2
+
+
+#If y=arcsin(sqrt(x)) then x=(sin(y))^2.
+
+Plot_eggs <- ggplot2::ggplot(data = data_PERF_Rate, 
+                aes(x = Nb_eggs, y = Rate, color = Test_environment)) +
+  geom_point(size = 0.7)  +
+  geom_line(data = filldata, aes(x = Nb_eggs, 
+                                y = Estimates, 
+                               colour = Test_environment), size = 0.9) + 
+  scale_color_manual(name="Test environment",   
+                       breaks=c("Blackberry","Cherry","Strawberry"),
+                       labels=c("Blackberry","Cherry","Strawberry"),
+                       values=c("#301934","#BC3C6D", "#3FAA96"),
+                       drop=FALSE) + 
+  ylab("Offspring performance") +
+  xlab("Number of eggs") +
+  theme_LO_sober
+
+ cowplot::save_plot(file =here::here("figures", "FigSX_DensityEggs_Effect.pdf"),
+                   Plot_eggs,
+                   base_height = 12/cm(1), base_width = 14/cm(1), dpi = 610)
+
+
 ```
 
 
@@ -1124,6 +1149,11 @@ indic <- grep("SA",rownames(vcov(m3)))
 seSAcoef <- sqrt(diag(vcov(m3)[indic,indic]))
 #names(SAcoef) <- c("seSAGen", "seSANonGen")
 seSAcoef
+
+
+
+
+
 
 ```
 
