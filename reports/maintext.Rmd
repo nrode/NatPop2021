@@ -114,7 +114,7 @@ levels(data_PREF$Population)
 
 
 
-# OVIPOSITION STIMULATION
+# FECUNDITY
 ## Exploration data
 ```{r }
 
@@ -564,7 +564,7 @@ m2 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
 ```
 
 
-## Analysis variance of eggs as covariable
+## Variance of eggs as covariable
 ```{r }
 
 #Goal estimate: 
@@ -572,10 +572,66 @@ m2 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA:IndicG0 + SA +
     # variance across pop 
     # variance among host 
 
-(asin(sqrt(Rate)) ~ , data = data_PERF_Rate)
 
-log(nb_eggs+1) ~ (1|Population) + (1|Host), data = data_PERF_Rate)
+
+#### Mixte model
+lm_vareggs <- lme4::lmer(log(Nb_eggs) ~ 1 +  (1|Population) + (1|Test_environment),
+                         data = data_PERF_Rate)
+summary(lm_vareggs)
+# Var host fruit: 0.01571
+# Var population: 0.55243
+# Var among tubes: 1.97954
+
+## Extract variance components
+VAR <- as.data.frame(lme4::VarCorr(lm_vareggs))$vcov
+
+## Proportion of total variance due to variation among populations
+(PropPop <- VAR[1]/sum(VAR))
+## Proportion of total variance  due to variation among fruits
+(PropObs <- VAR[2]/sum(VAR))
+## Proportion of total variance due to within tube variance
+(PropVarRes <- VAR[3]/sum(VAR)) 
+
+## Cl: High variance among tubes (78% of total variance)
+## Cl: Substantial variation among popupation (22% of total variance)
+## Cl: Low variance among hosts (>1% of total variance)
+
+
+head(data_PERF_Rate)
+
+
+
+## ANOVA 
+## Fit model with ANOVA
+fit0 <- aov(log(Nb_eggs) ~ Population + Test_environment, data = data_PERF_Rate) 
+anova(fit0)
+
+# Among-groups population variance component
+VarPop <- (anova(fit0))[1,3]
+
+# Among-groups Test_environment variance component
+VarHost <- (anova(fit0))[2,3]
+
+# Within group variance component = Residual variance
+VarRes <- (anova(fit0))[3,3]
+sigma(fit0)^2 # the two match
+
+## Number of replicates per tube
+n0=2 # 2 car tous les tubes gardés dans le dataframe ont 2 réplicas (Sarah & Léa)
+## Number of tubes - 1
+dfTube <- length(unique(data_tube$Tube[indic]))-1 # degree of freedom
+SSA0 <- summary(fit0)[[1]]$`Sum Sq`[1] # Sum of squares among tubes
+MSA0 <- SSA0/dfTube
+# dfRes <- length(unique(data_tube$Tube[indic]))*(n0-1) # degree of freedom
+# SSE0 <- summary(fit0)[[1]]$`Sum Sq`[2] # Sum of squares among replicas
+# VarRes <- SSE0/dfRes # Within group variance component = Residual variance
+# sigma(fit0)^2 # the two match
+## Among Tubes Variance 
+VarTube <- (MSA0-VarRes)/n0
+## Repeatability
+Repeatability0 <- VarTube/(VarRes+VarTubes) 
 ```
+
 
 
 
@@ -1263,22 +1319,22 @@ Genetic_NonGenetic_PLOT <- cowplot::ggdraw() +
 
 
 
-# PLOT POP EFFECT - HETEROGENEITY
+# Plot pop effect - Heterogeneity - RESIDUALS
 ```{r }
 # library("dplyr")
 PPMR_ALL_Pref_Stim_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
                                         formula="log(Nb_eggs+1) ~ Test_environment " ,
                                         gen = "G0" , 
                                         formula_Blanquart="log(Nb_eggs+1) ~  Test_environment + Population + SA + Test_environment:Original_environment",
-                                        xaxis_labelprint = "Oviposition stimulation in sympatry",
-                                        yaxis_labelprint = "Oviposition stimulation in allopatry")
+                                        xaxis_labelprint = "Fecundity in sympatry",
+                                        yaxis_labelprint = "Fecundity in allopatry")
 
 PPMR_ALL_Pref_Stim_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
                                         formula="log(Nb_eggs+1) ~ Test_environment " ,
                                         formula_Blanquart="log(Nb_eggs+1) ~  Test_environment + Population + SA + Test_environment:Original_environment",
                                         gen = "G2" , 
-                                        xaxis_labelprint = "Oviposition stimulation in sympatry",
-                                        yaxis_labelprint = "Oviposition stimulation in allopatry")
+                                        xaxis_labelprint = "Fecundity in sympatry",
+                                        yaxis_labelprint = "Fecundity in allopatry")
 
 
 PPMR_ALL_Pref_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
@@ -1388,6 +1444,104 @@ PPMR_ALL <- cowplot::ggdraw() +
                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
                   size = 18) 
  PPMR_ALL
+ # 
+ # cowplot::save_plot(file =here::here("figures", "Fig4_POP_effect_residuals.pdf"),
+ #                   PPMR_ALL,
+ #                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
+
+
+```
+
+
+
+# PLOT POP EFFECT - HETEROGENEITY
+```{r }
+# library("dplyr")
+PPMR_ALL_Pref_Stim_G0 <- plot_realdata(dataset = data_PERF, 
+                                        trait="Nb_eggs" ,
+                                        gen = "G0" , 
+                                        formula_Blanquart="log(Nb_eggs+1) ~  Test_environment + Population + SA + Test_environment:Original_environment",
+                                        xaxis_labelprint = "Fecundity in sympatry",
+                                        yaxis_labelprint = "Fecundity in allopatry")
+
+PPMR_ALL_Pref_Stim_G2 <- plot_realdata(dataset = data_PERF, 
+                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
+                                        formula_Blanquart="log(Nb_eggs+1) ~  Test_environment + Population + SA + Test_environment:Original_environment",
+                                        gen = "G2" , 
+                                        xaxis_labelprint = "Fecundity in sympatry",
+                                        yaxis_labelprint = "Fecundity in allopatry")
+
+
+PPMR_ALL_Pref_G0 <- plot_realdata(dataset = data_PREF_three, 
+                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
+                                        formula_Blanquart="log(Nb_eggs+1) ~ Test_environment + Population + SA + 
+                    Test_environment:Original_environment + BoxID",
+                                        gen = "G0" , 
+                                        xaxis_labelprint = "Oviposition preference in sympatry",
+                                        yaxis_labelprint = "Oviposition preference in allopatry")
+
+PPMR_ALL_Pref_G2 <- plot_realdata(dataset = data_PREF_three, 
+                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
+                                        formula_Blanquart="log(Nb_eggs+1) ~ Test_environment + Population + SA + 
+                    Test_environment:Original_environment + BoxID",
+                                        gen = "G2" , 
+                                        xaxis_labelprint = "Oviposition preference in sympatry",
+                                        yaxis_labelprint = "Oviposition preference in allopatry")
+
+PPMR_ALL_Perf_G0 <- plot_realdata(dataset = data_PERF_Rate, 
+                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
+                                        gen = "G0" , 
+                                        # fixedxylim = TRUE,
+                                        xlim = c(-0.8,1.15), 
+                                        ylim = c(-0.8,1.15), 
+                                        formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
+                                        xaxis_labelprint = "Offspring performance in sympatry",
+                                        yaxis_labelprint = "Offspring performance in allopatry")
+
+
+
+
+
+PPMR_ALL_Perf_G2 <- plot_realdata(dataset = data_PERF_Rate, 
+                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
+                                        gen = "G2" ,
+                                        formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
+                                        xaxis_labelprint = "Offspring performance in sympatry",
+                                        yaxis_labelprint = "Offspring performance in allopatry")
+
+
+legend <- lemon::g_legend(PPMR_ALL_Perf_G2)
+
+ 
+## ALL GENERATIONS 
+PPMR_ALL <- cowplot::ggdraw() + 
+  cowplot::draw_plot(PPMR_ALL_Pref_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.0, y = 0.66, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PPMR_ALL_Pref_Stim_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.0, y = 0.33, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PPMR_ALL_Perf_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.01, y = 0, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PPMR_ALL_Pref_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.44, y = 0.66, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PPMR_ALL_Pref_Stim_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.44, y = 0.33, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PPMR_ALL_Perf_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.44, y = 0, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(legend, x = 0.915, y = 0.5, width = 0.000001, height = 0.000001) + 
+  cowplot::draw_plot_label(c("Generation G0/G1","Generation G2/G3","A", "B", "C",
+                    "D", "E", "F"),  
+                  x = c(0.12,0.55, 0, 0.44, 0, 0.44, 0, 0.44 ), 
+                  y = c(1,1, 0.99, 0.99, 0.66,  0.66, 0.33, 0.33), 
+                  hjust = c(0,0,0,0,0,0,0,0), 
+                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+                  size = 18) 
+ PPMR_ALL
  
  cowplot::save_plot(file =here::here("figures", "Fig4_POP_effect_ALL.pdf"),
                    PPMR_ALL,
@@ -1395,5 +1549,6 @@ PPMR_ALL <- cowplot::ggdraw() +
 
 
 ```
+
 
 
