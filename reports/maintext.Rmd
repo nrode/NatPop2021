@@ -1460,12 +1460,14 @@ PPMR_ALL <- cowplot::ggdraw() +
 PPMR_ALL_Pref_Stim_G0 <- plot_realdata(dataset = data_PERF, 
                                         trait="Nb_eggs" ,
                                         gen = "G0" , 
+                                        xlim = c(0,90), 
+                                        ylim = c(0,90), 
                                         formula_Blanquart="log(Nb_eggs+1) ~  Test_environment + Population + SA + Test_environment:Original_environment",
                                         xaxis_labelprint = "Fecundity in sympatry",
                                         yaxis_labelprint = "Fecundity in allopatry")
 
 PPMR_ALL_Pref_Stim_G2 <- plot_realdata(dataset = data_PERF, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
+                                         trait="Nb_eggs" ,
                                         formula_Blanquart="log(Nb_eggs+1) ~  Test_environment + Population + SA + Test_environment:Original_environment",
                                         gen = "G2" , 
                                         xaxis_labelprint = "Fecundity in sympatry",
@@ -1473,7 +1475,7 @@ PPMR_ALL_Pref_Stim_G2 <- plot_realdata(dataset = data_PERF,
 
 
 PPMR_ALL_Pref_G0 <- plot_realdata(dataset = data_PREF_three, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
+                                         trait="Nb_eggs" ,
                                         formula_Blanquart="log(Nb_eggs+1) ~ Test_environment + Population + SA + 
                     Test_environment:Original_environment + BoxID",
                                         gen = "G0" , 
@@ -1481,19 +1483,21 @@ PPMR_ALL_Pref_G0 <- plot_realdata(dataset = data_PREF_three,
                                         yaxis_labelprint = "Oviposition preference in allopatry")
 
 PPMR_ALL_Pref_G2 <- plot_realdata(dataset = data_PREF_three, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
+                                        trait="Nb_eggs" ,
                                         formula_Blanquart="log(Nb_eggs+1) ~ Test_environment + Population + SA + 
                     Test_environment:Original_environment + BoxID",
-                                        gen = "G2" , 
+                                        gen = "G2" ,
+                                        xlim = c(0,80), 
+                                        ylim = c(0,80), 
                                         xaxis_labelprint = "Oviposition preference in sympatry",
                                         yaxis_labelprint = "Oviposition preference in allopatry")
 
 PPMR_ALL_Perf_G0 <- plot_realdata(dataset = data_PERF_Rate, 
-                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
-                                        gen = "G0" , 
-                                        # fixedxylim = TRUE,
-                                        xlim = c(-0.8,1.15), 
-                                        ylim = c(-0.8,1.15), 
+                                         trait="Rate" ,
+                                          gen = "G0" , 
+                                        # # fixedxylim = TRUE,
+                                        xlim = c(0,1.05), 
+                                        ylim = c(0,1.05), 
                                         formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
                                         xaxis_labelprint = "Offspring performance in sympatry",
                                         yaxis_labelprint = "Offspring performance in allopatry")
@@ -1503,9 +1507,11 @@ PPMR_ALL_Perf_G0 <- plot_realdata(dataset = data_PERF_Rate,
 
 
 PPMR_ALL_Perf_G2 <- plot_realdata(dataset = data_PERF_Rate, 
-                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
+                                         trait="Rate" ,
                                         gen = "G2" ,
-                                        formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
+                                  formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
+                                        xlim = c(0,0.7), 
+                                        ylim = c(0,0.7), 
                                         xaxis_labelprint = "Offspring performance in sympatry",
                                         yaxis_labelprint = "Offspring performance in allopatry")
 
@@ -1542,10 +1548,10 @@ PPMR_ALL <- cowplot::ggdraw() +
                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
                   size = 18) 
  PPMR_ALL
- 
- cowplot::save_plot(file =here::here("figures", "Fig4_POP_effect_ALL.pdf"),
-                   PPMR_ALL,
-                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
+# 
+#  cowplot::save_plot(file =here::here("figures", "Fig4_POP_effect_ALL.pdf"),
+#                    PPMR_ALL,
+#                    base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
 
 
 ```
