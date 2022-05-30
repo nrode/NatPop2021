@@ -45,7 +45,7 @@ data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv",
                          trait = "performance",
                          remove_testenvt = c("Grape","GF"), 
                          remove_pop = c("WT3"), 
-                         remove_rate = TRUE)
+                         remove_rate = "Replace")
 head(data_PERF_Rate)
 tapply(data_PERF_Rate$Nb_adults,list(data_PERF_Rate$Original_environment,
                                      data_PERF_Rate$Generation),length)

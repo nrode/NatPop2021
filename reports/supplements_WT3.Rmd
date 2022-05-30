@@ -68,7 +68,7 @@ data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv",
                                         "Cherry3", "Cherry47","Cherry50","Cherry51",
                                         "Cherry52","Cherry6","Cherry7",
                                         "Strawberry42", "Strawberry44","Strawberry53"), 
-                         remove_rate = TRUE)
+                         remove_rate = "Replace")
 head(data_PERF_Rate)
 tapply(data_PERF_Rate$Nb_adults,list(data_PERF_Rate$Original_environment,
                                      data_PERF_Rate$Generation),length)

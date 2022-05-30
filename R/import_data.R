@@ -224,8 +224,7 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
                      " tubes for the first and third generation respectively) were not removed but the emergence rate was REPLACED by 1."))
         
         dim(data_rate_clean)
-        dim(data_rate_clean_all)
-        
+
       }else{
         print("Error: unknown remove_rate")
       }

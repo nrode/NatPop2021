@@ -29,7 +29,7 @@ plot_RTP_realdata <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen 
   # Plot title and y axis title
   plot_title <- ifelse(gen == "G0", "G0", "G2")
   if("Obs_A" %in% colnames(dataset)  & trait == "Nb_eggs"){
-    yaxis_labelprint <- paste0("Oviposition stimulation")
+    yaxis_labelprint <- paste0("Fecundity")
   }else{
     if("Obs_A" %in% colnames(dataset)  & trait == "Nb_adults"){
       yaxis_labelprint <- paste0("Number of adults")

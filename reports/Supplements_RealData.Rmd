@@ -46,7 +46,7 @@ data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv",
                          trait = "performance",
                          remove_testenvt = c("Grape","GF"), 
                          remove_pop = c("WT3"), 
-                         remove_rate = TRUE)
+                         remove_rate = "Replace")
 head(data_PERF_Rate)
 tapply(data_PERF_Rate$Nb_adults,list(data_PERF_Rate$Original_environment,
                                      data_PERF_Rate$Generation),length)
@@ -115,7 +115,7 @@ levels(data_PREF$Population)
 
 
 
-# Oviposition stimualtion
+# Fecundity
 ```{r }
 
 (PLOT_eggs_G0 <- plot_RTP_realdata(dataset = data_PERF, trait = "Nb_eggs", gen = "G0"))
@@ -157,34 +157,34 @@ legend <- lemon::g_legend(PLOT_pref_G0)
 
 
 ## ALL GENERATIONS 
-LOCAL_ADAPTATION_PLOT_REALDATA <- cowplot::ggdraw() + 
-  cowplot::draw_plot(PLOT_pref_G0 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_eggs_G0 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_rate_G0 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
-  cowplot::draw_plot(PLOT_pref_G2 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.01, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_eggs_G2 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.31, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_rate_G2 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.61, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot_label(c("Generation: G0","Generation: G0","Generation: G1", "A", "B", "C", " ",
-                    "Generation: G2","Generation: G2","Generation: G3", "D", "E", "F", " "),  
-                  x = c(0.1,0.4,0.7, 0.01, 0.30, 0.61, 0.92, 0.10,0.4,0.7, 0.01, 0.3, 0.61, 0.92), 
-                  y = c(1,1,1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.5, 0.5, 0.48, 0.48, 0.48, 0.48), 
-                  hjust = c(0,0,0,0,0,0,0,0,0,0,0,0,0,0), 
-                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
-                  size = 16) 
- LOCAL_ADAPTATION_PLOT_REALDATA
+# LOCAL_ADAPTATION_PLOT_REALDATA <- cowplot::ggdraw() + 
+#   cowplot::draw_plot(PLOT_pref_G0 + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PLOT_eggs_G0 + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PLOT_rate_G0 + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
+#   cowplot::draw_plot(PLOT_pref_G2 + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.01, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PLOT_eggs_G2 + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.31, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PLOT_rate_G2 + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.61, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot_label(c("Generation: G0","Generation: G0","Generation: G1", "A", "B", "C", " ",
+#                     "Generation: G2","Generation: G2","Generation: G3", "D", "E", "F", " "),  
+#                   x = c(0.1,0.4,0.7, 0.01, 0.30, 0.61, 0.92, 0.10,0.4,0.7, 0.01, 0.3, 0.61, 0.92), 
+#                   y = c(1,1,1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.5, 0.5, 0.48, 0.48, 0.48, 0.48), 
+#                   hjust = c(0,0,0,0,0,0,0,0,0,0,0,0,0,0), 
+#                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+#                   size = 16) 
+#  LOCAL_ADAPTATION_PLOT_REALDATA
 
  # 
  # cowplot::save_plot(file =here::here("figures", "Supplements_Local_Adaptation_Data.pdf"),
@@ -224,10 +224,10 @@ LOCAL_ADAPTATION_PLOT_REALDATA <- cowplot::ggdraw() +
  LOCAL_ADAPTATION_PLOT_REALDATA
  
 
-  # #
- # cowplot::save_plot(file =here::here("figures", "Supplements_FigS2_Local_Adaptation_Data.pdf"),
- #                   LOCAL_ADAPTATION_PLOT_REALDATA,
- #                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
+ #
+ cowplot::save_plot(file =here::here("figures", "Supplements_FigS2_Local_Adaptation_Data.pdf"),
+                   LOCAL_ADAPTATION_PLOT_REALDATA,
+                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
 
 
 ```
