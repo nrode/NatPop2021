@@ -37,6 +37,7 @@ data_PERF <- import_data(dataset = "DATACOMPLET_PERF.csv",
 head(data_PERF)
 tapply(data_PERF$Nb_adults,list(data_PERF$Original_environment,data_PERF$Generation),length)
 
+
 #############################
 #EMERGENCE RATE
 #############################
@@ -45,21 +46,14 @@ data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv",
                          trait = "performance",
                          remove_testenvt = c("Grape","GF"), 
                          remove_pop = c("WT3"), 
-                         remove_rate = TRUE)
+                         remove_rate = "Replace")
 head(data_PERF_Rate)
 tapply(data_PERF_Rate$Nb_adults,list(data_PERF_Rate$Original_environment,
                                      data_PERF_Rate$Generation),length)
 
 tapply(data_PERF_Rate$Rate,data_PERF_Rate$Generation,mean)
 
-## To test Rate higher than 1
-# data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv", 
-#                          trait = "performance",
-#                          remove_testenvt = c("Grape","GF"), 
-#                          remove_pop = c("WT3"), 
-#                          remove_rate = NA)
-# #Replace Rate>1 by 1
-# data_PERF_Rate$Rate[data_PERF_Rate$Nb_adults>=data_PERF_Rate$Nb_eggs] <- 1
+
 
 ###########################
 #PREFERENCE 
@@ -72,7 +66,6 @@ data_PREF <- import_data(dataset = "DATACOMPLET_PREF.csv",
 
 head(data_PREF)
 tapply(data_PREF$Nb_eggs,list(data_PREF$Original_environment,data_PREF$Generation),length)
-
 
 
 ###########################

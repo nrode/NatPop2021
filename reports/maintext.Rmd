@@ -42,25 +42,29 @@ tapply(data_PERF$Nb_adults,list(data_PERF$Original_environment,data_PERF$Generat
 #EMERGENCE RATE
 #############################
 
-data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv", 
+#When Eggs>Adults: remove data
+data_PERF_Rate_removed <- import_data(dataset = "DATACOMPLET_PERF.csv", 
                          trait = "performance",
                          remove_testenvt = c("Grape","GF"), 
                          remove_pop = c("WT3"), 
                          remove_rate = TRUE)
-head(data_PERF_Rate)
+head(data_PERF_Rate_removed)
+tapply(data_PERF_Rate_removed$Nb_adults,list(data_PERF_Rate_removed$Original_environment,
+                                     data_PERF_Rate_removed$Generation),length)
+
+tapply(data_PERF_Rate_removed$Rate,data_PERF_Rate_removed$Generation,mean)
+
+#When Eggs>Adults: Rate=1
+data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv", 
+                         trait = "performance",
+                         remove_testenvt = c("Grape","GF"), 
+                         remove_pop = c("WT3"), 
+                         remove_rate = "Replace")
 tapply(data_PERF_Rate$Nb_adults,list(data_PERF_Rate$Original_environment,
                                      data_PERF_Rate$Generation),length)
 
 tapply(data_PERF_Rate$Rate,data_PERF_Rate$Generation,mean)
 
-## To test Rate higher than 1
-# data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv", 
-#                          trait = "performance",
-#                          remove_testenvt = c("Grape","GF"), 
-#                          remove_pop = c("WT3"), 
-#                          remove_rate = NA)
-# #Replace Rate>1 by 1
-# data_PERF_Rate$Rate[data_PERF_Rate$Nb_adults>=data_PERF_Rate$Nb_eggs] <- 1
 
 ###########################
 #PREFERENCE 
@@ -73,7 +77,6 @@ data_PREF <- import_data(dataset = "DATACOMPLET_PREF.csv",
 
 head(data_PREF)
 tapply(data_PREF$Nb_eggs,list(data_PREF$Original_environment,data_PREF$Generation),length)
-
 
 
 ###########################
@@ -1251,12 +1254,12 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
  LOCAL_ADAPTATION_PLOT
  
  # 
- # 
- # cowplot::save_plot(file =here::here("figures", "Supplements_FigS4_Local_Adaptation_Residuals.pdf"),
- #                   LOCAL_ADAPTATION_PLOT,
- #                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
- # 
- # 
+# 
+#  cowplot::save_plot(file =here::here("figures", "Supplements_FigS4_Local_Adaptation_Residuals.pdf"),
+#                    LOCAL_ADAPTATION_PLOT,
+#                    base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
+# 
+
 
 
 ```
@@ -1268,45 +1271,45 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
 ```{r }
 legend <- lemon::g_legend(PLOT_pref_G0)
 
-Genetic_NonGenetic_PLOT <- cowplot::ggdraw() + 
-  cowplot::draw_plot(PLOT_GEN_pref_G2 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_GEN_eggs_G2 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_GEN_rate_G2 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
-  cowplot::draw_plot(PLOT_GEN_pref_G0 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.01, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_GEN_eggs_G0 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.31, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot(PLOT_GEN_rate_G0 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.61, y = 0, width = 0.25, height = 0.45) + 
-  cowplot::draw_plot_label(c("Genetic effects", "A", "B", "C", " ",
-                    "Plastic effects", "D", "E", "F", " "),  
-                  x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
-                  y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
-                  hjust = c(0,0,0,0,0,0,0,0,0,0), 
-                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
-                  size = 16) 
- Genetic_NonGenetic_PLOT
+# Genetic_NonGenetic_PLOT <- cowplot::ggdraw() + 
+#   cowplot::draw_plot(PLOT_GEN_pref_G2 + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PLOT_GEN_eggs_G2 + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PLOT_GEN_rate_G2 + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
+#   cowplot::draw_plot(PLOT_GEN_pref_G0 + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.01, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PLOT_GEN_eggs_G0 + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.31, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot(PLOT_GEN_rate_G0 + theme(legend.position = "none", 
+#                                         plot.title = element_blank()), 
+#             x = 0.61, y = 0, width = 0.25, height = 0.45) + 
+#   cowplot::draw_plot_label(c("Genetic effects", "A", "B", "C", " ",
+#                     "Plastic effects", "D", "E", "F", " "),  
+#                   x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
+#                   y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
+#                   hjust = c(0,0,0,0,0,0,0,0,0,0), 
+#                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+#                   size = 16) 
+#  Genetic_NonGenetic_PLOT
  
  
- # 
-#
+# 
+# 
 # cowplot::save_plot(file =here::here("figures", "GENETIC_NONGENETIC_First_Third.pdf"),
 #                   Genetic_NonGenetic_PLOT,
 #                   base_height = 18/cm(1), base_width = 34/cm(1), dpi = 610)
+# 
+# 
+# 
 
-
- 
- 
  
 ## ALL GENERATIONS 
 Genetic_NonGenetic_PLOT <- cowplot::ggdraw() + 
@@ -1582,7 +1585,7 @@ PPMR_ALL <- cowplot::ggdraw() +
 #  cowplot::save_plot(file =here::here("figures", "Fig4_POP_effect_ALL.pdf"),
 #                    PPMR_ALL,
 #                    base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
-
+# 
 
 ```
 

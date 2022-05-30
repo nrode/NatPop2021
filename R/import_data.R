@@ -4,7 +4,7 @@
 #' @param dataset Fitness dataset
 #' @param remove_testenvt remove all data measured on this test_environment (could be a vector with several test environment)
 #' @param remove_pop remove all data of this population
-#' @param remove_rate if TRUE remove data where number of adults is higher than the number of eggs
+#' @param remove_rate if TRUE remove data where number of adults is higher than the number of eggs; if NA doesnt change; if "Replace" replace Rate by 1
 #' @param trait can be only "preference" of "performance"
 #' 
 #'
@@ -155,15 +155,11 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
   #       list(data_rate_clean[data_rate_clean$Nb_eggs==0,]$Generation,data_rate_clean[data_rate_clean$Nb_eggs==0,]$SA),length)
   data_rate_clean <- data_rate_clean[data_rate_clean$Nb_eggs!=0,]
   
-  #Remove adults > eggs
+  #When Eggs>Adults
   temp_g0remv <- length(data_rate_clean$Nb_eggs[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs&
                                             data_rate_clean$Generation=="G0"])
   temp_g2remv <- length(data_rate_clean$Nb_eggs[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs&
                                             data_rate_clean$Generation=="G2"])
-  #tapply(data_rate_clean[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs,]$Nb_eggs,
-  #       list(data_rate_clean[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs,]$Generation,
-  #            data_rate_clean[data_rate_clean$Nb_adults>data_rate_clean$Nb_eggs,]$SA),length)
-  data_rate_clean_all <- data_rate_clean[data_rate_clean$Nb_adults<=data_rate_clean$Nb_eggs,]
 
   
   if(is.na(remove_rate)){ 
@@ -183,6 +179,9 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
     
   }else{
     if(remove_rate == TRUE){ 
+      # PROBLEM EGGS>ADULTS
+      ###First option: Remove eggs > adults
+      data_rate_clean_all <- data_rate_clean[data_rate_clean$Nb_adults<=data_rate_clean$Nb_eggs,]
       
       #Assign data_rate_clean to data
       data <- data_rate_clean_all
@@ -203,7 +202,33 @@ import_data <- function(dataset = "DATACOMPLET_PERF.csv", trait = "performance",
       
       
     }else{
-      print("Error: unknown remove_rate")
+      if(remove_rate == "Replace"){ 
+        #Assign data_rate_clean to data
+        data <- data_rate_clean
+        
+        data$Rate <- data$Nb_adults / data$Nb_eggs
+        
+        # PROBLEM EGGS>ADULTS
+        # Replace rate by 1 
+        data$Rate<-ifelse(data$Rate>1,1,data$Rate)
+        
+        print(paste0("Data (" , temp_g0, " and ", temp_g2, 
+                     " tubes for the first and third generation respectively) where i) the number of eggs was NA (", 
+                     NA_eggs_G0 ," and ", NA_eggs_G2,
+                     " tubes for the first and third generation respectively); or ", 
+                     "ii) the number of adults  was NA (", NA_adults, " and ", NA_adults,
+                     " tubes for the first and third generation respectively); or ", 
+                     "iii) the number of eggs was zero -Emergence rate = NaN- (",NA_zeroeggs_G0, " and ",NA_zeroeggs_G2 , 
+                     " tubes for the first and third generation respectively); or ", 
+                     "iv) the number of adults was higher than the initial number of eggs (",temp_g0remv, " and " ,temp_g2remv,
+                     " tubes for the first and third generation respectively) were not removed but the emergence rate was REPLACED by 1."))
+        
+        dim(data_rate_clean)
+        dim(data_rate_clean_all)
+        
+      }else{
+        print("Error: unknown remove_rate")
+      }
     }
       
   }
