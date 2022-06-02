@@ -50,7 +50,7 @@ data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv",
                          trait = "performance",
                          remove_testenvt = c("Grape","GF"), 
                          remove_pop = c("WT3"), 
-                         remove_rate = TRUE)
+                         remove_rate = "Replace")
 
 ## Model to extract value of our dataset
 m <- lme4::lmer(asin(sqrt(Rate)) ~ SA + SA*IndicG0 + Test_environment:Generation  +
