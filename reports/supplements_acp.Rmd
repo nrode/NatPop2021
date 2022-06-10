@@ -128,11 +128,11 @@ acp_pref_G2 <- plot_acp(dataset = data_PREF_three,
 acp_stim_G0 <- plot_acp(dataset = data_PERF,
          formula="log(Nb_eggs+1) ~ Test_environment ",
          gen = "G0",
-         titleplot = "Oviposition stimulation in G0")
+         titleplot = "Fecundity in G0")
 acp_stim_G2 <- plot_acp(dataset = data_PERF,
          formula="log(Nb_eggs+1) ~ Test_environment ",
          gen = "G2",
-         titleplot = "Oviposition stimulation in G2")
+         titleplot = "Fecundity in G2")
 
 
 
