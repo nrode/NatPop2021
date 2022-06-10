@@ -43,7 +43,9 @@ plot_realdata <- function(dataset = data_PERF_Rate,
                                                   coltest_envlevels = c("#301934","#BC3C6D", "#3FAA96"),
                                                   xaxis_labelprint = "Offspring performance\nin sympatry",
                                                   yaxis_labelprint = "Offspring performance\nin allopatry",
-                                                  xlim=NULL, ylim=NULL, fixedxylim=TRUE,  
+                                                  xlim=NULL, 
+                                                  ylim=NULL, 
+                                                  fixedxylim=TRUE,  
                                                   printcor=FALSE, printSA=FALSE, test_Blanquart=TRUE){
   
   # Subset dataset per generation 
@@ -209,15 +211,50 @@ plot_realdata <- function(dataset = data_PERF_Rate,
       panel.grid.major.y = element_blank(),
       panel.grid.minor.y = element_blank())
   
+  #Add Blanquart results
   if(test_Blanquart){
     plot_pair <- plot_pair + annotate('text', x = min_plot, y = max_plot,
                                       label = equation_Blanquart, parse = TRUE, hjust = 0, size = 4)
   }
-  
-  
 
+  ## Add correlation
+  if(printcor){
+    ## Compute weighted correlation
+    weightedcor <- sjstats:::weighted_correlation(datameany,
+                                                  x = Mean_Symp, 
+                                                  y = Mean_Allop, 
+                                                  weights = N, 
+                                                  ci.lvl = 0.95)
+    rho <- as.numeric(weightedcor$estimate[1])
+    #rho <- as.numeric(weightedcor$p.value[1])
+
+    eq_rho <- as.character(as.expression(substitute(~~italic(rho)[subscript]~"="~weightedcor~"["~inf~";"~sup~"]",
+                                                    list(subscript=subscript,
+                                             weightedcor = format(rho, digits = 2, nsmall=2), 
+                                             inf = format(weightedcor$ci[1], digits = 2),
+                                             sup = format(weightedcor$ci[2], digits = 2)))))
+  
+    
+    plot_pair <- plot_pair  + annotate('text', x = min_plot, 
+                         y = max_plot*0.95, 
+                         label = eq_rho, parse = TRUE, hjust = 0, size = 4) 
+    
+  }
+    
+  ### If printed SA
+  if(printSA) { eq_SA <- as.character(as.expression(substitute(~~italic(SA)[subscript]~"="~SAmean~"(+/-se="~se~")",
+                                                               list(subscript = subscript,
+                                                                    SAmean = format(SAstats$SA_mean,
+                                                                                    digits = 2, nsmall=2),
+                                                                    se = format(SAstats$SA_se, 
+                                                                                digits = 2)))))
+  plot_pair <- plot_pair  + annotate('text', x = min_plot, 
+                                     y = max_plot*0.95, 
+                                     label = eq_rho, parse = TRUE, hjust = 0, size = 4) 
+  }
   
   
+    
   ## Change range limit
   if(fixedxylim){
     plot_pair <- plot_pair +
@@ -242,66 +279,59 @@ plot_realdata <- function(dataset = data_PERF_Rate,
       ylim(min(xlim[1], ylim[1]), max(xlim[2], ylim[2]))
   }
   
-  
-  ## Add correlation
-  if(printcor){
-    ## Compute weighted correlation
-    weightedcor <- sjstats:::weighted_correlation(data_fruit1_fruit2,
-                                                  x = allopatry, 
-                                                  y = sympatry, 
-                                                  weights = N, 
-                                                  ci.lvl = 0.95)
-    rho <- as.numeric(weightedcor$estimate[1])
-    eq_rho <- as.character(as.expression(substitute(~~italic(rho)[subscript]~"="~weightedcor~"["~inf~";"~sup~"]",
-                                                    list(subscript=subscript,
-                                                         weightedcor = format(rho, digits = 2, nsmall=2), 
-                                                         inf = format(weightedcor$ci[1], digits = 2),
-                                                         sup = format(weightedcor$ci[2], digits = 2)))))
+
+
     
-    eq_SA <- as.character(as.expression(substitute(~~italic(SA)[subscript]~"="~SAmean~"(+/-se="~se~")",
-                                                   list(subscript = subscript,
-                                                        SAmean = format(SAstats$SA_mean, digits = 2, nsmall=2), 
-                                                        se = format(SAstats$SA_se, digits = 2)))))
+    # ## Position of the equation depends on the range of values of x and y
+    # if(fixedxylim){
+    #   plot_pair <- plot_pair + annotate('text', x = min(rangexy)+0.2*(max(rangexy)-min(rangexy)), 
+    #                                      y = max(rangexy), 
+    #                                      label = eq_rho, parse = TRUE, hjust = 0, size = 4) 
+    #   if(printSA) { plot_pair <- plot_pair + geom_text(x =  min(rangexy)+0.275*(max(rangexy)-min(rangexy)), 
+    #                                                    y =  min(rangexy)+0.925*(max(rangexy)-min(rangexy)), 
+    #                                                    label = eq_SA,
+    #                                                    parse = TRUE, 
+    #                                                    color="black", size = 3.5) }
+    # 
+    #   
+    # }else{
+      # rangex <- layer_scales(plot_pair)$x$range$range
+      # rangey <- layer_scales(plot_pair)$y$range$range
+      # plot_pair <- plot_pair + geom_text(x = min(rangex)+0.2*(max(rangex)-min(rangex)), y = max(rangey), 
+      #                                    label = eq_rho,
+      #                                    parse = TRUE, 
+      #                                    color="black", size = 3.5) +
+      # if(printSA) {  geom_text(x =  min(rangex)+0.275*(max(rangex)-min(rangex)), y =  min(rangey)+0.925*(max(rangey)-min(rangey)), 
+      #                            label = eq_SA,
+      #                            parse = TRUE, 
+      #                            color="black", size = 3.5) }
     
     
-    
-    ## Position of the equation depends on the range of values of x and y
-    if(fixedxylim){
-      plot_pair <- plot_pair + geom_text(x = min(rangexy)+0.2*(max(rangexy)-min(rangexy)), y = max(rangexy), 
-                                         label = eq_rho,
-                                         parse = TRUE, 
-                                         color="black", size = 3.5) 
-      if(printSA) { plot_pair <- plot_pair + geom_text(x =  min(rangexy)+0.275*(max(rangexy)-min(rangexy)), 
-                                                       y =  min(rangexy)+0.925*(max(rangexy)-min(rangexy)), 
-                                                       label = eq_SA,
-                                                       parse = TRUE, 
-                                                       color="black", size = 3.5) }
-      
-    }else{
-      rangex <- layer_scales(plot_pair)$x$range$range
-      rangey <- layer_scales(plot_pair)$y$range$range
-      plot_pair <- plot_pair + geom_text(x = min(rangex)+0.2*(max(rangex)-min(rangex)), y = max(rangey), 
-                                         label = eq_rho,
-                                         parse = TRUE, 
-                                         color="black", size = 3.5) +
-        if(printSA) {  geom_text(x =  min(rangex)+0.275*(max(rangex)-min(rangex)), y =  min(rangey)+0.925*(max(rangey)-min(rangey)), 
-                                 label = eq_SA,
-                                 parse = TRUE, 
-                                 color="black", size = 3.5) }
-    }
-    if(!is.null(xlim)&!is.null(ylim)){
-      plot_pair <- plot_pair + geom_text(x =  min(xlim)+0.2*(max(xlim)-min(xlim)), y = max(ylim), 
-                                         label = eq_rho,
-                                         parse = TRUE, 
-                                         color="black", size = 3.5) +
-        if(printSA) {   geom_text(x =  min(xlim)+0.275*(max(xlim)-min(xlim)), 
-                                  y =  min(ylim)+0.925*(max(ylim)-min(ylim)), 
-                                  label = eq_SA,
-                                  parse = TRUE, 
-                                  color="black", size = 3.5) }
-    }
-    
-  }
+      # plot_pair <- plot_pair + annotate('text', x = min_plot, 
+      #                                   y = max_plot*0.95, 
+      #                                   label = eq_rho, parse = TRUE, hjust = 0, size = 4) 
+    #   if(printSA) {plot_pair <- plot_pair + geom_text(x =  min(rangex)+0.275*(max(rangex)-min(rangex)),
+    #                                                   y =  min(rangey)+0.925*(max(rangey)-min(rangey)), 
+    #                            label = eq_SA,
+    #                            parse = TRUE, 
+    #                            color="black", size = 3.5)
+    #     
+    # }
+    # if(!is.null(xlim)&!is.null(ylim)){
+    #   plot_pair <- plot_pair + geom_text(x =  min(xlim)+0.2*(max(xlim)-min(xlim)), y = max(ylim), 
+    #                                      label = eq_rho,
+    #                                      parse = TRUE, 
+    #                                      color="black", size = 3.5) +
+    #    if(printSA) {   geom_text(x =  min(xlim)+0.275*(max(xlim)-min(xlim)), 
+    #                               y =  min(ylim)+0.925*(max(ylim)-min(ylim)), 
+    #                               label = eq_SA,
+    #                               parse = TRUE, 
+    #                               color="black", size = 3.5) }
+    # 
+    #   
+    # }
+
+  #}
   return(plot_pair)
 }
 

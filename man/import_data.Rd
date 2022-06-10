@@ -21,7 +21,7 @@ import_data(
 
 \item{remove_pop}{remove all data of this population}
 
-\item{remove_rate}{if TRUE remove data where number of adults is higher than the number of eggs}
+\item{remove_rate}{if TRUE remove data where number of adults is higher than the number of eggs; if NA doesnt change; if "Replace" replace Rate by 1}
 }
 \value{
 
