@@ -755,6 +755,7 @@ m1 <- aov(asin(sqrt(Rate)) ~ pop_gen + hab_gen + SA +
           data = data_PERF_Rate)
   
   
+
 ## F test for SA
 (Fratio <- (anova(m1)[3,2]/anova(m1)[5,2])/(1/anova(m1)[5, 1]))
 (pvalue <- 1 - pf(Fratio, 1, anova(m1)[5, 1])) 
@@ -1253,12 +1254,12 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
                   size = 18) 
  LOCAL_ADAPTATION_PLOT
  
- # 
-# 
-#  cowplot::save_plot(file =here::here("figures", "Supplements_FigS4_Local_Adaptation_Residuals.pdf"),
-#                    LOCAL_ADAPTATION_PLOT,
-#                    base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
-# 
+
+
+ cowplot::save_plot(file =here::here("figures", "Supplements_FigS4_Local_Adaptation_Residuals.pdf"),
+                   LOCAL_ADAPTATION_PLOT,
+                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
+
 
 
 
