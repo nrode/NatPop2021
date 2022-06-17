@@ -684,6 +684,19 @@ var(log((data_PERF_Rate$Nb_eggs+1)))
 var(log((data_PERF_Rate$Nb_adults+1)))
 var(log((data_PERF_Rate$Nb_eggs+1)))
 
+var(log((data_PERF$Nb_adults)))
+var(log((data_PERF$Nb_eggs)))
+
+#The coefficient of variation (CV) is a statistical measure of the relative dispersion of data points in a data series around the mean. 
+
+sd(data_PERF_Rate$Nb_adults[data_PERF_Rate$Generation=="G0"])/mean(data_PERF_Rate$Nb_adults[data_PERF_Rate$Generation=="G0"])
+sd(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G0"])/mean(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G0"])
+
+
+
+sd(data_PERF_Rate$Nb_adults[data_PERF_Rate$Generation=="G2"])/mean(data_PERF_Rate$Nb_adults[data_PERF_Rate$Generation=="G2"])
+sd(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G2"])/mean(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G2"])
+
 ```
 
 
