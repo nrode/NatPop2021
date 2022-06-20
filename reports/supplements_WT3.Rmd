@@ -308,7 +308,7 @@ wt3rate<-ggplot(data = data_PERF_Rate,
   xlab("Date")  +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
-    guides(col=guide_legend("Test environment")) + 
+    guides(col=guide_legend("Test fruit")) + 
  theme_LO_sober
 wt3rate
 
@@ -328,7 +328,7 @@ wt3eggs<-ggplot(data = data_PERF,
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
   xlab("Date")  +
-  guides(col=guide_legend("Test environment")) + 
+  guides(col=guide_legend("Test fruit")) + 
 theme_LO_sober
 wt3eggs
 
@@ -346,7 +346,7 @@ wt3eggspref<-ggplot(data = data_PREF,
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
   ylab("Oviposition preference")  +
-  guides(col=guide_legend("Test environment")) + 
+  guides(col=guide_legend("Test fruit")) + 
   xlab("Date")  +
   theme_LO_sober
 wt3eggspref

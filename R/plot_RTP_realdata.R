@@ -58,7 +58,7 @@ plot_RTP_realdata <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen 
                        labels=c("Cherry","Strawberry","Blackberry"),
                        values=c("#BC3C6D","#3FAA96", "#301934")) +
     ylab(yaxis_labelprint)  +
-    xlab("Test environment")  +
+    xlab("Test fruit")  +
     ggtitle(plot_title) +
     theme_LO_sober 
   
@@ -67,9 +67,9 @@ plot_RTP_realdata <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen 
     geom_point(aes(alpha = SA, fill = interaction(SA, Original_environment), shape = SA), 
                position = pd, size = 4) + 
     scale_alpha_manual(values = c(0,1)) + 
-    scale_shape_manual(name="Test environment:",   
+    scale_shape_manual(name="Test fruit:",   
                        breaks=c("1", "0"),
-                       labels=c("Sympatric","Allopatric"),
+                       labels=c("Original","Alternative"),
                        values=c(16,21)) + 
     guides(fill = FALSE, alpha = FALSE) 
   

@@ -203,7 +203,7 @@ plot_realdata <- function(dataset = data_PERF_Rate,
                        labels=c("Blackberry","Cherry","Strawberry"),
                        values=c("#301934","#BC3C6D", "#3FAA96"),
                        drop=FALSE) + 
-    scale_shape_manual(name = "Test environment:",
+    scale_shape_manual(name = "Test fruit:",
                        labels = c("Blackberry","Cherry","Strawberry"), 
                        values =  c(15,16,17)) + 
     theme(plot.title = element_text(hjust = 0.5)) + 

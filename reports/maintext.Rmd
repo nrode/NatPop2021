@@ -38,6 +38,27 @@ data_PERF <- import_data(dataset = "DATACOMPLET_PERF.csv",
 head(data_PERF)
 tapply(data_PERF$Nb_adults,list(data_PERF$Original_environment,data_PERF$Generation),length)
 
+
+
+
+#Problem eggs
+
+data_issue_eggs <- data_PERF[data_PERF$Nb_adults>data_PERF$Nb_eggs,]
+#Ovservations with more eggs than edults
+dim(data_issue_eggs)[1]
+#Ovservations with a difference equal or less than two eggs
+sum(ifelse((data_issue_eggs$Nb_adults-data_issue_eggs$Nb_eggs)<=2,1,0))
+
+tapply(data_issue_eggs$Nb_eggs,data_issue_eggs$Test_environment,length)
+tapply(data_issue_eggs$Nb_eggs,data_issue_eggs$Original_environment,length)
+tapply(data_PERF$Nb_eggs,data_PERF$Original_environment,length)
+
+mean(data_issue_eggs$Rate)
+
+data_issue_eggs$Nb_eggs
+data_issue_eggs$Nb_adults
+data_issue_eggs$Rate
+
 #############################
 #EMERGENCE RATE
 #############################
@@ -54,6 +75,10 @@ tapply(data_PERF_Rate_removed$Nb_adults,list(data_PERF_Rate_removed$Original_env
 
 tapply(data_PERF_Rate_removed$Rate,data_PERF_Rate_removed$Generation,mean)
 
+
+
+
+
 #When Eggs>Adults: Rate=1
 data_PERF_Rate <- import_data(dataset = "DATACOMPLET_PERF.csv", 
                          trait = "performance",
@@ -64,7 +89,6 @@ tapply(data_PERF_Rate$Nb_adults,list(data_PERF_Rate$Original_environment,
                                      data_PERF_Rate$Generation),length)
 
 tapply(data_PERF_Rate$Rate,data_PERF_Rate$Generation,mean)
-
 
 ###########################
 #PREFERENCE 
@@ -644,7 +668,7 @@ Plot_eggs <- ggplot2::ggplot(data = data_PERF_Rate,
   geom_line(data = filldata, aes(x = Nb_eggs, 
                                 y = Estimates, 
                                colour = Test_environment), size = 0.9) + 
-  scale_color_manual(name="Test environment",   
+  scale_color_manual(name="Test fruit",   
                        breaks=c("Blackberry","Cherry","Strawberry"),
                        labels=c("Blackberry","Cherry","Strawberry"),
                        values=c("#301934","#BC3C6D", "#3FAA96"),
@@ -696,6 +720,30 @@ sd(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G0"])/mean(data_PERF_Rate$
 
 sd(data_PERF_Rate$Nb_adults[data_PERF_Rate$Generation=="G2"])/mean(data_PERF_Rate$Nb_adults[data_PERF_Rate$Generation=="G2"])
 sd(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G2"])/mean(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G2"])
+
+
+# 
+# 
+# sd(asin(sqrt(data_PERF_Rate$Rate[data_PERF_Rate$Generation=="G0"])))/mean(asin(sqrt(data_PERF_Rate$Rate[data_PERF_Rate$Generation=="G0"])))
+# sd(asin(sqrt(data_PERF_Rate$Rate[data_PERF_Rate$Generation=="G2"])))/mean(asin(sqrt(data_PERF_Rate$Rate[data_PERF_Rate$Generation=="G2"])))
+# 
+# 
+# sd(log(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G0"]))/mean(log(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G0"]))
+# sd(log(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G0"]))/mean(log(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G0"])) 
+
+
+
+# 
+# sd(data_PERF_Rate$Rate[data_PERF_Rate$Generation=="G0"])/mean(data_PERF_Rate$Rate[data_PERF_Rate$Generation=="G0"])
+# sd(data_PERF_Rate$Rate[data_PERF_Rate$Generation=="G2"])/mean(data_PERF_Rate$Rate[data_PERF_Rate$Generation=="G2"])
+# 
+# 
+# sd(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G0"])/mean(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G0"])
+# sd(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G0"])/mean(data_PERF_Rate$Nb_eggs[data_PERF_Rate$Generation=="G0"])
+
+
+sd(data_PERF_Rate$Rate)/mean(data_PERF_Rate$Rate)
+sd(data_PERF_Rate$Nb_eggs)/mean(data_PERF_Rate$Nb_eggs)
 
 ```
 
@@ -1353,26 +1401,26 @@ legend <- lemon::g_legend(PLOT_pref_G0)
  
 ## ALL GENERATIONS 
 Genetic_NonGenetic_PLOT <- cowplot::ggdraw() + 
-  cowplot::draw_plot(PLOT_GEN_pref_G0 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.0, y = 0.66, width = 0.4, height = 0.3) + 
-  cowplot::draw_plot(PLOT_GEN_eggs_G0 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.0, y = 0.33, width = 0.4, height = 0.3) + 
-  cowplot::draw_plot(PLOT_GEN_rate_G0 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.01, y = 0, width = 0.4, height = 0.3) + 
   cowplot::draw_plot(PLOT_GEN_pref_G2 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
-            x = 0.44, y = 0.66, width = 0.4, height = 0.3) + 
+            x = 0.0, y = 0.66, width = 0.4, height = 0.3) + 
   cowplot::draw_plot(PLOT_GEN_eggs_G2 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
-            x = 0.44, y = 0.33, width = 0.4, height = 0.3) + 
+            x = 0.0, y = 0.33, width = 0.4, height = 0.3) + 
   cowplot::draw_plot(PLOT_GEN_rate_G2 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.01, y = 0, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PLOT_GEN_pref_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.44, y = 0.66, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PLOT_GEN_eggs_G0 + theme(legend.position = "none", 
+                                        plot.title = element_blank()), 
+            x = 0.44, y = 0.33, width = 0.4, height = 0.3) + 
+  cowplot::draw_plot(PLOT_GEN_rate_G0 + theme(legend.position = "none", 
                                         plot.title = element_blank()), 
             x = 0.44, y = 0, width = 0.4, height = 0.3) + 
   cowplot::draw_plot(legend, x = 0.915, y = 0.5, width = 0.000001, height = 0.000001) + 
-  cowplot::draw_plot_label(c("Plastic effects","Genetic effects","A", "B", "C",
+  cowplot::draw_plot_label(c("Genetic effects","Plastic effects","A", "B", "C",
                     "D", "E", "F"),  
                   x = c(0.12,0.55, 0, 0.44, 0, 0.44, 0, 0.44 ), 
                   y = c(1,1, 0.99, 0.99, 0.66,  0.66, 0.33, 0.33), 
@@ -1382,149 +1430,12 @@ Genetic_NonGenetic_PLOT <- cowplot::ggdraw() +
  Genetic_NonGenetic_PLOT
 
 
- # #
- # cowplot::save_plot(file =here::here("figures", "Fig5_GENETIC_NONGENETIC_First_Third.pdf"),
- #                   Genetic_NonGenetic_PLOT,
- #                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
+ #
+ cowplot::save_plot(file =here::here("figures", "Fig5_GENETIC_NONGENETIC_First_Third.pdf"),
+                   Genetic_NonGenetic_PLOT,
+                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
 
 ```
-
-
-
-
-# Plot pop effect - Heterogeneity - RESIDUALS
-```{r }
-# library("dplyr")
-PPMR_ALL_Pref_Stim_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
-                                        gen = "G0" , 
-                                        formula_Blanquart="log(Nb_eggs+1) ~  Test_environment + Population + SA + Test_environment:Original_environment",
-                                        xaxis_labelprint = "Fecundity in sympatry",
-                                        yaxis_labelprint = "Fecundity in allopatry")
-
-PPMR_ALL_Pref_Stim_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
-                                        formula_Blanquart="log(Nb_eggs+1) ~  Test_environment + Population + SA + Test_environment:Original_environment",
-                                        gen = "G2" , 
-                                        xaxis_labelprint = "Fecundity in sympatry",
-                                        yaxis_labelprint = "Fecundity in allopatry")
-
-
-PPMR_ALL_Pref_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
-                                        formula_Blanquart="log(Nb_eggs+1) ~ Test_environment + Population + SA + 
-                    Test_environment:Original_environment + BoxID",
-                                        gen = "G0" , 
-                                        xaxis_labelprint = "Oviposition preference in sympatry",
-                                        yaxis_labelprint = "Oviposition preference in allopatry")
-
-PPMR_ALL_Pref_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PREF_three, 
-                                        formula="log(Nb_eggs+1) ~ Test_environment " ,
-                                        formula_Blanquart="log(Nb_eggs+1) ~ Test_environment + Population + SA + 
-                    Test_environment:Original_environment + BoxID",
-                                        gen = "G2" , 
-                                        xaxis_labelprint = "Oviposition preference in sympatry",
-                                        yaxis_labelprint = "Oviposition preference in allopatry")
-
-PPMR_ALL_Perf_G0 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
-                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
-                                        gen = "G0" , 
-                                        # fixedxylim = TRUE,
-                                        xlim = c(-0.8,1.15), 
-                                        ylim = c(-0.8,1.15), 
-                                        formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
-                                        xaxis_labelprint = "Offspring performance in sympatry",
-                                        yaxis_labelprint = "Offspring performance in allopatry")
-
-
-
-
-
-PPMR_ALL_Perf_G2 <- plot_pairwise_meanresiduals_popeffect(dataset = data_PERF_Rate, 
-                                        formula="asin(sqrt(Rate)) ~ Test_environment + log(Nb_eggs)" ,
-                                        gen = "G2" ,
-                                        formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
-                                        xaxis_labelprint = "Offspring performance in sympatry",
-                                        yaxis_labelprint = "Offspring performance in allopatry")
-
-
-legend <- lemon::g_legend(PPMR_ALL_Perf_G2)
-
-
-# PPMR_ALL <- cowplot::ggdraw() + 
-#   cowplot::draw_plot(PPMR_ALL_Pref_G0 + theme(legend.position = "none", 
-#                                         plot.title = element_blank()), 
-#             x = 0.01, y = 0.5, width = 0.25, height = 0.45) + 
-#   cowplot::draw_plot( PPMR_ALL_Pref_Stim_G0+ theme(legend.position = "none", 
-#                                         plot.title = element_blank()), 
-#             x = 0.31, y = 0.5, width = 0.25, height = 0.45) + 
-#   cowplot::draw_plot(PPMR_ALL_Perf_G0 + theme(legend.position = "none", 
-#                                         plot.title = element_blank()), 
-#             x = 0.61, y = 0.5, width = 0.25, height = 0.45) + 
-#   cowplot::draw_plot(legend, x = 0.93, y = 0.5, width = 0.0001, height = 0.0001) + 
-#   cowplot::draw_plot(PPMR_ALL_Pref_G2 + theme(legend.position = "none", 
-#                                         plot.title = element_blank()), 
-#             x = 0.01, y = 0, width = 0.25, height = 0.45) + 
-#   cowplot::draw_plot(PPMR_ALL_Pref_Stim_G2 + theme(legend.position = "none", 
-#                                         plot.title = element_blank()), 
-#             x = 0.31, y = 0, width = 0.25, height = 0.45) + 
-#   cowplot::draw_plot(PPMR_ALL_Perf_G2 + theme(legend.position = "none", 
-#                                         plot.title = element_blank()), 
-#             x = 0.61, y = 0, width = 0.25, height = 0.45) + 
-#   cowplot::draw_plot_label(c("Generation G0/G1", "A", "B", "C", " ",
-#                     "Generation G2/G3", "D", "E", "F", " "),  
-#                   x = c(0.4, 0.01, 0.30, 0.61, 0.92, 0.4, 0.01, 0.3, 0.61, 0.92), 
-#                   y = c(1, 0.98, 0.98, 0.98, 0.98, 0.5, 0.48, 0.48, 0.48, 0.48), 
-#                   hjust = c(0,0,0,0,0,0,0,0,0,0), 
-#                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
-#                   size = 16) 
-#  PPMR_ALL
- 
-# 
-# cowplot::save_plot(file =here::here("figures", "POP_effect_ALL.pdf"),
-#                   PPMR_ALL,
-#                    base_height = 20/cm(1), base_width = 36/cm(1), dpi = 610)
-# 
-
- 
- 
-## ALL GENERATIONS 
-PPMR_ALL <- cowplot::ggdraw() + 
-  cowplot::draw_plot(PPMR_ALL_Pref_G0 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.0, y = 0.66, width = 0.4, height = 0.3) + 
-  cowplot::draw_plot(PPMR_ALL_Pref_Stim_G0 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.0, y = 0.33, width = 0.4, height = 0.3) + 
-  cowplot::draw_plot(PPMR_ALL_Perf_G0 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.01, y = 0, width = 0.4, height = 0.3) + 
-  cowplot::draw_plot(PPMR_ALL_Pref_G2 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.44, y = 0.66, width = 0.4, height = 0.3) + 
-  cowplot::draw_plot(PPMR_ALL_Pref_Stim_G2 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.44, y = 0.33, width = 0.4, height = 0.3) + 
-  cowplot::draw_plot(PPMR_ALL_Perf_G2 + theme(legend.position = "none", 
-                                        plot.title = element_blank()), 
-            x = 0.44, y = 0, width = 0.4, height = 0.3) + 
-  cowplot::draw_plot(legend, x = 0.915, y = 0.5, width = 0.000001, height = 0.000001) + 
-  cowplot::draw_plot_label(c("Generation G0/G1","Generation G2/G3","A", "B", "C",
-                    "D", "E", "F"),  
-                  x = c(0.12,0.55, 0, 0.44, 0, 0.44, 0, 0.44 ), 
-                  y = c(1,1, 0.99, 0.99, 0.66,  0.66, 0.33, 0.33), 
-                  hjust = c(0,0,0,0,0,0,0,0), 
-                  vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
-                  size = 18) 
- PPMR_ALL
- # 
- # cowplot::save_plot(file =here::here("figures", "Fig4_POP_effect_residuals.pdf"),
- #                   PPMR_ALL,
- #                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
-
-
-```
-
 
 
 # PLOT POP EFFECT - HETEROGENEITY
@@ -1537,16 +1448,16 @@ PPMR_ALL_Pref_Stim_G0 <- plot_realdata(dataset = data_PERF,
                                         xlim = c(0,94), 
                                         ylim = c(0,94), 
                                         formula_Blanquart="log(Nb_eggs+1) ~  Test_environment + Population + SA + Test_environment:Original_environment",
-                                        xaxis_labelprint = "Fecundity in sympatry",
-                                        yaxis_labelprint = "Fecundity in allopatry")
+                                        xaxis_labelprint = "Fecundity in original",
+                                        yaxis_labelprint = "Fecundity in alternative")
 
 PPMR_ALL_Pref_Stim_G2 <- plot_realdata(dataset = data_PERF, 
                                         printcor = TRUE,
                                         trait="Nb_eggs" ,
                                         formula_Blanquart="log(Nb_eggs+1) ~  Test_environment + Population + SA + Test_environment:Original_environment",
                                         gen = "G2" , 
-                                        xaxis_labelprint = "Fecundity in sympatry",
-                                        yaxis_labelprint = "Fecundity in allopatry")
+                                        xaxis_labelprint = "Fecundity in original",
+                                        yaxis_labelprint = "Fecundity in alternative")
 
 
 PPMR_ALL_Pref_G0 <- plot_realdata(dataset = data_PREF_three, 
@@ -1555,8 +1466,8 @@ PPMR_ALL_Pref_G0 <- plot_realdata(dataset = data_PREF_three,
                                         formula_Blanquart="log(Nb_eggs+1) ~ Test_environment + Population + SA + 
                     Test_environment:Original_environment + BoxID",
                                         gen = "G0" , 
-                                        xaxis_labelprint = "Oviposition preference in sympatry",
-                                        yaxis_labelprint = "Oviposition preference in allopatry")
+                                        xaxis_labelprint = "Oviposition preference in original",
+                                        yaxis_labelprint = "Oviposition preference in alternative")
 
 PPMR_ALL_Pref_G2 <- plot_realdata(dataset = data_PREF_three, 
                                         trait="Nb_eggs" ,
@@ -1566,8 +1477,8 @@ PPMR_ALL_Pref_G2 <- plot_realdata(dataset = data_PREF_three,
                                         printcor = TRUE,
                                         xlim = c(0,80), 
                                         ylim = c(0,80), 
-                                        xaxis_labelprint = "Oviposition preference in sympatry",
-                                        yaxis_labelprint = "Oviposition preference in allopatry")
+                                        xaxis_labelprint = "Oviposition preference in original",
+                                        yaxis_labelprint = "Oviposition preference in alternative")
 
 PPMR_ALL_Perf_G0 <- plot_realdata(dataset = data_PERF_Rate, 
                                          trait="Rate" ,
@@ -1576,8 +1487,8 @@ PPMR_ALL_Perf_G0 <- plot_realdata(dataset = data_PERF_Rate,
                                         xlim = c(0,1.1), 
                                         ylim = c(0,1.1), 
                                         formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
-                                        xaxis_labelprint = "Offspring performance in sympatry",
-                                        yaxis_labelprint = "Offspring performance in allopatry")
+                                        xaxis_labelprint = "Offspring performance in original",
+                                        yaxis_labelprint = "Offspring performance in alternative")
 
 
 
@@ -1590,8 +1501,8 @@ PPMR_ALL_Perf_G2 <- plot_realdata(dataset = data_PERF_Rate,
                                   formula_Blanquart="asin(sqrt(Rate)) ~  Test_environment + Population + SA + log(Nb_eggs) + Test_environment:Original_environment",
                                         xlim = c(0,0.7), 
                                         ylim = c(0,0.7), 
-                                        xaxis_labelprint = "Offspring performance in sympatry",
-                                        yaxis_labelprint = "Offspring performance in allopatry")
+                                        xaxis_labelprint = "Offspring performance in original",
+                                        yaxis_labelprint = "Offspring performance in alternative")
 
 
 legend <- lemon::g_legend(PPMR_ALL_Perf_G2)
@@ -1630,7 +1541,7 @@ PPMR_ALL <- cowplot::ggdraw() +
 # cowplot::save_plot(file =here::here("figures", "Fig4_POP_effect_ALL.pdf"),
 #                   PPMR_ALL,
 #                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
-# 
+
 
 ```
 

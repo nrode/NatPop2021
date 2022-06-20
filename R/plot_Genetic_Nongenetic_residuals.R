@@ -303,7 +303,7 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
                   width=.1, position=pd, size = 1) +
     geom_point(size = 4, position=pd, fill="white", shape = 21, stroke = 1.5) +
     ylab(yaxis_labelprint)  +
-    xlab("Test environment")  +
+    xlab("Test fruit")  +
     ggtitle(plot_title) +
     theme_LO_sober 
   
@@ -312,9 +312,9 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
     geom_point(aes(alpha = SA, fill = interaction(SA, Original_environment), shape = SA), 
                position = pd, size = 4) + 
     scale_alpha_manual(values = c(0,1)) + 
-    scale_shape_manual(name="Test environment:",   
+    scale_shape_manual(name="Test fruit:",   
                        breaks=c("1", "0"),
-                       labels=c("Sympatric","Allopatric"),
+                       labels=c("Original","Alternative"),
                        values=c(16,21)) + 
     guides(fill = FALSE, alpha = FALSE) 
   
