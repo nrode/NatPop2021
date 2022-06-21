@@ -50,7 +50,7 @@ tapply(data_PERF$Nb_adults,list(data_PERF$Original_environment,
 tapply(data_PERF$Nb_adults,list(data_PERF$Original_environment,data_PERF$Test_environment,
                                 data_PERF$Generation),length)
 data_PERF$Date_P=as.Date(data_PERF$Date_P, format="%d/%m/%Y")
-
+data_PERF$Date_P <- data_PERF$Date_P + lubridate::years(2000)
 #############################
 #Egg-to-adult survival
 #############################
@@ -75,7 +75,7 @@ tapply(data_PERF_Rate$Nb_adults,list(data_PERF_Rate$Original_environment,
 
 tapply(data_PERF_Rate$Rate,data_PERF_Rate$Generation,mean)
 data_PERF_Rate$Date_P=as.Date(data_PERF_Rate$Date_P, format="%d/%m/%Y")
-
+data_PERF_Rate$Date_P <- data_PERF_Rate$Date_P + lubridate::years(2000)
 ###########################
 #PREFERENCE 
 ###########################
@@ -168,7 +168,7 @@ wt3rate<-ggplot(data = data_PERF_Rate,
   xlab("Date")  +
   scale_x_date(date_breaks = "1 month", 
                  limits = as.Date(c('2018-06-01','2018-12-01'))) + 
-  ylim(-0.8,0.8) +
+  ylim(-1,1) +
 theme_LO_sober
 wt3rate
 

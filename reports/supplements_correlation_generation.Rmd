@@ -138,7 +138,7 @@ PAIR_G0_G2_PERFORMANCE <- plot_correlation_meanresiduals(dataset = dataselect,
 
 ### STIMULATION
 dataselect <- data_PERF
-axis <- c("Oviposition stimulation G0","Oviposition stimulation G2")
+axis <- c("Fecundity G0","Fecundity G2")
 modelformula <- log(Nb_eggs+1)  ~ Test_environment + Generation
 
 ## Accounting for differences among original environments in G0
@@ -206,11 +206,11 @@ PAIR_G0_G2 <- cowplot::ggdraw() +
                   size = 16) 
  PAIR_G0_G2
  
-# 
-# cowplot::save_plot(file =here::here("figures", "Supplements_FigS9_Correlation_G0_G2.pdf"),
-#                   PAIR_G0_G2,
-#                    base_height = 10/cm(1), base_width = 36/cm(1), dpi = 610)
-# 
+
+cowplot::save_plot(file =here::here("figures", "Supplements_FigS9_Correlation_G0_G2.pdf"),
+                  PAIR_G0_G2,
+                   base_height = 10/cm(1), base_width = 36/cm(1), dpi = 610)
+
 
 
 ```

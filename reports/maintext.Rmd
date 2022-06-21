@@ -238,7 +238,7 @@ m3 <- lm(log(Nb_eggs+1)~ pop_gen + hab_gen + SA*IndicG0 + SA  ,
 cf <-coef(summary(m3,complete = TRUE)) 
 indic <- grep("SA",rownames(cf))
 SAcoef <- cf[indic,1]
-#names(SAcoef) <- c("SAGen", "SANonGen")
+#names(SAcoef) <- c("SAGen", "SAPlastic")
 SAcoef
 
 #Estimates se
@@ -1537,13 +1537,11 @@ PPMR_ALL <- cowplot::ggdraw() +
                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
                   size = 18) 
  PPMR_ALL
-# 
-# cowplot::save_plot(file =here::here("figures", "Fig4_POP_effect_ALL.pdf"),
-#                   PPMR_ALL,
-#                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
+
+cowplot::save_plot(file =here::here("figures", "Fig4_POP_effect_ALL.pdf"),
+                  PPMR_ALL,
+                  base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
 
 
 ```
-
-
 
