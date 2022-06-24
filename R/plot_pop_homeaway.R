@@ -174,21 +174,22 @@ plot_pop_homeaway <- function(dataset = data_PREF_three,
     geom_errorbar(aes(ymin = Mean_Dif+CI_int,
                       ymax = Mean_Dif-CI_int),
                   width = 0.2, size = 0.5, alpha = 0.6,position = pd) +
-    geom_point(aes(fill = interaction(fill_point,Symp)), position = pd, stroke = 1.1, size =3) +
+    geom_point(fill="white", position = pd, stroke = 1.1, size =3) +
+    #geom_point(aes(fill = interaction(fill_point,Symp)), position = pd, stroke = 1.1, size =3) +
     labs(shape = "Test fruit", color = "Original fruit") +
     guides(shape = guide_legend(override.aes = list(fill = c("black"))),
            fill = FALSE) +
     xlab("Populations")  +
     ylab(yaxis_labelprint) +
-    scale_fill_manual(name="Test stat",   
-                       breaks=c("*.Blackberry","ns.Blackberry",
-                                "*.Cherry","ns.Cherry",
-                                "*.Strawberry","ns.Strawberry"),
-                       labels=c("significant","non-significant","significant",
-                                "non-significant","significant","non-significant"),
-                       values=c("#301934","white",
-                                "#BC3C6D","white",
-                                "#3FAA96","white")) +
+    # scale_fill_manual(name="Test stat",   
+    #                    breaks=c("*.Blackberry","ns.Blackberry",
+    #                             "*.Cherry","ns.Cherry",
+    #                             "*.Strawberry","ns.Strawberry"),
+    #                    labels=c("significant","non-significant","significant",
+    #                             "non-significant","significant","non-significant"),
+    #                    values=c("#301934","white",
+    #                             "#BC3C6D","white",
+    #                             "#3FAA96","white")) +
     scale_color_manual(name="Fly population from:",   
                        breaks=c("Blackberry","Cherry","Strawberry"),
                        labels=c("Blackberry","Cherry","Strawberry"),
@@ -199,9 +200,9 @@ plot_pop_homeaway <- function(dataset = data_PREF_three,
                        values =  c(21, 22, 24)) + 
     coord_cartesian(expand = FALSE, ylim = c(-max_lim, max_lim), xlim=c(0, nb_pop+3),clip = "off") + 
     theme_LO_sober + theme(axis.text.x  = element_blank()) +  
-    annotate("text", x = nb_pop+2.5, y = 0.6*max_lim, label = 'bold("Higher on\nalternative")',
+    annotate("text", x = nb_pop+2.5, y = 0.6*max_lim, label = 'bold("Higher on\n original")',
               size = 3,colour = "black", parse = TRUE, angle = 90) + 
-    annotate("text", x = nb_pop+2.5, y = -0.6*max_lim, label = 'bold("Higher on\n original")',
+    annotate("text", x = nb_pop+2.5, y = -0.6*max_lim, label = 'bold("Higher on\nalternative")',
                size = 3,colour = "black", parse = TRUE, angle = 90)  + 
     geom_segment(x = nb_pop+0.5, y = 0.4*max_lim, xend = nb_pop+0.5, yend = 0.85*max_lim, size = 0.15, 
                  arrow = arrow(length = unit(0.05, "npc")), colour = "black") + 

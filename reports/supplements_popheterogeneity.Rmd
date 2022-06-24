@@ -108,25 +108,25 @@ levels(data_PREF$Population)
 ```{r }
 HA_Rate_G0 <- plot_pop_homeaway(dataset = data_PERF_Rate, 
          gen = "G0",  trait="Rate",
-         yaxis_labelprint = "Change in offspring performance\non alternative fruit")
+         yaxis_labelprint = "Difference in offspring performance\nbetween original and alternative fruits")
 HA_Rate_G2 <- plot_pop_homeaway(dataset = data_PERF_Rate,
          gen = "G2", trait="Rate",
-         yaxis_labelprint = "Change in offspring performance\non alternative fruit")
+         yaxis_labelprint = "Difference in offspring performance\nbetween original and alternative fruits")
 
 
 HA_pref_G0 <- plot_pop_homeaway(dataset = data_PREF_three,
          gen = "G0", trait="Nb_eggs",
-         yaxis_labelprint = "Change in oviposition preference\non alternative fruit")
+         yaxis_labelprint = "Difference in oviposition preference\nbetween original and alternative fruits")
 HA_pref_G2 <- plot_pop_homeaway(dataset = data_PREF_three,
          gen = "G2", trait="Nb_eggs",
-         yaxis_labelprint = "Change in oviposition preference\non alternative fruit")
+         yaxis_labelprint = "Difference in oviposition preference\nbetween original and alternative fruits")
 
 HA_stim_G0 <- plot_pop_homeaway(dataset = data_PERF,
          gen = "G0", trait="Nb_eggs",
-         yaxis_labelprint = "Change in fecundity\non alternative fruit")
+         yaxis_labelprint = "Difference in fecundity between\noriginal and alternative fruits")
 HA_stim_G2 <- plot_pop_homeaway(dataset = data_PERF,
          gen = "G2", trait="Nb_eggs",
-         yaxis_labelprint = "Change in fecundity\non alternative fruit")
+         yaxis_labelprint = "Difference in fecundity between\noriginal and alternative fruits")
 
 
 

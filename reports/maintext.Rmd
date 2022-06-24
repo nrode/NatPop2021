@@ -49,6 +49,8 @@ dim(data_issue_eggs)[1]
 #Ovservations with a difference equal or less than two eggs
 sum(ifelse((data_issue_eggs$Nb_adults-data_issue_eggs$Nb_eggs)<=2,1,0))
 
+mean(data_issue_eggs[data_issue_eggs$Nb_adults-data_issue_eggs$Nb_eggs<=2,]$Nb_eggs)
+
 tapply(data_issue_eggs$Nb_eggs,data_issue_eggs$Test_environment,length)
 tapply(data_issue_eggs$Nb_eggs,data_issue_eggs$Original_environment,length)
 tapply(data_PERF$Nb_eggs,data_PERF$Original_environment,length)
