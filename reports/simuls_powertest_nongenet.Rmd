@@ -111,7 +111,7 @@ dim(data_PREF)
 # Preliminary check of the function
 ```{r }
 #Check: 
-sim <- sapply(1:1000, simul_powertest_nongenet, SAng= 0.032,  dup = 1)
+sim <- sapply(1:1000, simul_powertest_nongenet, SAng = 0.043,  dup = 1)
 sim <- as.data.frame(t(sim))
 
 #SA genet
@@ -127,6 +127,10 @@ mean(sim$SANonGen_Est)
 #Proportion of simuls where tests are significant:
 mean(sim$IndicGen)
 mean(sim$IndicNonGen)
+
+
+#Proportion of var explained 
+mean(sim$rsqng)
 
 ```
 
