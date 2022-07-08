@@ -207,7 +207,8 @@ plot_pop_homeaway <- function(dataset = data_PREF_three,
     geom_segment(x = nb_pop+0.5, y = 0.4*max_lim, xend = nb_pop+0.5, yend = 0.85*max_lim, size = 0.15, 
                  arrow = arrow(length = unit(0.05, "npc")), colour = "black") + 
     geom_segment(x = nb_pop+0.5, y = -0.4*max_lim, xend =  nb_pop+0.5, yend = -0.85*max_lim, size = 0.15,
-                 arrow = arrow(length = unit(0.05, "npc")),colour = "black") 
+                 arrow = arrow(length = unit(0.05, "npc")),colour = "black")  +
+    guides(color = guide_legend(override.aes=list(shape = 3, stroke = 1.3)))
   
     plot_pair
   return(plot_pair)

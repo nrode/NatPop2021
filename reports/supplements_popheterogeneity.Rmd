@@ -162,7 +162,7 @@ HomeAway_Figure_ALL <- cowplot::ggdraw() +
                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
                   size = 18) 
 
-cowplot::save_plot(file =here::here("figures", "FigSX_HomeAwayTest.pdf"),
+cowplot::save_plot(file =here::here("figures", "Supplements_FigS4_HomeAwayTest.pdf"),
                   HomeAway_Figure_ALL,
                   base_height = 36/cm(1), base_width = 28/cm(1), dpi = 610)
 

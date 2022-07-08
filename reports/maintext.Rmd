@@ -679,7 +679,7 @@ Plot_eggs <- ggplot2::ggplot(data = data_PERF_Rate,
   xlab("Number of eggs") +
   theme_LO_sober
 
- cowplot::save_plot(file =here::here("figures", "FigSX_DensityEggs_Effect.pdf"),
+ cowplot::save_plot(file =here::here("figures", "Supplements_FigS12_DensityEggs_Effect.pdf"),
                    Plot_eggs,
                    base_height = 12/cm(1), base_width = 14/cm(1), dpi = 610)
 
@@ -1345,7 +1345,7 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
  
 
 
- cowplot::save_plot(file =here::here("figures", "Supplements_FigS4_Local_Adaptation_Residuals.pdf"),
+ cowplot::save_plot(file =here::here("figures", "Supplements_FigS5_Local_Adaptation_Residuals.pdf"),
                    LOCAL_ADAPTATION_PLOT,
                    base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
 
@@ -1539,7 +1539,8 @@ PPMR_ALL <- cowplot::ggdraw() +
                   vjust = c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
                   size = 18) 
  PPMR_ALL
-
+ 
+ 
 cowplot::save_plot(file =here::here("figures", "Fig4_POP_effect_ALL.pdf"),
                   PPMR_ALL,
                   base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)

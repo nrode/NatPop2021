@@ -209,7 +209,8 @@ plot_realdata <- function(dataset = data_PERF_Rate,
     theme(plot.title = element_text(hjust = 0.5)) + 
     theme_LO_sober + theme (
       panel.grid.major.y = element_blank(),
-      panel.grid.minor.y = element_blank())
+      panel.grid.minor.y = element_blank())+
+    guides(color = guide_legend(override.aes=list(shape = 3, stroke = 1.3)))
   
   #Add Blanquart results
   if(test_Blanquart){

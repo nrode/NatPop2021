@@ -289,7 +289,7 @@ THREE_JOIN <- cowplot::ggdraw() +
 THREE_JOIN 
 
 
-cowplot::save_plot(file = here::here("figures", "Supplements_FigS1_WT3.pdf"),
+cowplot::save_plot(file = here::here("figures", "Supplements_FigS2_WT3.pdf"),
                    THREE_JOIN, base_height = 28/cm(1), base_width = 17/cm(1), dpi = 1200)
 #
 

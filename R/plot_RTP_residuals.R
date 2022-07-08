@@ -164,7 +164,8 @@ plot_RTP_residuals <- function(dataset = data_PREF_three, trait = "Nb_eggs", gen
     ylab(yaxis_labelprint)  +
     xlab("Test fruit")  +
     ggtitle(plot_title) +
-    theme_LO_sober 
+    theme_LO_sober +
+      guides(color = guide_legend(override.aes=list(shape = 3, stroke = 1.3)))
     
     ### Add stroke
     plot2 <- plot + 

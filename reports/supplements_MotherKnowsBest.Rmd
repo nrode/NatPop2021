@@ -152,8 +152,8 @@ MKB_G0 <- plot_CorrelationTraits_residuals(gen = "G0", fruit = "All",
                                  dataset2 = data_PREF_three,
                                  formula1 = "asin(sqrt(Rate)) ~ Test_environment + Population + log(Nb_eggs)",
                                  formula2 = "log(Nb_eggs+1) ~ Test_environment + Population + BoxID",
-                                 axis_label_trait1 = "Offspring performance",
-                                 axis_label_trait2 = "Oviposition preference",
+                                 axis_label_trait1 = "Residuals(offspring performance)",
+                                 axis_label_trait2 = "Residuals(oviposition preference)",
                                  subscript_label = "Preference G0/Performance G1", 
                                  printcor=TRUE)
 
@@ -164,8 +164,8 @@ MKB_G2 <- plot_CorrelationTraits_residuals(gen = "G2", fruit = "All",
                                  dataset2 = data_PREF_three,
                                  formula1 = "asin(sqrt(Rate)) ~ Test_environment + Population + log(Nb_eggs)",
                                  formula2 = "log(Nb_eggs+1) ~ Test_environment + Population + BoxID",
-                                 axis_label_trait1 = "Offspring performance",
-                                 axis_label_trait2 = "Oviposition preference",
+                                 axis_label_trait1 = "Residuals(offspring performance)",
+                                 axis_label_trait2 = "Residuals(oviposition preference)",
                                  subscript_label = "Preference G2/Performance G3", 
                                  printcor=TRUE)
 
@@ -192,7 +192,7 @@ MotherKnowsBest_G0G2 <- cowplot::ggdraw() +
  
  
 
- cowplot::save_plot(file =here::here("figures", "Supplements_FigS8_MotherKnowsBest.pdf"),
+ cowplot::save_plot(file =here::here("figures", "Supplements_FigS11_MotherKnowsBest.pdf"),
                    MotherKnowsBest_G0G2,
                    base_height = 22/cm(1), base_width = 14/cm(1), dpi = 610)
 

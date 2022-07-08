@@ -225,7 +225,7 @@ LOCAL_ADAPTATION_PLOT_REALDATA <- cowplot::ggdraw() +
  
 
  #
- cowplot::save_plot(file =here::here("figures", "Supplements_FigS2_Local_Adaptation_Data.pdf"),
+ cowplot::save_plot(file =here::here("figures", "Supplements_FigS3_Local_Adaptation_Data.pdf"),
                    LOCAL_ADAPTATION_PLOT_REALDATA,
                    base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
 

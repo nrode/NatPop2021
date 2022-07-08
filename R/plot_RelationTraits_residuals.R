@@ -243,7 +243,8 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
       theme(panel.grid.major.y = element_blank(),
             panel.grid.minor.y = element_blank(),
             axis.title.x = element_text(colour = col),
-            axis.title.y = element_text(colour = col))
+            axis.title.y = element_text(colour = col))+
+      guides(color = guide_legend(override.aes=list(shape = 3, stroke = 1.3)))
     #plot_pair
     
   }else{
@@ -305,7 +306,8 @@ plot_RelationTraits_residuals <- function(gen = "G2", fruit = "Blackberry", trai
         theme(panel.grid.major.y = element_blank(),
               panel.grid.minor.y = element_blank(),
               axis.title.x = element_text(colour = col),
-              axis.title.y = element_text(colour = col))
+              axis.title.y = element_text(colour = col))+
+        guides(color = guide_legend(override.aes=list(shape = 3, stroke = 1.3)))
       #plot_pair 
       
     }else {

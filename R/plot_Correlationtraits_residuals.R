@@ -133,9 +133,11 @@ plot_CorrelationTraits_residuals <- function(gen = "G2", fruit = "All",
       panel.grid.major.y = element_blank(),
       panel.grid.minor.y = element_blank(),
       axis.title.x = element_text(colour = col),
-      axis.title.y = element_text(colour = col))
+      axis.title.y = element_text(colour = col)) +
+    guides(color = guide_legend(override.aes=list(shape = 3, stroke = 1.3)))
+    #guides(color = guide_legend(override.aes=list(shape = 22, size = 6)))
   
-  #plot_pair
+  plot_pair
   
   
   ######### CORRELATION 

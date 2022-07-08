@@ -187,7 +187,7 @@ ACP_ALL <- cowplot::ggdraw() +
  ACP_ALL
  
 
-cowplot::save_plot(file =here::here("figures", "Supplements_FigS3_ACP_pop.pdf"),
+cowplot::save_plot(file =here::here("figures", "Supplements_FigS6_ACP_pop.pdf"),
                   ACP_ALL,
                    base_height = 28/cm(1), base_width = 22/cm(1), dpi = 610)
 
