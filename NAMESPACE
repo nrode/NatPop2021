@@ -3,6 +3,8 @@
 export("%>%")
 export(add_indic_sign)
 export(add_sim_number_SA)
+export(datablank)
+export(datablank_rtp)
 export(import_data)
 export(plot_CorrelationTraits_residuals)
 export(plot_Genetic_Nongenetic_residuals)

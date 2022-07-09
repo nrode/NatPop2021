@@ -100,13 +100,12 @@ plot_correlation_meanresiduals <- function(dataset = dataselect,
       plot_pair <- ggplot(data = datameanreswide,
                           aes_q(x = as.name(colenvfactor[1]), 
                                 y = as.name(colenvfactor[2])))
-      
+
     }else{
       plot_pair <- ggplot(data = datameanreswide,
                           aes_q(x = as.name(colenvfactor[1]), 
                                 y = as.name(colenvfactor[2]),
-                                color = as.name(original_environment)))  
-
+                                fill = as.name(original_environment)))  
     }
     
   }else{
@@ -123,7 +122,7 @@ plot_correlation_meanresiduals <- function(dataset = dataselect,
                                   y = as.name(colenvfactor[2]), 
                                   color = as.name(original_environment))) +
           facet_wrap(facets=additional_factor, scales = "free_y") 
-        
+
       }
       
       
@@ -133,6 +132,8 @@ plot_correlation_meanresiduals <- function(dataset = dataselect,
                             aes_q(x = as.name(colenvfactor[1]), 
                                   y = as.name(colenvfactor[2]), 
                                   shape = as.name(additional_factor)))
+        
+
       }else{
         plot_pair <- ggplot(data = datameanreswide,
                             aes_q(x = as.name(colenvfactor[1]), 
@@ -167,19 +168,26 @@ plot_correlation_meanresiduals <- function(dataset = dataselect,
                       labels=c("Blackberry","Cherry","Strawberry"),
                       values=c("#301934","#BC3C6D", "#3FAA96"),
                       drop=FALSE) +
-    scale_color_manual(name="Fly population from:",   
+    scale_color_manual(name="Fly population from:",
                        breaks=c("Blackberry","Cherry","Strawberry"),
                        labels=c("Blackberry","Cherry","Strawberry"),
                        values=c("#301934","#BC3C6D", "#3FAA96"),
-                       drop=FALSE) + 
+                       drop=FALSE) +
     scale_shape_manual(name = "Test fruit:",
                        labels = c("Blackberry","Cherry","Strawberry"), 
                        values =  c(15,16,17)) + 
     theme(plot.title = element_text(hjust = 0.5)) + 
     theme_LO_sober + theme (
       panel.grid.major.y = element_blank(),
-      panel.grid.minor.y = element_blank())+
-    guides(color = guide_legend(override.aes=list(shape = 3, stroke = 1.3)))
+      panel.grid.minor.y = element_blank()) + 
+    guides(fill = guide_legend(override.aes = aes(color = NA, shape = NA)))
+  
+    guides(fill = guide_legend(override.aes = list(col = c("#301934","#BC3C6D", "#3FAA96"))), 
+           color = guide_legend(override.aes = list(shape = c(NA,0,1)))) 
+    
+  #+
+  #  guides(fill = guide_legend(fill = guide_legend(override.aes = list(color = c("#301934","#BC3C6D", "#3FAA96"))), color = FALSE))
+  # guides(color = guide_legend(override.aes=list(shape = NA)))
   
   if(!is.null(xaxis_labelprint)){
     plot_pair <- plot_pair + xlab(xaxis_labelprint)

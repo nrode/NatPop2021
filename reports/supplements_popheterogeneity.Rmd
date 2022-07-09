@@ -130,8 +130,8 @@ HA_stim_G2 <- plot_pop_homeaway(dataset = data_PERF,
 
 
 
-legend <- lemon::g_legend(HA_stim_G2)
-
+ 
+legend <- legend_all
  
 ## ALL GENERATIONS 
 HomeAway_Figure_ALL <- cowplot::ggdraw() + 

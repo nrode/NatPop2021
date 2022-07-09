@@ -1,0 +1,48 @@
+#' @title Legend for plot
+#'
+#' @description Create a legend for most of the plot
+#' @importFrom ggplot2 facet_wrap unit aes geom_vline geom_hline geom_label  geom_jitter position_jitter position_dodge scale_x_date scale_linetype_manual geom_histogram geom_boxplot coord_flip element_blank arrow scale_alpha_manual geom_polygon coord_cartesian guide_legend geom_segment annotate element_text element_line element_rect geom_abline geom_bar  geom_errorbar geom_errorbarh geom_point ggplot ggtitle guides labs scale_color_manual scale_fill_manual scale_shape_manual theme unit xlab xlim ylab ylim geom_text geom_line geom_hline position_dodge layer_scales aes_q geom_path element_text
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'PLOT_MAIN_Text<-ggplot + legend_all
+
+#Theme
+
+datablank_rtp <- data.frame(Mean = c(1,1,1), 
+                        Test_environment = c("Blackberry","Cherry","Strawberry"), 
+                        Fruit = c("0","1","1"))
+
+plot_blank_rtp <- ggplot(datablank_rtp) + 
+  geom_bar(aes(Mean, fill = Test_environment)) + 
+  geom_point(aes(x = Mean, y = Mean, shape =  Fruit), size=3) + 
+  scale_fill_manual(name="Fly populations from:", 
+                    breaks=c("Cherry", "Strawberry","Blackberry"),
+                    labels=c("Cherry","Strawberry","Blackberry"), 
+                    values=c("#BC3C6D","#3FAA96", "#301934")) +
+  guides(fill = guide_legend(override.aes = list(col = NA))) + 
+  scale_shape_manual(name="Test fruit:",   
+                     breaks=c("1", "0"),
+                     labels=c("Original","Alternative"),
+                     values=c(16,21)) + 
+  guides(fill = guide_legend(order = 1), 
+         shape = guide_legend(order = 2)) + 
+  theme(plot.title = element_text(size = 13, face="bold", hjust = 0.5),
+        axis.title.x = element_text(size = 13),
+        axis.title.y = element_text(size = 13),
+        axis.text.x = element_text(size = 9),
+        axis.text.y = element_text(size = 9),
+        panel.background = element_rect(fill = "white", colour = "white", size = 0.5, linetype = "solid"),
+        panel.grid.major.y = element_line(size = 0.075, linetype = 'solid',colour = "grey"), 
+        panel.grid.minor.y = element_line(size = 0.025, linetype = 'solid',colour = "grey"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.line = element_line(colour = "grey30", size = 0.4, linetype = "solid"),
+        legend.title = element_text(colour="black", size = 10, face = "bold"),
+        legend.text = element_text(colour="black", size = 10))
+# theme_LO_sober
+
+
+legend_rtp <- lemon::g_legend(plot_blank_rtp)

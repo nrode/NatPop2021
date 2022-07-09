@@ -1278,7 +1278,8 @@ seSAcoef
 # PLOT LOCAL ADAPTATION
 ```{r }
 legend <- lemon::g_legend(PLOT_pref_G0)
-# 
+#  
+legend <- legend_rtp
 
 # 
 # ## ALL GENERATIONS 
@@ -1359,7 +1360,7 @@ LOCAL_ADAPTATION_PLOT <- cowplot::ggdraw() +
 
 # PLOT GENETIC vs PLASTIC
 ```{r }
-legend <- lemon::g_legend(PLOT_pref_G0)
+legend <- legend_rtp
 
 # Genetic_NonGenetic_PLOT <- cowplot::ggdraw() + 
 #   cowplot::draw_plot(PLOT_GEN_pref_G2 + theme(legend.position = "none", 
@@ -1507,8 +1508,8 @@ PPMR_ALL_Perf_G2 <- plot_realdata(dataset = data_PERF_Rate,
                                         yaxis_labelprint = "Offspring performance in alternative")
 
 
-legend <- lemon::g_legend(PPMR_ALL_Perf_G2)
 
+legend <- legend_all
  
 ## ALL GENERATIONS 
 PPMR_ALL <- cowplot::ggdraw() + 

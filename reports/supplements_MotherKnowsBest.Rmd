@@ -170,8 +170,8 @@ MKB_G2 <- plot_CorrelationTraits_residuals(gen = "G2", fruit = "All",
                                  printcor=TRUE)
 
 
-legend <- lemon::g_legend(MKB_G2)
 
+legend <- legend_all
 
 ## ALL GENERATIONS 
 MotherKnowsBest_G0G2 <- cowplot::ggdraw() + 
@@ -227,8 +227,8 @@ PLOT_Strawberry_G0 <- plot_RelationTraits_residuals(gen = "G0",
                                                 fruit = "Strawberry", 
                                                 trait2 = "Preference")
 
-legend <- lemon::g_legend(PLOT_Strawberry_G0)
 
+legend <- legend_all
 
 
 ## ALL GENERATIONS 

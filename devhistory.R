@@ -52,6 +52,8 @@ usethis::use_r("simul_fitnessdata")
 usethis::use_r("simul_fitnessdata_unbalanced")
 usethis::use_r("simul_powertest_nongenet")
 usethis::use_r("theme_LO_sober")
+usethis::use_r("legend_all")
+usethis::use_r("legend_rtp")
 usethis::use_r("utils-pipe")
 
 

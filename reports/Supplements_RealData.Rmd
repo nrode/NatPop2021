@@ -152,7 +152,7 @@ levels(data_PREF$Population)
 
 # PLOT LOCAL ADAPTATION
 ```{r }
-legend <- lemon::g_legend(PLOT_pref_G0)
+legend <- legend_rtp
 
 
 

@@ -135,7 +135,7 @@ PAIR_G0_G2_PERFORMANCE <- plot_correlation_meanresiduals(dataset = dataselect,
                                               facetwrap=FALSE, fixedxylim = FALSE, 
                                               xaxis_labelprint = axis[1], 
                                               yaxis_labelprint =  axis[2])
-
+PAIR_G0_G2_PERFORMANCE
 ### STIMULATION
 dataselect <- data_PERF
 axis <- c("Fecundity G0","Fecundity G2")
@@ -183,7 +183,7 @@ PAIR_G0_G2_PREFERENCE <- plot_correlation_meanresiduals(dataset = dataselect,
 # title_plot <- "CorrelationsG1_G3_Offspring_performance.pdf"
 # title_plot <- "CorrelationsG0_G2_Oviposition_Preference.pdf"
  
-legend <- lemon::g_legend(PAIR_G0_G2_PREFERENCE)
+legend <- legend_all
 
 
 
