@@ -266,7 +266,7 @@ plot_Genetic_Nongenetic_residuals <- function(dataset = data_PERF_Rate, trait = 
   plot_title <- effect
  
   if("Obs_A" %in% colnames(dataset)  & trait == "Nb_eggs"){
-    yaxis_labelprint <- paste0("Residuals(oviposition stimulation)")
+    yaxis_labelprint <- paste0("Residuals(fecundity)")
   }else{
     if("Obs_A" %in% colnames(dataset)  & trait == "Nb_adults"){
       yaxis_labelprint <- paste0("Residuals(number of adults)")

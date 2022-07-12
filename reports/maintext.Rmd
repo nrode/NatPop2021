@@ -56,6 +56,7 @@ tapply(data_issue_eggs$Nb_eggs,data_issue_eggs$Original_environment,length)
 tapply(data_PERF$Nb_eggs,data_PERF$Original_environment,length)
 
 mean(data_issue_eggs$Rate)
+mean(data_issue_eggs$Nb_eggs)
 
 data_issue_eggs$Nb_eggs
 data_issue_eggs$Nb_adults
