@@ -749,7 +749,8 @@ sd(data_PERF_Rate$Rate)/mean(data_PERF_Rate$Rate)
 sd(data_PERF_Rate$Nb_eggs)/mean(data_PERF_Rate$Nb_eggs)
 
 #Test statistic
-asymptotic_test(cv_Data$Eggs, cv_Data$Variable)
+# library("cvequality")
+# asymptotic_test(cv_Data$Eggs, cv_Data$Variable)
 ```
 
 
