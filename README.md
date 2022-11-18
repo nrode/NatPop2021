@@ -14,7 +14,7 @@ output:
 This research compendium describes how to analyze fecundity, egg-to-adult viability and oviposition preference data from an experiment conducted in D. suzukii in 2018, in South of France (CBGP, Montpellier, France). [here](https://github.com/nrode/NatPop2021).  
 
 The analyses of this research compendium are published in Evolution Letters: "Rapid and transient evolution of local adaptation to seasonal host fruits in an invasive pest fly"   
-:writing_hand: Article DOI: 10.1002/evl3.304
+:writing_hand: Article DOI: 10.1002/evl3.304  [here](https://doi.org/10.1002/evl3.304)
 
 
 ####  2. Author information and main investigators
